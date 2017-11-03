@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <Mixpanel.h>
 
 #import "NSString+EmailAddresses.h"
 
 @interface BCredentialsObject : NSObject
 
 @property (nonatomic, strong) NSUserDefaults *data;
+@property (nonatomic, strong) Mixpanel *mixpanel;
 
 -(void)destoryAllCredentials;
 

@@ -16,7 +16,8 @@
     self = [super init];
     if (self) {
         self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
-        
+        self.mixpanel = [Mixpanel sharedInstance];
+
     }
     return self;
     
@@ -27,6 +28,12 @@
     [self setUserHandle:nil];
     [self setUserIdentifyer:nil];
 
+    if (!APP_DEBUG_MODE) {
+        [self.mixpanel track:@"App Logged Out"];
+        [self.mixpanel.people set:@{@"$email":@"", @"$name":@""}];
+        
+    }
+    
 }
 
 -(NSString *)devicePush {

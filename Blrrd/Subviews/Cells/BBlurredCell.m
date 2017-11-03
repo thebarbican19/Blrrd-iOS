@@ -10,13 +10,9 @@
 
 @implementation BBlurredCell
 
--(void)dealloc {
-    NSLog(@"dealloc %@" ,self.subtitle.text);
-    
-}
-
 -(id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
+    self.mixpanel = [Mixpanel sharedInstance];
     if (self) {        
         self.container = [[UIView alloc] initWithFrame:self.bounds];
         self.container.backgroundColor = [UIColor colorWithWhite:0.05 alpha:1.0];
@@ -55,6 +51,8 @@
 }
 
 -(void)content:(NSDictionary *)content index:(NSIndexPath *)index {
+    self.content = [[NSMutableDictionary alloc] initWithDictionary:content];
+    NSLog(@"content: %@" ,content);
     [self.subtitle setText:[content objectForKey:@"name"]];
     [self blur:[NSURL URLWithString:[content objectForKey:@"publicpath"]]];
     
@@ -64,7 +62,7 @@
     [self.image sd_setImageWithURL:url completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         [UIView transitionWithView:self duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             if (image.CGImage != NULL && image.CGImage != nil) {
-                [self.overlay setImage:[UIImage ty_imageByApplyingBlurToImage:image withRadius:40.0 tintColor:[UIColor colorWithWhite:0.0 alpha:0.15] saturationDeltaFactor:1.0 maskImage:nil]];
+                [self.overlay setImage:[UIImage ty_imageByApplyingBlurToImage:image withRadius:60.0 tintColor:[UIColor colorWithWhite:0.0 alpha:0.15] saturationDeltaFactor:1.0 maskImage:nil]];
                 [self.image setImage:image];
                 
             }
@@ -76,6 +74,14 @@
 }
                         
 -(void)reveal:(UILongPressGestureRecognizer *)gesture {
+    if (gesture == nil) {
+        [self.mixpanel track:@"Image Revealed" properties:@{@"Image":[self.content objectForKey:@"publicpath"],
+                                                            @"ID":[self.content objectForKey:@"id"],
+                                                            @"User":[self.content objectForKey:@"username"]}];
+        
+    }
+    else [self.mixpanel timeEvent:@"Image Revealed"];
+                                                    
     [UIView animateWithDuration:gesture==nil?0.2:0.4 delay:0.05 options:(gesture==nil?UIViewAnimationOptionCurveEaseIn:UIViewAnimationOptionCurveEaseOut) animations:^{
         if (gesture != nil) {
             [self.subtitle setAlpha:0.0];
@@ -93,5 +99,12 @@
     } completion:nil];
 
 }
+
+-(void)backgroundoffset:(CGPoint)offset {
+    [self.overlay setFrame:CGRectOffset(self.overlay.bounds, offset.x, offset.y)];
+    //[self.overlay setFrame:self.image.bounds];
+    
+}
+
 
 @end

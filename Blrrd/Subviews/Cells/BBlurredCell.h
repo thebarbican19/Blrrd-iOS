@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 #import <UIImage+BlurEffects.h>
 #import <UIImageView+WebCache.h>
+#import <Mixpanel.h>
 #import "SAMLabel.h"
 
 @interface BBlurredCell : UICollectionViewCell <UIGestureRecognizerDelegate>
+
+@property (nonatomic ,strong) Mixpanel *mixpanel;
+@property (nonatomic ,strong) NSMutableDictionary *content;
 
 @property (nonatomic ,strong) UIView *container;
 @property (nonatomic ,strong) UIImageView *image;
@@ -21,5 +25,6 @@
 
 -(void)content:(NSDictionary *)content index:(NSIndexPath *)index;
 -(void)reveal:(UILongPressGestureRecognizer *)gesture;
+-(void)backgroundoffset:(CGPoint)offset;
 
 @end

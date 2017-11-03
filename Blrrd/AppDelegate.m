@@ -19,7 +19,11 @@
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
     self.credentials = [[BCredentialsObject alloc] init];
+    self.mixpanel = [Mixpanel sharedInstance];
 
+    [Mixpanel sharedInstanceWithToken:@"e25f29857e2e509f1f1e6befde7b7688"];
+    [self.credentials setDeviceIdentifyer];
+    
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
         [self.data setBool:true forKey:@"app_inactive"];
         [self.data synchronize];
@@ -27,12 +31,20 @@
     }
     
     if (![self.data boolForKey:@"app_installed"]) {
-         
+        if (!APP_DEBUG_MODE) [self.mixpanel track:@"App Installed" properties:nil];
+
+    }
+    else {
+        if (!APP_DEBUG_MODE) [self.mixpanel track:@"App Opened" properties:@{@"version":APP_VERSION, @"build":APP_BUILD}];
+
     }
     
     [self applicationVersionCheck];
     [self applicationCheckCrashes];
     [self applicationSetActiveTimer:true];
+    
+    [application setMinimumBackgroundFetchInterval:APP_DEBUG_MODE?UIApplicationBackgroundFetchIntervalMinimum:3600*3];
+
     
     [self.data setBool:true forKey:@"app_installed"];
     [self.data synchronize];
@@ -43,8 +55,9 @@
 
 -(void)applicationCheckCrashes {
     self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
+    self.mixpanel = [Mixpanel sharedInstance];
     if ([[self.data objectForKey:@"app_installed"] boolValue] && ![[self.data objectForKey:@"app_killed"] boolValue]) {
-        //if (!APP_DEBUG_MODE) [self.mixpanel track:@"App Crashed"];
+        if (!APP_DEBUG_MODE) [self.mixpanel track:@"App Crashed"];
         
     }
     
@@ -56,7 +69,8 @@
 -(void)applicationVersionCheck {
     self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
     self.credentials = [[BCredentialsObject alloc] init];
-    if ([[self.data objectForKey:@"app_version"] floatValue] != APP_VERSION_FLOAT || [[self.data objectForKey:@"app_build"] floatValue] != APP_BUILD_FLOAT || [[self.data objectForKey:@"app_version"] floatValue] == 0) {
+    self.mixpanel = [Mixpanel sharedInstance];
+    if ([[self.data objectForKey:@"app_installed"] boolValue] && ([[self.data objectForKey:@"app_version"] floatValue] != APP_VERSION_FLOAT || [[self.data objectForKey:@"app_build"] floatValue] != APP_BUILD_FLOAT || [[self.data objectForKey:@"app_version"] floatValue] == 0)) {
         [self.data setFloat:APP_VERSION_FLOAT forKey:@"app_version"];
         [self.data setFloat:APP_BUILD_FLOAT forKey:@"app_build"];
         
@@ -67,6 +81,7 @@
 -(void)applicationSetActiveTimer:(BOOL)initiate  {
     self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
     self.credentials = [[BCredentialsObject alloc] init];
+    self.mixpanel = [Mixpanel sharedInstance];
 
     if (!self.timer.isValid && initiate) self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(applicationSetActiveTimer:) userInfo:nil repeats:true];
     
@@ -79,10 +94,32 @@
         if (APP_DEVICE_FLOAT >= 10.3) {
             [SKStoreReviewController requestReview];
             [self.credentials setAppRated:true];
-            
+            [self.mixpanel track:@"App Rated"];
+
         }
         
     }
+    
+}
+
+-(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
+    self.query =  [[BQueryObject alloc] init];
+    self.mixpanel = [Mixpanel sharedInstance];
+    self.backgroundtask = [application beginBackgroundTaskWithExpirationHandler:^{
+        [application endBackgroundTask:self.backgroundtask];
+        [self setBackgroundtask:UIBackgroundTaskInvalid];
+        
+    }];
+    
+    [self.mixpanel timeEvent:@"App Updated Content in Background"];
+    [self.query queryFriendsTimeline:0 completion:^(NSArray *posts, NSError *error) {
+        [self.mixpanel track:@"App Updated Content in Background"];
+        
+        if (error.code == 200) completionHandler(UIBackgroundFetchResultNewData);
+        else completionHandler(UIBackgroundFetchResultNewData);
+        
+    }];
     
 }
 

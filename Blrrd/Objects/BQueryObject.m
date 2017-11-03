@@ -16,7 +16,8 @@
     if (self) {
         self.data = [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
         self.credentials = [[BCredentialsObject alloc] init];
-       
+        self.mixpanel = [Mixpanel sharedInstance];
+
     }
     return self;
     
@@ -37,6 +38,10 @@
                 [self.credentials setUserPublic:[[user objectForKey:@"publicuser"] boolValue]];
                 [self.credentials setDevicePush:[user objectForKey:@"pushId"]];
 
+                [self.mixpanel.people set:@{@"$name":self.credentials.userHandle==nil?@"Unknow userHandleUser":self.credentials.userHandle,
+                                          @"$email":self.credentials.userEmail==nil?@"":self.credentials.userEmail}];
+                [self.mixpanel identify:self.credentials.userKey];
+                
                 completion(user, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil]);
                 
             }

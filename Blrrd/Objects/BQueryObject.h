@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <Mixpanel.h>
 
 #import "BCredentialsObject.h"
 
@@ -16,6 +17,7 @@
 @property (nonatomic, assign) BOOL debug;
 @property (nonatomic, strong) NSUserDefaults *data;
 @property (nonatomic, strong) BCredentialsObject *credentials;
+@property (nonatomic, strong) Mixpanel *mixpanel;
 
 -(void)authenticationLoginWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion;
 -(void)authenticationSignupWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion;

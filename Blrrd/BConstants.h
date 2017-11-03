@@ -20,6 +20,8 @@
 #define IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 #define IS_IPHONE_X (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 812.0f)
 
+#define MAIN_CELL_SIZE CGSizeMake(self.view.bounds.size.width - 30.0, self.view.bounds.size.width - 30.0)
+
 #define APP_HOST_URL @"http://62.75.213.212:8000/"
 #define APP_BUNDLE_NAME [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]
 //#define APP_SHORT_URL @"http://apple.co/2fXuzEY"

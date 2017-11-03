@@ -7,6 +7,7 @@
 //
 
 #import "BTimelineSubview.h"
+#import "BConstants.h"
 
 @interface BTimelineSubview ()
 
@@ -41,7 +42,8 @@
     BBlurredCell *cell = (BBlurredCell *)[self.collectionView dequeueReusableCellWithReuseIdentifier:@"item" forIndexPath:indexPath];
 
     [cell content:[self.content objectAtIndex:indexPath.row] index:indexPath];
-    
+    [cell backgroundoffset:CGPointMake(0.0f, ((self.collectionView.contentOffset.y - cell.frame.origin.y) / MAIN_CELL_SIZE.height) * 8.0)];
+
     return cell;
 }
 
@@ -59,6 +61,12 @@
         BBlurredCell *cell = (BBlurredCell *)[self.collectionView cellForItemAtIndexPath:item];
         if (cell != self.activecell) [cell reveal:nil];
 
+    }
+    
+    CGSize cellsize = MAIN_CELL_SIZE;
+    for (BBlurredCell *view in self.collectionView.visibleCells) {
+        [view backgroundoffset:CGPointMake(0.0f, ((self.collectionView.contentOffset.y - view.frame.origin.y) / cellsize.height) * 10.0)];
+        
     }
     
 }
