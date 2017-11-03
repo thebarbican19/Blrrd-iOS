@@ -15,4 +15,9 @@
 @property (nonatomic, strong) BQueryObject *query;
 @property (nonatomic, strong) BCredentialsObject *credentials;
 
+@property (nonatomic, strong) UILabel *status;
+
+@property (nonatomic) UIStatusBarStyle statusbarstyle;
+@property (nonatomic) BOOL statusbarhidden;
+
 @end

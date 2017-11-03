@@ -23,6 +23,10 @@
 		778D9B5A1FABD27900878A6A /* NSString+EmailAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B581FABD27800878A6A /* NSString+EmailAddresses.m */; };
 		778D9B5C1FABD60F00878A6A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778D9B5B1FABD60F00878A6A /* StoreKit.framework */; };
 		778D9B5F1FABD63700878A6A /* BQueryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B5E1FABD63700878A6A /* BQueryObject.m */; };
+		778D9B621FABEB5100878A6A /* BContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B611FABEB5100878A6A /* BContainerController.m */; };
+		778D9B6A1FABEBD300878A6A /* BTimelineSubview.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B691FABEBD300878A6A /* BTimelineSubview.m */; };
+		778D9B6D1FABEC1600878A6A /* BBlurredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B6C1FABEC1600878A6A /* BBlurredCell.m */; };
+		778D9B721FABF18A00878A6A /* GDPlaceholderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B711FABF18A00878A6A /* GDPlaceholderView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +78,15 @@
 		778D9B5B1FABD60F00878A6A /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		778D9B5D1FABD63700878A6A /* BQueryObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BQueryObject.h; sourceTree = "<group>"; };
 		778D9B5E1FABD63700878A6A /* BQueryObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BQueryObject.m; sourceTree = "<group>"; };
+		778D9B601FABEB5100878A6A /* BContainerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BContainerController.h; sourceTree = "<group>"; };
+		778D9B611FABEB5100878A6A /* BContainerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BContainerController.m; sourceTree = "<group>"; };
+		778D9B681FABEBD300878A6A /* BTimelineSubview.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BTimelineSubview.h; sourceTree = "<group>"; };
+		778D9B691FABEBD300878A6A /* BTimelineSubview.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BTimelineSubview.m; sourceTree = "<group>"; };
+		778D9B6B1FABEC1600878A6A /* BBlurredCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBlurredCell.h; sourceTree = "<group>"; };
+		778D9B6C1FABEC1600878A6A /* BBlurredCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBlurredCell.m; sourceTree = "<group>"; };
+		778D9B701FABF18A00878A6A /* GDPlaceholderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDPlaceholderView.h; sourceTree = "<group>"; };
+		778D9B711FABF18A00878A6A /* GDPlaceholderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDPlaceholderView.m; sourceTree = "<group>"; };
+		778D9B731FAC0E0F00878A6A /* UIImage+BlurExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurExtension.h"; sourceTree = "<group>"; };
 		846352F4B811913EF775AD40 /* Pods-BlrrdTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdTests/Pods-BlrrdTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Blrrd.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -195,8 +208,8 @@
 		778D9B511FABCC8100878A6A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				778D9B541FABCE0700878A6A /* BAuthController.h */,
-				778D9B551FABCE0700878A6A /* BAuthController.m */,
+				778D9B641FABEB6000878A6A /* Main */,
+				778D9B631FABEB5600878A6A /* Auth */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -212,6 +225,8 @@
 		778D9B531FABCCBE00878A6A /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				778D9B6B1FABEC1600878A6A /* BBlurredCell.h */,
+				778D9B6C1FABEC1600878A6A /* BBlurredCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -219,10 +234,49 @@
 		778D9B571FABD1CB00878A6A /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				778D9B6F1FABF15700878A6A /* Grado */,
+				778D9B6E1FABF14E00878A6A /* Other */,
+			);
+			path = Custom;
+			sourceTree = "<group>";
+		};
+		778D9B631FABEB5600878A6A /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				778D9B541FABCE0700878A6A /* BAuthController.h */,
+				778D9B551FABCE0700878A6A /* BAuthController.m */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		778D9B641FABEB6000878A6A /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				778D9B601FABEB5100878A6A /* BContainerController.h */,
+				778D9B611FABEB5100878A6A /* BContainerController.m */,
+				778D9B681FABEBD300878A6A /* BTimelineSubview.h */,
+				778D9B691FABEBD300878A6A /* BTimelineSubview.m */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		778D9B6E1FABF14E00878A6A /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				778D9B731FAC0E0F00878A6A /* UIImage+BlurExtension.h */,
 				778D9B591FABD27800878A6A /* NSString+EmailAddresses.h */,
 				778D9B581FABD27800878A6A /* NSString+EmailAddresses.m */,
 			);
-			path = Custom;
+			path = Other;
+			sourceTree = "<group>";
+		};
+		778D9B6F1FABF15700878A6A /* Grado */ = {
+			isa = PBXGroup;
+			children = (
+				778D9B701FABF18A00878A6A /* GDPlaceholderView.h */,
+				778D9B711FABF18A00878A6A /* GDPlaceholderView.m */,
+			);
+			path = Grado;
 			sourceTree = "<group>";
 		};
 		DC2B262B6F1B871B7C26DD9C /* Frameworks */ = {
@@ -520,10 +574,14 @@
 			files = (
 				778D9B561FABCE0700878A6A /* BAuthController.m in Sources */,
 				778D9B5A1FABD27900878A6A /* NSString+EmailAddresses.m in Sources */,
+				778D9B6D1FABEC1600878A6A /* BBlurredCell.m in Sources */,
 				778D9B5F1FABD63700878A6A /* BQueryObject.m in Sources */,
+				778D9B6A1FABEBD300878A6A /* BTimelineSubview.m in Sources */,
 				778D9B4A1FABCC1400878A6A /* BCredentialsObject.m in Sources */,
 				778D9B251FABB53600878A6A /* main.m in Sources */,
+				778D9B621FABEB5100878A6A /* BContainerController.m in Sources */,
 				778D9B171FABB53600878A6A /* AppDelegate.m in Sources */,
+				778D9B721FABF18A00878A6A /* GDPlaceholderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -700,7 +758,7 @@
 				INFOPLIST_FILE = Blrrd/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.blrrd.client;
+				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -716,7 +774,7 @@
 				INFOPLIST_FILE = Blrrd/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.blrrd.client;
+				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

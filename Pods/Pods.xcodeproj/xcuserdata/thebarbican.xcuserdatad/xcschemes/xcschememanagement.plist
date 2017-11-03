@@ -64,6 +64,11 @@
 			<key>orderHint</key>
 			<integer>11</integer>
 		</dict>
+		<key>UIImage-Helpers.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>11</integer>
+		</dict>
 	</dict>
 </dict>
 </plist>

@@ -18,7 +18,7 @@
 -(void)destoryAllCredentials;
 
 -(NSString *)userKey;
--(NSString *)userDisplay;
+-(NSString *)userHandle;
 -(NSString *)userEmail;
 -(NSURL *)userAvatar;
 -(BOOL)userPublic;

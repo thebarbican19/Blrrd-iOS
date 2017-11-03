@@ -20,4 +20,6 @@
 -(void)authenticationLoginWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion;
 -(void)authenticationSignupWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion;
 
+-(void)queryFriendsTimeline:(int)page completion:(void (^)(NSArray *posts, NSError *error))completion;
+
 @end

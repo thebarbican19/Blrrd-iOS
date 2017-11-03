@@ -50,8 +50,8 @@
     
 }
 
--(NSString *)userDisplay {
-    if ([self.data objectForKey:@"user_displayname"] != nil) return [self.data objectForKey:@"user_displayname"];
+-(NSString *)userHandle {
+    if ([self.data objectForKey:@"user_handle"] != nil) return [self.data objectForKey:@"user_handle"];
     else return nil;
     
 }

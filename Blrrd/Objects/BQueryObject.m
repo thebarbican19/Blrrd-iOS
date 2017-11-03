@@ -37,8 +37,6 @@
                 [self.credentials setUserPublic:[[user objectForKey:@"publicuser"] boolValue]];
                 [self.credentials setDevicePush:[user objectForKey:@"pushId"]];
 
-                NSLog(@"output: %@ %d" ,user ,(int)status.statusCode)
-
                 completion(user, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil]);
                 
             }
@@ -48,8 +46,8 @@
             }
             
         }
-        else completion(nil, [self requestErrorHandle:0 message:nil error:error]);
-        
+        else completion(nil, [self requestErrorHandle:(int)error.code message:nil error:error]);
+
     }];
     
     [task resume];
@@ -60,7 +58,55 @@
     
 }
 
--(void)requestCache:(NSDictionary *)data {
+-(void)queryFriendsTimeline:(int)page completion:(void (^)(NSArray *posts, NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"postsApi/%@/?myusername=%@" ,page==0?@"getAllFriendsPostsV2":@"getAllFriendsPostsNext" ,self.credentials.userHandle];
+    NSString *method = @"GET";
+    NSArray *cache = [self cacheRetrive:endpoint];
+    if (cache != nil) {
+        completion(cache, [self requestErrorHandle:200 message:@"returned from cache" error:nil]);
+        
+    }
+    else {
+        NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint dictionary:nil method:method] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+            if (data.length > 0 && !error) {
+                if (status.statusCode == 200) {
+                    [self cacheSave:[[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] objectForKey:@"data"] endpoint:endpoint];
+                    
+                    completion([self cacheRetrive:endpoint], [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil]);
+                    
+                }
+                else if (status.statusCode == 500) {
+                    completion(nil, [self requestErrorHandle:401 message:@"credentials incorrect" error:nil]);
+                    
+                }
+                
+            }
+            else completion(nil, [self requestErrorHandle:(int)error.code message:nil error:error]);
+            
+        }];
+        
+        [task resume];
+        
+    }
+    
+}
+
+-(void)cacheSave:(id)data endpoint:(NSString *)endpoint {
+    if (data != nil) {
+        [self.data setObject:@{@"data":data, @"expiry":[NSDate dateWithTimeIntervalSinceNow:60*60]} forKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]];
+        [self.data synchronize];
+        
+        if (self.debug) NSLog(@"\n\nSaved Cache 💾 with Key %@ \n\n", endpoint);
+
+    }
+    
+}
+
+-(id)cacheRetrive:(NSString *)endpoint {
+    NSDate *expiry = [[self.data objectForKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]] objectForKey:@"expiry"];
+    if ([[NSDate date] compare:expiry] == NSOrderedDescending || expiry == nil) return nil;
+    else return [[self.data objectForKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]] objectForKey:@"data"];
     
 }
 
@@ -73,6 +119,8 @@
 }
 
 -(NSError *)requestErrorHandle:(int)code message:(NSString *)message error:(NSError *)error {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
+
     if (error) return [NSError errorWithDomain:error.localizedDescription code:error.code userInfo:nil];
     else if (message == nil && error == nil) return [NSError errorWithDomain:@"unknown error" code:600 userInfo:nil];
     else return [NSError errorWithDomain:message code:code userInfo:nil];
@@ -85,9 +133,7 @@
     [sessionRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [sessionRequest setHTTPMethod:method];
     
-    BOOL loader = false;
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:loader];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:true];
     
     if (dictionary != nil) {
         [sessionRequest setHTTPBody:[NSJSONSerialization dataWithJSONObject:@[dictionary] options:NSJSONWritingPrettyPrinted error:nil]];

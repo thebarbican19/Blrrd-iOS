@@ -6,14 +6,14 @@ project 'Blrrd.xcodeproj'
 target 'Blrrd' do
   pod 'SDWebImage', '~>3.8'
   pod 'Mixpanel'
-  pod 'UIImage+ImageWithColor'
+  pod 'UIImage-Helpers'
+  pod 'TYBlurImage'
   pod 'SDWebImage', '~>3.8'
   pod 'DBImageColorPicker'
   pod 'BLMultiColorLoader'
   pod 'SAMLabel'
   pod 'DBImageColorPicker'
   pod 'GBDeviceInfo', '~>4.4.0'
-  pod 'TYBlurImage'
 
   target 'BlrrdTests' do
     inherit! :search_paths
