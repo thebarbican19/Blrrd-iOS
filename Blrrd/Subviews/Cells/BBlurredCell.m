@@ -80,8 +80,11 @@
                                                             @"User":[self.content objectForKey:@"username"]}];
         
     }
-    else [self.mixpanel timeEvent:@"Image Revealed"];
-                                                    
+    else if (gesture.state == UIGestureRecognizerStateBegan) {
+        [self.mixpanel timeEvent:@"Image Revealed"];
+        
+    }
+    
     [UIView animateWithDuration:gesture==nil?0.2:0.4 delay:0.05 options:(gesture==nil?UIViewAnimationOptionCurveEaseIn:UIViewAnimationOptionCurveEaseOut) animations:^{
         if (gesture != nil) {
             [self.subtitle setAlpha:0.0];
@@ -89,7 +92,7 @@
             [self.image setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
             
         }
-        else {
+        else if (gesture.state == UIGestureRecognizerStateBegan) {
             [self.subtitle setAlpha:1.0];
             [self.overlay setAlpha:1.0];
             [self.image setTransform:CGAffineTransformMakeScale(1.15, 1.15)];
@@ -101,7 +104,7 @@
 }
 
 -(void)backgroundoffset:(CGPoint)offset {
-    [self.overlay setFrame:CGRectOffset(self.overlay.bounds, offset.x, offset.y)];
+    [self.container setFrame:CGRectOffset(self.overlay.bounds, offset.x, offset.y)];
     //[self.overlay setFrame:self.image.bounds];
     
 }
