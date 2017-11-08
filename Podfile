@@ -14,6 +14,7 @@ target 'Blrrd' do
   pod 'SAMLabel'
   pod 'DBImageColorPicker'
   pod 'GBDeviceInfo', '~>4.4.0'
+  pod 'KVNBoundedImageView'
 
   target 'BlrrdTests' do
     inherit! :search_paths

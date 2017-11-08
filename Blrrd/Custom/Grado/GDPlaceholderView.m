@@ -26,10 +26,10 @@
         placeholderTitle.verticalTextAlignment = UIControlContentVerticalAlignmentCenter;
         placeholderTitle.textAlignment = NSTextAlignmentCenter;
         placeholderTitle.numberOfLines = 5;
-        placeholderTitle.font = [UIFont fontWithName:@"TitilliumWeb-Light" size:26];
+        placeholderTitle.font = [UIFont fontWithName:@"Arial-BoldMT" size:56];
         placeholderTitle.textColor = self.textcolor;
         placeholderTitle.text = nil;
-        placeholderTitle.alpha = 0.7;
+        placeholderTitle.alpha = 1.0;
         placeholderTitle.backgroundColor = [UIColor clearColor];
         placeholderTitle.userInteractionEnabled = false;
         [self addSubview:placeholderTitle];
@@ -59,12 +59,12 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (![placeholderTitle.attributedText isEqual:[self format:title subtitle:instructions]]) {
             [placeholderTitle setAttributedText:[self format:title subtitle:instructions]];
-            [placeholderTitle setAlpha:0.7];
+            [placeholderTitle setAlpha:1.0];
 
         }
         else {
             [placeholderTitle setAttributedText:[self format:title subtitle:instructions]];
-            [placeholderTitle setAlpha:0.7];
+            [placeholderTitle setAlpha:1.0];
             
         }
         
@@ -130,13 +130,13 @@
 
 -(NSAttributedString *)format:(NSString *)title subtitle:(NSString *)subtitle {
     NSString *text;
-    if (subtitle) text = [NSString stringWithFormat:@"%@\n%@" ,title, subtitle];
-    else text = title;
+    if (subtitle) text = [NSString stringWithFormat:@"%@\n%@" ,title.uppercaseString, subtitle];
+    else text = title.uppercaseString;
     
     NSMutableAttributedString *formatted = [[NSMutableAttributedString alloc] initWithString:text];
     if (subtitle) {
-        [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"TitilliumWeb-Light" size:12.0] range:NSMakeRange(title.length + 1, subtitle.length)];
-        [formatted addAttribute:NSForegroundColorAttributeName value:self.textcolor range:NSMakeRange(title.length + 1, subtitle.length)];
+        [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Arial-BoldMT" size:10.0] range:NSMakeRange(title.length + 1, subtitle.length)];
+        [formatted addAttribute:NSForegroundColorAttributeName value:[self.textcolor colorWithAlphaComponent:0.7] range:NSMakeRange(title.length + 1, subtitle.length)];
         
     }
     

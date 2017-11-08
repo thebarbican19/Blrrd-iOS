@@ -10,6 +10,10 @@
 		10D81ABF3A18D93B28414C21 /* libPods-Blrrd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */; };
 		2BE2E861C4D7BD74507C4F52 /* libPods-BlrrdTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */; };
 		3C1837B2FB585C787DA1836D /* libPods-BlrrdUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */; };
+		77656A981FB26478006F0854 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77656A971FB26477006F0854 /* UserNotifications.framework */; };
+		77656A9B1FB286E0006F0854 /* BSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656A9A1FB286DF006F0854 /* BSegmentControl.m */; };
+		77656A9F1FB287B5006F0854 /* BSegmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656A9E1FB287B5006F0854 /* BSegmentCell.m */; };
+		77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656AA01FB29623006F0854 /* GDStatusLabel.m */; };
 		778D9B171FABB53600878A6A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B161FABB53600878A6A /* AppDelegate.m */; };
 		778D9B1D1FABB53600878A6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1B1FABB53600878A6A /* Main.storyboard */; };
 		778D9B1F1FABB53600878A6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1E1FABB53600878A6A /* Assets.xcassets */; };
@@ -53,6 +57,13 @@
 		4D03DFD143260305F4E5E860 /* Pods-Blrrd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blrrd.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Blrrd/Pods-Blrrd.debug.xcconfig"; sourceTree = "<group>"; };
 		525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EC6E94C2F62261082206C6F /* Pods-BlrrdUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdUITests/Pods-BlrrdUITests.release.xcconfig"; sourceTree = "<group>"; };
+		77656A971FB26477006F0854 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		77656A991FB286DF006F0854 /* BSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSegmentControl.h; sourceTree = "<group>"; };
+		77656A9A1FB286DF006F0854 /* BSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSegmentControl.m; sourceTree = "<group>"; };
+		77656A9D1FB287B5006F0854 /* BSegmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSegmentCell.h; sourceTree = "<group>"; };
+		77656A9E1FB287B5006F0854 /* BSegmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSegmentCell.m; sourceTree = "<group>"; };
+		77656AA01FB29623006F0854 /* GDStatusLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDStatusLabel.m; sourceTree = "<group>"; };
+		77656AA11FB29624006F0854 /* GDStatusLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDStatusLabel.h; sourceTree = "<group>"; };
 		778D9B121FABB53600878A6A /* Blrrd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blrrd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		778D9B151FABB53600878A6A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		778D9B161FABB53600878A6A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -98,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77656A981FB26478006F0854 /* UserNotifications.framework in Frameworks */,
 				778D9B5C1FABD60F00878A6A /* StoreKit.framework in Frameworks */,
 				10D81ABF3A18D93B28414C21 /* libPods-Blrrd.a in Frameworks */,
 			);
@@ -133,6 +145,17 @@
 				6EC6E94C2F62261082206C6F /* Pods-BlrrdUITests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		77656A9C1FB286EB006F0854 /* Segment */ = {
+			isa = PBXGroup;
+			children = (
+				77656A9D1FB287B5006F0854 /* BSegmentCell.h */,
+				77656A9E1FB287B5006F0854 /* BSegmentCell.m */,
+				77656A991FB286DF006F0854 /* BSegmentControl.h */,
+				77656A9A1FB286DF006F0854 /* BSegmentControl.m */,
+			);
+			path = Segment;
 			sourceTree = "<group>";
 		};
 		778D9B091FABB53600878A6A = {
@@ -219,6 +242,7 @@
 		778D9B521FABCCAD00878A6A /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				77656A9C1FB286EB006F0854 /* Segment */,
 				778D9B531FABCCBE00878A6A /* Cells */,
 			);
 			path = Subviews;
@@ -277,6 +301,8 @@
 			children = (
 				778D9B701FABF18A00878A6A /* GDPlaceholderView.h */,
 				778D9B711FABF18A00878A6A /* GDPlaceholderView.m */,
+				77656AA11FB29624006F0854 /* GDStatusLabel.h */,
+				77656AA01FB29623006F0854 /* GDStatusLabel.m */,
 			);
 			path = Grado;
 			sourceTree = "<group>";
@@ -284,6 +310,7 @@
 		DC2B262B6F1B871B7C26DD9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				77656A971FB26477006F0854 /* UserNotifications.framework */,
 				778D9B5B1FABD60F00878A6A /* StoreKit.framework */,
 				B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */,
 				525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */,
@@ -378,6 +405,9 @@
 								enabled = 1;
 							};
 							com.apple.Keychain = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -589,11 +619,14 @@
 				778D9B5A1FABD27900878A6A /* NSString+EmailAddresses.m in Sources */,
 				778D9B6D1FABEC1600878A6A /* BBlurredCell.m in Sources */,
 				778D9B5F1FABD63700878A6A /* BQueryObject.m in Sources */,
+				77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */,
+				77656A9F1FB287B5006F0854 /* BSegmentCell.m in Sources */,
 				778D9B6A1FABEBD300878A6A /* BTimelineSubview.m in Sources */,
 				778D9B4A1FABCC1400878A6A /* BCredentialsObject.m in Sources */,
 				778D9B251FABB53600878A6A /* main.m in Sources */,
 				778D9B621FABEB5100878A6A /* BContainerController.m in Sources */,
 				778D9B171FABB53600878A6A /* AppDelegate.m in Sources */,
+				77656A9B1FB286E0006F0854 /* BSegmentControl.m in Sources */,
 				778D9B721FABF18A00878A6A /* GDPlaceholderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

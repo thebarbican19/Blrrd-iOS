@@ -23,10 +23,41 @@
     
 }
 
+-(NSDictionary *)retriveEndpoint:(NSString *)key {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@ || key == %@" ,key ,key];
+    NSMutableArray *endpoints = [[NSMutableArray alloc] init];
+    [endpoints addObject:@{@"endpoint":@"userApi/checkUser/",
+                           @"method":@"POST",
+                           @"name":@"authenticate",
+                           @"key":@"authenticate",
+                           @"parameter":@""}];
+    [endpoints addObject:@{@"endpoint":@"postsApi/getAllFriendsPostsV2/",
+                           @"method":@"GET",
+                           @"name":@"friendstimelineone",
+                           @"key":@"maintimeline",
+                           @"parameter":[NSString stringWithFormat:@"?myusername=%@" ,self.credentials.userHandle]}];
+    [endpoints addObject:@{@"endpoint":@"postsApi/getAllFriendsPostsNext/",
+                           @"method":@"GET",
+                           @"name":@"friendstimelinenext",
+                           @"key":@"maintimeline",
+                           @"parameter":[NSString stringWithFormat:@"?myusername=%@" ,self.credentials.userHandle]}];
+  
+    
+    
+    NSMutableDictionary *returned = [[NSMutableDictionary alloc] initWithDictionary:[[endpoints filteredArrayUsingPredicate:predicate] firstObject]];
+    NSString *output = [NSString stringWithFormat:@"%@%@%@" ,APP_HOST_URL ,[returned objectForKey:@"endpoint"] ,[returned objectForKey:@"parameter"]];
+    [returned setObject:[NSURL URLWithString:output] forKey:@"url"];
+    
+    return returned;
+    
+}
+
 -(void)authenticationLoginWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion {
-    NSString *endpoint = @"userApi/checkUser/";
-    NSString *method = @"POST";
-    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint dictionary:credentials method:method] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSDictionary *endpoint = [self retriveEndpoint:@"authenticate"];
+    NSString *endpointmethod = [endpoint objectForKey:@"method"];
+    NSURL *endpointurl = [endpoint objectForKey:@"url"];
+    
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpointurl dictionary:credentials method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
         if (data.length > 0 && !error) {
             if (status.statusCode == 200) {
@@ -38,7 +69,7 @@
                 [self.credentials setUserPublic:[[user objectForKey:@"publicuser"] boolValue]];
                 [self.credentials setDevicePush:[user objectForKey:@"pushId"]];
 
-                [self.mixpanel.people set:@{@"$name":self.credentials.userHandle==nil?@"Unknow userHandleUser":self.credentials.userHandle,
+                [self.mixpanel.people set:@{@"$name":self.credentials.userHandle==nil?@"Unknown User":self.credentials.userHandle,
                                           @"$email":self.credentials.userEmail==nil?@"":self.credentials.userEmail}];
                 [self.mixpanel identify:self.credentials.userKey];
                 
@@ -64,21 +95,24 @@
 }
 
 -(void)queryFriendsTimeline:(int)page completion:(void (^)(NSArray *posts, NSError *error))completion {
-    NSString *endpoint = [NSString stringWithFormat:@"postsApi/%@/?myusername=%@" ,page==0?@"getAllFriendsPostsV2":@"getAllFriendsPostsNext" ,self.credentials.userHandle];
-    NSString *method = @"GET";
-    NSArray *cache = [self cacheRetrive:endpoint];
-    if (cache != nil) {
-        completion(cache, [self requestErrorHandle:200 message:@"returned from cache" error:nil]);
+    NSDictionary *endpoint = [self retriveEndpoint:page==0?@"friendstimelineone":@"friendstimelinenext"];
+    NSString *endpointname = [endpoint objectForKey:@"name"];
+    NSString *endpointmethod = [endpoint objectForKey:@"method"];
+    NSURL *endpointurl = [endpoint objectForKey:@"url"];
+
+    BOOL cacheexpired = [self cacheExpired:endpointname];
+    if (cacheexpired == false) {
+        completion([self cacheRetrive:endpointname], [self requestErrorHandle:200 message:@"returned from cache" error:nil]);
         
     }
     else {
-        NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint dictionary:nil method:method] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpointurl dictionary:nil method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
             NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
             if (data.length > 0 && !error) {
                 if (status.statusCode == 200) {
-                    [self cacheSave:[[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] objectForKey:@"data"] endpoint:endpoint];
+                    [self cacheSave:[[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] objectForKey:@"data"] endpointname:endpointname append:page==0?false:true];
                     
-                    completion([self cacheRetrive:endpoint], [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil]);
+                    completion([self cacheRetrive:endpointname], [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil]);
                     
                 }
                 else if (status.statusCode == 500) {
@@ -97,7 +131,7 @@
     
 }
 
--(void)cacheSave:(id)data endpoint:(NSString *)endpoint {
+-(void)cacheSave:(id)data endpointname:(NSString *)endpoint append:(BOOL)append {
     if (data != nil) {
         [self.data setObject:@{@"data":data, @"expiry":[NSDate dateWithTimeIntervalSinceNow:60*60]} forKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]];
         [self.data synchronize];
@@ -109,9 +143,16 @@
 }
 
 -(id)cacheRetrive:(NSString *)endpoint {
-    NSDate *expiry = [[self.data objectForKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]] objectForKey:@"expiry"];
-    if ([[NSDate date] compare:expiry] == NSOrderedDescending || expiry == nil) return nil;
+    if ([self.data objectForKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]] == nil) return [[NSArray alloc] init];
     else return [[self.data objectForKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]] objectForKey:@"data"];
+
+}
+
+-(BOOL)cacheExpired:(NSString *)endpoint {
+    NSDate *expiry = [[self.data objectForKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]] objectForKey:@"expiry"];
+    if ([[NSDate date] compare:expiry] == NSOrderedDescending || expiry == nil) return true;
+    else if ([self.data objectForKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]] == nil) return true;
+    else return false;
     
 }
 
@@ -125,6 +166,15 @@
 
 -(NSError *)requestErrorHandle:(int)code message:(NSString *)message error:(NSError *)error {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
+    
+    if (code == 401) {
+        [self.credentials destoryAllCredentials];
+        if ([self.delegate respondsToSelector:@selector(viewCheckAuthenticaion)]) {
+            [self.delegate viewCheckAuthenticaion];
+            
+        }
+        
+    }
 
     if (error) return [NSError errorWithDomain:error.localizedDescription code:error.code userInfo:nil];
     else if (message == nil && error == nil) return [NSError errorWithDomain:@"unknown error" code:600 userInfo:nil];
@@ -132,9 +182,8 @@
     
 }
 
--(NSMutableURLRequest *)requestMaster:(NSString *)endpoint dictionary:(NSDictionary *)dictionary method:(NSString *)method {
-    NSURL *sessionEndpoint = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@" ,APP_HOST_URL, endpoint]];
-    NSMutableURLRequest *sessionRequest = [NSMutableURLRequest requestWithURL:sessionEndpoint cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:40];
+-(NSMutableURLRequest *)requestMaster:(NSURL *)endpoint dictionary:(NSDictionary *)dictionary method:(NSString *)method {
+    NSMutableURLRequest *sessionRequest = [NSMutableURLRequest requestWithURL:endpoint cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:40];
     [sessionRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [sessionRequest setHTTPMethod:method];
     
@@ -145,7 +194,7 @@
         
     }
     
-    if (self.debug) NSLog(@"\n\nLoading ✍️ %@: %@\n\n" ,method, sessionEndpoint);
+    if (self.debug) NSLog(@"\n\nLoading ✍️ %@: %@\n\n" ,method, endpoint);
     
     return sessionRequest;
     

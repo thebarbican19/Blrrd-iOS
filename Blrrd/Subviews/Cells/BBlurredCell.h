@@ -11,20 +11,38 @@
 #import <UIImageView+WebCache.h>
 #import <Mixpanel.h>
 #import "SAMLabel.h"
+#import "KVNBoundedImageView.h"
+#import "GDStatusLabel.h"
 
+@protocol BBlurredCellDelegate;
 @interface BBlurredCell : UICollectionViewCell <UIGestureRecognizerDelegate>
 
+@property (nonatomic, strong) id <BBlurredCellDelegate> delegate;
 @property (nonatomic ,strong) Mixpanel *mixpanel;
 @property (nonatomic ,strong) NSMutableDictionary *content;
+@property (nonatomic ,strong) NSMutableDictionary *userdata;
+@property (nonatomic ,assign) int timeviewed;
+@property (nonatomic ,assign) int existingtimeviewed;
+@property (nonatomic ,strong) NSTimer *timer;
 
 @property (nonatomic ,strong) UIView *container;
 @property (nonatomic ,strong) UIImageView *image;
 @property (nonatomic ,strong) UIImageView *overlay;
 @property (nonatomic ,strong) SAMLabel *subtitle;
+@property (nonatomic ,strong) UILabel *user;
+@property (nonatomic, strong) KVNBoundedImageView *avatar;
+@property (nonatomic ,strong) GDStatusLabel *time;
 @property (nonatomic ,strong) UILongPressGestureRecognizer *gesture;
 
 -(void)content:(NSDictionary *)content index:(NSIndexPath *)index;
 -(void)reveal:(UILongPressGestureRecognizer *)gesture;
--(void)backgroundoffset:(CGPoint)offset;
+
+@end
+
+@protocol BBlurredCellDelegate <NSObject>
+
+@optional
+
+-(void)collectionViewRevealed:(BBlurredCell *)revealed;
 
 @end

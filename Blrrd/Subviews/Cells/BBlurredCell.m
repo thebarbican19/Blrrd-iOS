@@ -13,8 +13,37 @@
 -(id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     self.mixpanel = [Mixpanel sharedInstance];
-    if (self) {        
-        self.container = [[UIView alloc] initWithFrame:self.bounds];
+    if (self) {
+        self.avatar = [[KVNBoundedImageView alloc] initWithFrame:CGRectMake(0.0, 4.0, 20.0 ,20.0)];
+        self.avatar.boundingBoxScheme = BoundingBoxSchemeLargest;
+        self.avatar.boundingEnabled = true;
+        self.avatar.boundingPadding = 10.0;
+        self.avatar.animated = true;
+        self.avatar.contentMode = UIViewContentModeScaleAspectFill;
+        self.avatar.image = nil;
+        self.avatar.backgroundColor = [UIColor lightGrayColor];
+        self.avatar.layer.cornerRadius = self.avatar.bounds.size.width / 2;
+        [self.contentView addSubview:self.avatar];
+        
+        self.user = [[SAMLabel alloc] initWithFrame:CGRectMake(25.0, 0.0, self.bounds.size.width - 60.0 ,28.0)];
+        self.user.numberOfLines = 1;
+        self.user.textAlignment = NSTextAlignmentLeft;
+        self.user.text = nil;
+        self.user.textColor = [UIColor whiteColor];
+        self.user.font = [UIFont fontWithName:@"Arial-BoldMT" size:12];
+        [self addSubview:self.user];
+        
+        self.time = [[GDStatusLabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - 55.0, 0.0, 50.0, 28.0)];
+        self.time.numberOfLines = 1;
+        self.time.hidden = false;
+        self.time.colour = [UIColor whiteColor];
+        self.time.fount =  [UIFont fontWithName:@"Arial-BoldMT" size:12];
+        self.time.alignment = NSTextAlignmentRight;
+        self.time.backgroundColor = [UIColor clearColor];
+        self.time.userInteractionEnabled = false;
+        [self addSubview:self.time];
+        
+        self.container = [[UIView alloc] initWithFrame:CGRectMake(0.0, 30.0, self.bounds.size.width, self.bounds.size.height)];
         self.container.backgroundColor = [UIColor colorWithWhite:0.05 alpha:1.0];
         self.container.clipsToBounds = true;
         self.container.userInteractionEnabled = true;
@@ -41,7 +70,7 @@
         [self.container addSubview:self.subtitle];
 
         self.gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(reveal:)];
-        self.gesture.minimumPressDuration = 0.3;
+        self.gesture.minimumPressDuration = 0.1;
         [self.container addGestureRecognizer:self.gesture];
         
     }
@@ -52,9 +81,18 @@
 
 -(void)content:(NSDictionary *)content index:(NSIndexPath *)index {
     self.content = [[NSMutableDictionary alloc] initWithDictionary:content];
-    NSLog(@"content: %@" ,content);
+    self.userdata = [[content objectForKey:@"userdata"] firstObject];
+    self.existingtimeviewed = [[self.content objectForKey:@"sectotal"] intValue];
+
     [self.subtitle setText:[content objectForKey:@"name"]];
-    [self blur:[NSURL URLWithString:[content objectForKey:@"publicpath"]]];
+    [self.user setText:[[self.userdata objectForKey:@"username"] lowercaseString]];
+    [self.avatar setImageFromURL:[NSURL URLWithString:[self.userdata objectForKey:@"photo"]] placeholder:nil];
+    [self.time setText:self.timeformatted animate:false];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self blur:[NSURL URLWithString:[content objectForKey:@"publicpath"]]];
+        
+    });
     
 }
 
@@ -72,27 +110,57 @@
     }];
     
 }
+
+-(void)givetime:(NSTimer *)timer {
+    if (timer != nil) {
+        [self setExistingtimeviewed:self.existingtimeviewed+1];
+        [self setTimeviewed:self.timeviewed+1];
+        [self.time setText:self.timeformatted animate:true];
+        [self.content setObject:[NSNumber numberWithInt:self.existingtimeviewed] forKey:@"sectotal"];
+
+    }
+    
+    if (self.timeviewed > 35) [self reveal:nil];
+    
+}
+
+-(NSString *)timeformatted {
+    if (self.existingtimeviewed < 60) return [NSString stringWithFormat:@"%01ds" ,self.existingtimeviewed % 60];
+    else return [NSString stringWithFormat:@"%01dm %01ds" ,self.existingtimeviewed / 60 % 60, self.existingtimeviewed % 60];
+}
                         
 -(void)reveal:(UILongPressGestureRecognizer *)gesture {
     if (gesture == nil) {
+        [self.timer invalidate];
         [self.mixpanel track:@"Image Revealed" properties:@{@"Image":[self.content objectForKey:@"publicpath"],
                                                             @"ID":[self.content objectForKey:@"id"],
                                                             @"User":[self.content objectForKey:@"username"]}];
         
     }
     else if (gesture.state == UIGestureRecognizerStateBegan) {
+        [self setTimeviewed:0];
         [self.mixpanel timeEvent:@"Image Revealed"];
+        if ([self.delegate respondsToSelector:@selector(collectionViewRevealed:)]) {
+            [self.delegate collectionViewRevealed:self];
+            
+        }
         
+        if (self.timer.isValid == false) {
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(givetime:) userInfo:nil repeats:true];
+            
+        }
+
     }
     
-    [UIView animateWithDuration:gesture==nil?0.2:0.4 delay:0.05 options:(gesture==nil?UIViewAnimationOptionCurveEaseIn:UIViewAnimationOptionCurveEaseOut) animations:^{
+    
+    [UIView animateWithDuration:gesture==nil?0.2:0.4 delay:0.0 options:(gesture==nil?UIViewAnimationOptionCurveEaseIn:UIViewAnimationOptionCurveEaseOut) animations:^{
         if (gesture != nil) {
             [self.subtitle setAlpha:0.0];
             [self.overlay setAlpha:0.0];
             [self.image setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
             
         }
-        else if (gesture.state == UIGestureRecognizerStateBegan) {
+        else {
             [self.subtitle setAlpha:1.0];
             [self.overlay setAlpha:1.0];
             [self.image setTransform:CGAffineTransformMakeScale(1.15, 1.15)];
@@ -102,12 +170,5 @@
     } completion:nil];
 
 }
-
--(void)backgroundoffset:(CGPoint)offset {
-    [self.container setFrame:CGRectOffset(self.overlay.bounds, offset.x, offset.y)];
-    //[self.overlay setFrame:self.image.bounds];
-    
-}
-
 
 @end

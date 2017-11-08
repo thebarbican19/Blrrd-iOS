@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <StoreKit/StoreKit.h>
+#import <UserNotifications/UserNotifications.h>
 #import <Mixpanel.h>
 
 #import "BCredentialsObject.h"
@@ -22,6 +23,8 @@
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundtask;
+
+-(void)applicationRegisterPushNotifications;
 
 @end
 
