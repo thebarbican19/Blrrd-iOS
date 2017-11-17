@@ -26,27 +26,44 @@
     [self.collectionView addSubview:self.placeholder];
     [self.collectionView sendSubviewToBack:self.placeholder];
     
+    self.footer = [[BFooterView alloc] initWithFrame:CGRectMake(0.0, self.collectionView.collectionViewLayout.collectionViewContentSize.height - 45.0, self.collectionView.bounds.size.width, 40.0)];
+    self.footer.backgroundColor = [UIColor clearColor];
+    [self.collectionView addSubview:self.footer];
+    
     [self.collectionView registerClass:[BBlurredCell class] forCellWithReuseIdentifier:@"item"];
     [self.collectionView reloadData];
     
 }
 
--(void)collectionViewLoadContent:(NSArray *)content append:(BOOL)append {
+-(void)collectionViewLoadContent:(NSArray *)content append:(BOOL)append loading:(BOOL)loading {
     if (append) [self.content addObjectsFromArray:content];
     else self.content = [[NSMutableArray alloc] initWithArray:content];
     
     if (self.content.count > 0) {
-        [self.collectionView reloadData];
         [self.placeholder setHidden:true];
         
     }
     else {
+        if (loading) [self.placeholder placeholderUpdateTitle:@"Loading..." instructions:@"This wont happen very often"];
+        else [self.placeholder placeholderUpdateTitle:@"Shit!" instructions:@"Feed currently unavailable."];
         [self.placeholder setHidden:false];
-        [self.placeholder placeholderUpdateTitle:@"Shit!" instructions:@"Feed currently unavailable."];
-        [self.collectionView reloadData];
+        
 
     }
+    
+    [self.collectionView reloadData];
+    
+    [self.footer setFrame:CGRectMake(0.0, self.collectionView.collectionViewLayout.collectionViewContentSize.height - self.footer.bounds.size.height - 15.0, self.collectionView.bounds.size.width, self.footer.bounds.size.height)];
+    [self.footer present:false status:nil];
 
+    for (BBlurredCell *cell in self.collectionView.visibleCells) {
+        [cell reveal:nil];
+        
+    }
+    
+    [self setLoading:false];
+    [self setUpdating:false];
+    
 }
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -69,6 +86,11 @@
 
     [cell setDelegate:self];
     [cell content:[self.content objectAtIndex:indexPath.row] index:indexPath];
+    
+    [cell.contentView.layer setShadowColor:UIColorFromRGB(0x000000).CGColor];
+    [cell.contentView.layer setShadowOffset:CGSizeMake(0.0, 2.0)];
+    [cell.contentView.layer setShadowRadius:9.0];
+    [cell.contentView.layer setCornerRadius:8.0];
 
     return cell;
     
@@ -106,7 +128,7 @@
             self.pages = self.scrollheight;
             
         }
-        //else if (self.scrollend) [(GDStreamFooter *)[self.collection viewWithTag:100] informationSet:NSLocalizedString(@"StreamFooterEndTitle", nil)];
+        
         //else if (self.error.code != 200 && !self.scrollend) [(GDStreamFooter *)[self.collection viewWithTag:100] informationSet:self.error.domain];
         
     }
@@ -115,12 +137,12 @@
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (self.updating) {
-        if ([self.delegate respondsToSelector:@selector(viewUpdateTimeline)]) {
-            [self.delegate viewUpdateTimeline];
+    if (self.updating && !self.loading && !self.scrollend) {
+        if ([self.delegate respondsToSelector:@selector(viewUpdateTimeline:)]) {
+            [self setLoading:true];
+            [self.delegate viewUpdateTimeline:self.timeline];
             
         }
-        NSLog(@"go to next page: %d" ,(int)self.pagenation);
         
     }
     

@@ -10,9 +10,25 @@
 		10D81ABF3A18D93B28414C21 /* libPods-Blrrd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */; };
 		2BE2E861C4D7BD74507C4F52 /* libPods-BlrrdTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */; };
 		3C1837B2FB585C787DA1836D /* libPods-BlrrdUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */; };
+		7757319C1FBE3F5E002E0CCE /* Nunito-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7757318E1FBE3F5B002E0CCE /* Nunito-ExtraLightItalic.ttf */; };
+		7757319D1FBE3F5E002E0CCE /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7757318F1FBE3F5B002E0CCE /* Nunito-ExtraBold.ttf */; };
+		7757319E1FBE3F5E002E0CCE /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731901FBE3F5C002E0CCE /* Nunito-Bold.ttf */; };
+		7757319F1FBE3F5E002E0CCE /* Nunito-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731911FBE3F5C002E0CCE /* Nunito-Light.ttf */; };
+		775731A01FBE3F5E002E0CCE /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731921FBE3F5C002E0CCE /* Nunito-SemiBold.ttf */; };
+		775731A11FBE3F5E002E0CCE /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731931FBE3F5C002E0CCE /* Nunito-Black.ttf */; };
+		775731A21FBE3F5E002E0CCE /* Nunito-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731941FBE3F5C002E0CCE /* Nunito-BoldItalic.ttf */; };
+		775731A31FBE3F5E002E0CCE /* Nunito-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731951FBE3F5D002E0CCE /* Nunito-BlackItalic.ttf */; };
+		775731A41FBE3F5E002E0CCE /* Nunito-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731961FBE3F5D002E0CCE /* Nunito-SemiBoldItalic.ttf */; };
+		775731A51FBE3F5E002E0CCE /* Nunito-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731971FBE3F5D002E0CCE /* Nunito-ExtraBoldItalic.ttf */; };
+		775731A61FBE3F5E002E0CCE /* Nunito-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731981FBE3F5D002E0CCE /* Nunito-Italic.ttf */; };
+		775731A71FBE3F5E002E0CCE /* Nunito-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731991FBE3F5D002E0CCE /* Nunito-ExtraLight.ttf */; };
+		775731A81FBE3F5E002E0CCE /* Nunito-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7757319A1FBE3F5D002E0CCE /* Nunito-Regular.ttf */; };
+		775731A91FBE3F5E002E0CCE /* Nunito-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7757319B1FBE3F5E002E0CCE /* Nunito-LightItalic.ttf */; };
+		775731AD1FBE4A48002E0CCE /* BCanvasController.m in Sources */ = {isa = PBXBuildFile; fileRef = 775731AC1FBE4A48002E0CCE /* BCanvasController.m */; };
+		775731B01FBE50B5002E0CCE /* BSectionHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 775731AF1FBE50B5002E0CCE /* BSectionHeader.m */; };
+		775731B31FBE76B6002E0CCE /* BNavigationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 775731B21FBE76B6002E0CCE /* BNavigationView.m */; };
 		77656A981FB26478006F0854 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77656A971FB26477006F0854 /* UserNotifications.framework */; };
 		77656A9B1FB286E0006F0854 /* BSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656A9A1FB286DF006F0854 /* BSegmentControl.m */; };
-		77656A9F1FB287B5006F0854 /* BSegmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656A9E1FB287B5006F0854 /* BSegmentCell.m */; };
 		77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656AA01FB29623006F0854 /* GDStatusLabel.m */; };
 		778D9B171FABB53600878A6A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B161FABB53600878A6A /* AppDelegate.m */; };
 		778D9B1D1FABB53600878A6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1B1FABB53600878A6A /* Main.storyboard */; };
@@ -31,6 +47,17 @@
 		778D9B6A1FABEBD300878A6A /* BTimelineSubview.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B691FABEBD300878A6A /* BTimelineSubview.m */; };
 		778D9B6D1FABEC1600878A6A /* BBlurredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B6C1FABEC1600878A6A /* BBlurredCell.m */; };
 		778D9B721FABF18A00878A6A /* GDPlaceholderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B711FABF18A00878A6A /* GDPlaceholderView.m */; };
+		779994AB1FB9EB130002531B /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 779994AA1FB9EB130002531B /* Accelerate.framework */; };
+		779994AC1FB9EBED0002531B /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 779994A81FB9EAEF0002531B /* CoreMotion.framework */; };
+		779994AF1FBA03830002531B /* BUsageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994AE1FBA03830002531B /* BUsageObject.m */; };
+		779994B21FBA155C0002531B /* BFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994B11FBA155C0002531B /* BFooterView.m */; };
+		779994B71FBB69110002531B /* BChannelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994B61FBB69110002531B /* BChannelController.m */; };
+		779994BA1FBB69270002531B /* BChannelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994B91FBB69270002531B /* BChannelCell.m */; };
+		77BDA3E21FBD446000249572 /* BDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDA3E11FBD446000249572 /* BDiscoverController.m */; };
+		77BDA3E51FBD4C4A00249572 /* BNotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDA3E41FBD4C4A00249572 /* BNotificationCell.m */; };
+		77BDA3E81FBDF95E00249572 /* BFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDA3E71FBDF95E00249572 /* BFriendCell.m */; };
+		77BDA3EB1FBDFE1E00249572 /* BDetailedTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDA3EA1FBDFE1E00249572 /* BDetailedTimelineController.m */; };
+		77BDA3EE1FBE15D100249572 /* BTabbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDA3ED1FBE15D100249572 /* BTabbarView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,11 +84,29 @@
 		4D03DFD143260305F4E5E860 /* Pods-Blrrd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blrrd.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Blrrd/Pods-Blrrd.debug.xcconfig"; sourceTree = "<group>"; };
 		525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EC6E94C2F62261082206C6F /* Pods-BlrrdUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdUITests/Pods-BlrrdUITests.release.xcconfig"; sourceTree = "<group>"; };
+		7757318E1FBE3F5B002E0CCE /* Nunito-ExtraLightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
+		7757318F1FBE3F5B002E0CCE /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
+		775731901FBE3F5C002E0CCE /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
+		775731911FBE3F5C002E0CCE /* Nunito-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Light.ttf"; sourceTree = "<group>"; };
+		775731921FBE3F5C002E0CCE /* Nunito-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-SemiBold.ttf"; sourceTree = "<group>"; };
+		775731931FBE3F5C002E0CCE /* Nunito-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Black.ttf"; sourceTree = "<group>"; };
+		775731941FBE3F5C002E0CCE /* Nunito-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-BoldItalic.ttf"; sourceTree = "<group>"; };
+		775731951FBE3F5D002E0CCE /* Nunito-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-BlackItalic.ttf"; sourceTree = "<group>"; };
+		775731961FBE3F5D002E0CCE /* Nunito-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		775731971FBE3F5D002E0CCE /* Nunito-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		775731981FBE3F5D002E0CCE /* Nunito-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Italic.ttf"; sourceTree = "<group>"; };
+		775731991FBE3F5D002E0CCE /* Nunito-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraLight.ttf"; sourceTree = "<group>"; };
+		7757319A1FBE3F5D002E0CCE /* Nunito-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Regular.ttf"; sourceTree = "<group>"; };
+		7757319B1FBE3F5E002E0CCE /* Nunito-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-LightItalic.ttf"; sourceTree = "<group>"; };
+		775731AB1FBE4A48002E0CCE /* BCanvasController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCanvasController.h; sourceTree = "<group>"; };
+		775731AC1FBE4A48002E0CCE /* BCanvasController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCanvasController.m; sourceTree = "<group>"; };
+		775731AE1FBE50B5002E0CCE /* BSectionHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSectionHeader.h; sourceTree = "<group>"; };
+		775731AF1FBE50B5002E0CCE /* BSectionHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSectionHeader.m; sourceTree = "<group>"; };
+		775731B11FBE76B6002E0CCE /* BNavigationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BNavigationView.h; sourceTree = "<group>"; };
+		775731B21FBE76B6002E0CCE /* BNavigationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BNavigationView.m; sourceTree = "<group>"; };
 		77656A971FB26477006F0854 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		77656A991FB286DF006F0854 /* BSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSegmentControl.h; sourceTree = "<group>"; };
 		77656A9A1FB286DF006F0854 /* BSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSegmentControl.m; sourceTree = "<group>"; };
-		77656A9D1FB287B5006F0854 /* BSegmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSegmentCell.h; sourceTree = "<group>"; };
-		77656A9E1FB287B5006F0854 /* BSegmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSegmentCell.m; sourceTree = "<group>"; };
 		77656AA01FB29623006F0854 /* GDStatusLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDStatusLabel.m; sourceTree = "<group>"; };
 		77656AA11FB29624006F0854 /* GDStatusLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDStatusLabel.h; sourceTree = "<group>"; };
 		778D9B121FABB53600878A6A /* Blrrd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blrrd.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,6 +144,26 @@
 		778D9B711FABF18A00878A6A /* GDPlaceholderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDPlaceholderView.m; sourceTree = "<group>"; };
 		778D9B731FAC0E0F00878A6A /* UIImage+BlurExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurExtension.h"; sourceTree = "<group>"; };
 		778D9B741FAC9A9F00878A6A /* Blrrd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blrrd.entitlements; sourceTree = "<group>"; };
+		779994A81FB9EAEF0002531B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		779994AA1FB9EB130002531B /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		779994AD1FBA03830002531B /* BUsageObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BUsageObject.h; sourceTree = "<group>"; };
+		779994AE1FBA03830002531B /* BUsageObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BUsageObject.m; sourceTree = "<group>"; };
+		779994B01FBA155C0002531B /* BFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFooterView.h; sourceTree = "<group>"; };
+		779994B11FBA155C0002531B /* BFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFooterView.m; sourceTree = "<group>"; };
+		779994B51FBB69110002531B /* BChannelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BChannelController.h; sourceTree = "<group>"; };
+		779994B61FBB69110002531B /* BChannelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BChannelController.m; sourceTree = "<group>"; };
+		779994B81FBB69270002531B /* BChannelCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BChannelCell.h; sourceTree = "<group>"; };
+		779994B91FBB69270002531B /* BChannelCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BChannelCell.m; sourceTree = "<group>"; };
+		77BDA3E01FBD446000249572 /* BDiscoverController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDiscoverController.h; sourceTree = "<group>"; };
+		77BDA3E11FBD446000249572 /* BDiscoverController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BDiscoverController.m; sourceTree = "<group>"; };
+		77BDA3E31FBD4C4A00249572 /* BNotificationCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BNotificationCell.h; sourceTree = "<group>"; };
+		77BDA3E41FBD4C4A00249572 /* BNotificationCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BNotificationCell.m; sourceTree = "<group>"; };
+		77BDA3E61FBDF95E00249572 /* BFriendCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFriendCell.h; sourceTree = "<group>"; };
+		77BDA3E71FBDF95E00249572 /* BFriendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFriendCell.m; sourceTree = "<group>"; };
+		77BDA3E91FBDFE1E00249572 /* BDetailedTimelineController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDetailedTimelineController.h; sourceTree = "<group>"; };
+		77BDA3EA1FBDFE1E00249572 /* BDetailedTimelineController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BDetailedTimelineController.m; sourceTree = "<group>"; };
+		77BDA3EC1FBE15D100249572 /* BTabbarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BTabbarView.h; sourceTree = "<group>"; };
+		77BDA3ED1FBE15D100249572 /* BTabbarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BTabbarView.m; sourceTree = "<group>"; };
 		846352F4B811913EF775AD40 /* Pods-BlrrdTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdTests/Pods-BlrrdTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Blrrd.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +174,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				779994AC1FB9EBED0002531B /* CoreMotion.framework in Frameworks */,
+				779994AB1FB9EB130002531B /* Accelerate.framework in Frameworks */,
 				77656A981FB26478006F0854 /* UserNotifications.framework in Frameworks */,
 				778D9B5C1FABD60F00878A6A /* StoreKit.framework in Frameworks */,
 				10D81ABF3A18D93B28414C21 /* libPods-Blrrd.a in Frameworks */,
@@ -147,15 +214,55 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		77656A9C1FB286EB006F0854 /* Segment */ = {
+		7757318C1FBE3F20002E0CCE /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				77656A9D1FB287B5006F0854 /* BSegmentCell.h */,
-				77656A9E1FB287B5006F0854 /* BSegmentCell.m */,
+				7757318D1FBE3F27002E0CCE /* Fonts */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		7757318D1FBE3F27002E0CCE /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				775731931FBE3F5C002E0CCE /* Nunito-Black.ttf */,
+				775731951FBE3F5D002E0CCE /* Nunito-BlackItalic.ttf */,
+				775731901FBE3F5C002E0CCE /* Nunito-Bold.ttf */,
+				775731941FBE3F5C002E0CCE /* Nunito-BoldItalic.ttf */,
+				7757318F1FBE3F5B002E0CCE /* Nunito-ExtraBold.ttf */,
+				775731971FBE3F5D002E0CCE /* Nunito-ExtraBoldItalic.ttf */,
+				775731991FBE3F5D002E0CCE /* Nunito-ExtraLight.ttf */,
+				7757318E1FBE3F5B002E0CCE /* Nunito-ExtraLightItalic.ttf */,
+				775731981FBE3F5D002E0CCE /* Nunito-Italic.ttf */,
+				775731911FBE3F5C002E0CCE /* Nunito-Light.ttf */,
+				7757319B1FBE3F5E002E0CCE /* Nunito-LightItalic.ttf */,
+				7757319A1FBE3F5D002E0CCE /* Nunito-Regular.ttf */,
+				775731921FBE3F5C002E0CCE /* Nunito-SemiBold.ttf */,
+				775731961FBE3F5D002E0CCE /* Nunito-SemiBoldItalic.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		775731AA1FBE4A19002E0CCE /* Detailed */ = {
+			isa = PBXGroup;
+			children = (
+				77BDA3E91FBDFE1E00249572 /* BDetailedTimelineController.h */,
+				77BDA3EA1FBDFE1E00249572 /* BDetailedTimelineController.m */,
+			);
+			path = Detailed;
+			sourceTree = "<group>";
+		};
+		77656A9C1FB286EB006F0854 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				77BDA3EC1FBE15D100249572 /* BTabbarView.h */,
+				77BDA3ED1FBE15D100249572 /* BTabbarView.m */,
 				77656A991FB286DF006F0854 /* BSegmentControl.h */,
 				77656A9A1FB286DF006F0854 /* BSegmentControl.m */,
+				775731B11FBE76B6002E0CCE /* BNavigationView.h */,
+				775731B21FBE76B6002E0CCE /* BNavigationView.m */,
 			);
-			path = Segment;
+			path = Navigation;
 			sourceTree = "<group>";
 		};
 		778D9B091FABB53600878A6A = {
@@ -183,6 +290,7 @@
 		778D9B141FABB53600878A6A /* Blrrd */ = {
 			isa = PBXGroup;
 			children = (
+				7757318C1FBE3F20002E0CCE /* Assets */,
 				778D9B741FAC9A9F00878A6A /* Blrrd.entitlements */,
 				778D9B571FABD1CB00878A6A /* Custom */,
 				778D9B471FABCBFF00878A6A /* Objects */,
@@ -191,6 +299,7 @@
 				778D9B151FABB53600878A6A /* AppDelegate.h */,
 				778D9B161FABB53600878A6A /* AppDelegate.m */,
 				778D9B1B1FABB53600878A6A /* Main.storyboard */,
+				778D9B201FABB53600878A6A /* LaunchScreen.storyboard */,
 				778D9B1E1FABB53600878A6A /* Assets.xcassets */,
 				778D9B231FABB53600878A6A /* Info.plist */,
 				778D9B4B1FABCC2700878A6A /* BConstants.h */,
@@ -221,11 +330,12 @@
 		778D9B471FABCBFF00878A6A /* Objects */ = {
 			isa = PBXGroup;
 			children = (
-				778D9B201FABB53600878A6A /* LaunchScreen.storyboard */,
 				778D9B481FABCC1400878A6A /* BCredentialsObject.h */,
 				778D9B491FABCC1400878A6A /* BCredentialsObject.m */,
 				778D9B5D1FABD63700878A6A /* BQueryObject.h */,
 				778D9B5E1FABD63700878A6A /* BQueryObject.m */,
+				779994AD1FBA03830002531B /* BUsageObject.h */,
+				779994AE1FBA03830002531B /* BUsageObject.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -235,6 +345,7 @@
 			children = (
 				778D9B641FABEB6000878A6A /* Main */,
 				778D9B631FABEB5600878A6A /* Auth */,
+				775731AA1FBE4A19002E0CCE /* Detailed */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -242,8 +353,10 @@
 		778D9B521FABCCAD00878A6A /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				77656A9C1FB286EB006F0854 /* Segment */,
-				778D9B531FABCCBE00878A6A /* Cells */,
+				779994B41FBB68DA0002531B /* Channels */,
+				779994B31FBA15630002531B /* Other */,
+				77656A9C1FB286EB006F0854 /* Navigation */,
+				77BDA3F11FBE160A00249572 /* Table */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -253,6 +366,12 @@
 			children = (
 				778D9B6B1FABEC1600878A6A /* BBlurredCell.h */,
 				778D9B6C1FABEC1600878A6A /* BBlurredCell.m */,
+				779994B81FBB69270002531B /* BChannelCell.h */,
+				779994B91FBB69270002531B /* BChannelCell.m */,
+				77BDA3E31FBD4C4A00249572 /* BNotificationCell.h */,
+				77BDA3E41FBD4C4A00249572 /* BNotificationCell.m */,
+				77BDA3E61FBDF95E00249572 /* BFriendCell.h */,
+				77BDA3E71FBDF95E00249572 /* BFriendCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -282,6 +401,10 @@
 				778D9B611FABEB5100878A6A /* BContainerController.m */,
 				778D9B681FABEBD300878A6A /* BTimelineSubview.h */,
 				778D9B691FABEBD300878A6A /* BTimelineSubview.m */,
+				77BDA3E01FBD446000249572 /* BDiscoverController.h */,
+				77BDA3E11FBD446000249572 /* BDiscoverController.m */,
+				775731AB1FBE4A48002E0CCE /* BCanvasController.h */,
+				775731AC1FBE4A48002E0CCE /* BCanvasController.m */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -307,9 +430,47 @@
 			path = Grado;
 			sourceTree = "<group>";
 		};
+		779994B31FBA15630002531B /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				779994B01FBA155C0002531B /* BFooterView.h */,
+				779994B11FBA155C0002531B /* BFooterView.m */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		779994B41FBB68DA0002531B /* Channels */ = {
+			isa = PBXGroup;
+			children = (
+				779994B51FBB69110002531B /* BChannelController.h */,
+				779994B61FBB69110002531B /* BChannelController.m */,
+			);
+			path = Channels;
+			sourceTree = "<group>";
+		};
+		77BDA3EF1FBE15FA00249572 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				775731AE1FBE50B5002E0CCE /* BSectionHeader.h */,
+				775731AF1FBE50B5002E0CCE /* BSectionHeader.m */,
+			);
+			path = Header;
+			sourceTree = "<group>";
+		};
+		77BDA3F11FBE160A00249572 /* Table */ = {
+			isa = PBXGroup;
+			children = (
+				778D9B531FABCCBE00878A6A /* Cells */,
+				77BDA3EF1FBE15FA00249572 /* Header */,
+			);
+			path = Table;
+			sourceTree = "<group>";
+		};
 		DC2B262B6F1B871B7C26DD9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				779994AA1FB9EB130002531B /* Accelerate.framework */,
+				779994A81FB9EAEF0002531B /* CoreMotion.framework */,
 				77656A971FB26477006F0854 /* UserNotifications.framework */,
 				778D9B5B1FABD60F00878A6A /* StoreKit.framework */,
 				B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */,
@@ -449,9 +610,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7757319E1FBE3F5E002E0CCE /* Nunito-Bold.ttf in Resources */,
+				775731A61FBE3F5E002E0CCE /* Nunito-Italic.ttf in Resources */,
+				775731A11FBE3F5E002E0CCE /* Nunito-Black.ttf in Resources */,
 				778D9B221FABB53600878A6A /* LaunchScreen.storyboard in Resources */,
+				775731A91FBE3F5E002E0CCE /* Nunito-LightItalic.ttf in Resources */,
+				775731A21FBE3F5E002E0CCE /* Nunito-BoldItalic.ttf in Resources */,
+				7757319C1FBE3F5E002E0CCE /* Nunito-ExtraLightItalic.ttf in Resources */,
+				775731A51FBE3F5E002E0CCE /* Nunito-ExtraBoldItalic.ttf in Resources */,
+				775731A71FBE3F5E002E0CCE /* Nunito-ExtraLight.ttf in Resources */,
+				775731A01FBE3F5E002E0CCE /* Nunito-SemiBold.ttf in Resources */,
 				778D9B4E1FABCC7700878A6A /* Localizable.strings in Resources */,
+				775731A31FBE3F5E002E0CCE /* Nunito-BlackItalic.ttf in Resources */,
+				7757319D1FBE3F5E002E0CCE /* Nunito-ExtraBold.ttf in Resources */,
+				775731A41FBE3F5E002E0CCE /* Nunito-SemiBoldItalic.ttf in Resources */,
 				778D9B1F1FABB53600878A6A /* Assets.xcassets in Resources */,
+				7757319F1FBE3F5E002E0CCE /* Nunito-Light.ttf in Resources */,
+				775731A81FBE3F5E002E0CCE /* Nunito-Regular.ttf in Resources */,
 				778D9B1D1FABB53600878A6A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -615,19 +790,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				775731AD1FBE4A48002E0CCE /* BCanvasController.m in Sources */,
+				775731B31FBE76B6002E0CCE /* BNavigationView.m in Sources */,
+				779994B71FBB69110002531B /* BChannelController.m in Sources */,
+				77BDA3EE1FBE15D100249572 /* BTabbarView.m in Sources */,
 				778D9B561FABCE0700878A6A /* BAuthController.m in Sources */,
 				778D9B5A1FABD27900878A6A /* NSString+EmailAddresses.m in Sources */,
+				779994B21FBA155C0002531B /* BFooterView.m in Sources */,
+				779994BA1FBB69270002531B /* BChannelCell.m in Sources */,
+				775731B01FBE50B5002E0CCE /* BSectionHeader.m in Sources */,
 				778D9B6D1FABEC1600878A6A /* BBlurredCell.m in Sources */,
 				778D9B5F1FABD63700878A6A /* BQueryObject.m in Sources */,
 				77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */,
-				77656A9F1FB287B5006F0854 /* BSegmentCell.m in Sources */,
 				778D9B6A1FABEBD300878A6A /* BTimelineSubview.m in Sources */,
+				77BDA3EB1FBDFE1E00249572 /* BDetailedTimelineController.m in Sources */,
 				778D9B4A1FABCC1400878A6A /* BCredentialsObject.m in Sources */,
+				77BDA3E81FBDF95E00249572 /* BFriendCell.m in Sources */,
 				778D9B251FABB53600878A6A /* main.m in Sources */,
+				77BDA3E51FBD4C4A00249572 /* BNotificationCell.m in Sources */,
+				779994AF1FBA03830002531B /* BUsageObject.m in Sources */,
 				778D9B621FABEB5100878A6A /* BContainerController.m in Sources */,
 				778D9B171FABB53600878A6A /* AppDelegate.m in Sources */,
 				77656A9B1FB286E0006F0854 /* BSegmentControl.m in Sources */,
 				778D9B721FABF18A00878A6A /* GDPlaceholderView.m in Sources */,
+				77BDA3E21FBD446000249572 /* BDiscoverController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -807,6 +993,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -824,6 +1011,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

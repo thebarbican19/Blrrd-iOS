@@ -21,6 +21,8 @@
 #define IS_IPHONE_X (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 812.0f)
 
 #define MAIN_CELL_SIZE CGSizeMake(self.view.bounds.size.width - 30.0, self.view.bounds.size.width - 30.0)
+#define MAIN_BACKGROUND_COLOR UIColorFromRGB(0x140F26)
+#define MAIN_TABBAR_HEIGHT 60
 
 #define APP_HOST_URL @"http://62.75.213.212:8000/"
 #define APP_BUNDLE_NAME [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]

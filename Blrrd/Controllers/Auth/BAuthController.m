@@ -21,7 +21,7 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [self performSelector:@selector(viewAuthenticate) withObject:nil afterDelay:3.0];
+    //[self performSelector:@selector(viewAuthenticate) withObject:nil afterDelay:3.0];
 
 }
 
@@ -36,12 +36,11 @@
     self.statusbarstyle = UIStatusBarStyleLightContent;
 
     self.navigationController.navigationBarHidden = true;
-    self.view.backgroundColor = [UIColor blackColor];
-    
+    self.view.backgroundColor = MAIN_BACKGROUND_COLOR;
+
     self.status = [[UILabel alloc] initWithFrame:CGRectMake(30.0, (self.view.bounds.size.height / 2) - 80.0, self.view.bounds.size.width - 60.0, 160.0)];
     self.status.numberOfLines = 3;
     self.status.textAlignment = NSTextAlignmentCenter;
-    self.status.text = @"Authenticating 'emanuel.vila'";
     self.status.textColor = [UIColor colorWithWhite:0.95 alpha:1.0];
     self.status.font = [UIFont fontWithName:@"Arial-BoldMT" size:16];
     [self.view addSubview:self.status];
@@ -54,7 +53,7 @@
     [self.query authenticationLoginWithCredentials:@{@"username":@"emanuel.vila", @"password":@"Florian1"} completion:^(NSDictionary *user, NSError *error) {
         if (error.code == 200 && user) {
             [self.status setText:@"Sucsessful! Loading timeline..."];
-            [self.query queryFriendsTimeline:0 completion:^(NSArray *posts, NSError *error) {
+            [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
                 if (error.code == 200) [self viewDismiss];
                 else [self.status setText:error.domain];
                 

@@ -26,7 +26,7 @@
         placeholderTitle.verticalTextAlignment = UIControlContentVerticalAlignmentCenter;
         placeholderTitle.textAlignment = NSTextAlignmentCenter;
         placeholderTitle.numberOfLines = 5;
-        placeholderTitle.font = [UIFont fontWithName:@"Arial-BoldMT" size:56];
+        placeholderTitle.font = [UIFont fontWithName:@"Nunito-Black" size:30];
         placeholderTitle.textColor = self.textcolor;
         placeholderTitle.text = nil;
         placeholderTitle.alpha = 1.0;
@@ -130,13 +130,13 @@
 
 -(NSAttributedString *)format:(NSString *)title subtitle:(NSString *)subtitle {
     NSString *text;
-    if (subtitle) text = [NSString stringWithFormat:@"%@\n%@" ,title.uppercaseString, subtitle];
+    if (subtitle) text = [NSString stringWithFormat:@"%@\n%@" ,title, subtitle];
     else text = title.uppercaseString;
     
     NSMutableAttributedString *formatted = [[NSMutableAttributedString alloc] initWithString:text];
     if (subtitle) {
-        [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Arial-BoldMT" size:10.0] range:NSMakeRange(title.length + 1, subtitle.length)];
-        [formatted addAttribute:NSForegroundColorAttributeName value:[self.textcolor colorWithAlphaComponent:0.7] range:NSMakeRange(title.length + 1, subtitle.length)];
+        [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Nunito-Regular" size:12.0] range:NSMakeRange(title.length + 1, subtitle.length)];
+        [formatted addAttribute:NSForegroundColorAttributeName value:[self.textcolor colorWithAlphaComponent:0.6] range:NSMakeRange(title.length + 1, subtitle.length)];
         
     }
     

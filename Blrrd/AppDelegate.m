@@ -15,7 +15,6 @@
 
 @implementation AppDelegate
 
-
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
     self.credentials = [[BCredentialsObject alloc] init];
@@ -44,12 +43,21 @@
     [self applicationSetActiveTimer:true];
     
     [application setMinimumBackgroundFetchInterval:APP_DEBUG_MODE?UIApplicationBackgroundFetchIntervalMinimum:3600*3];
-
     
     [self.data setBool:true forKey:@"app_installed"];
     [self.data synchronize];
     
     return true;
+    
+}
+
+-(void)applicationHandleSockets:(BOOL)terminate {
+    self.credentials = [[BCredentialsObject alloc] init];
+    self.sockets = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"ws://62.75.213.212:8000/ws/viewtimesNewApi/%@" ,self.credentials.userHandle]]];
+    self.sockets.delegate = self;
+    
+    if (terminate) [self.sockets close];
+    else if (self.sockets != nil) [self.sockets open];
     
 }
 
@@ -113,13 +121,48 @@
     }];
     
     [self.mixpanel timeEvent:@"App Updated Content in Background"];
-    [self.query queryFriendsTimeline:0 completion:^(NSArray *posts, NSError *error) {
-        [self.mixpanel track:@"App Updated Content in Background"];
+    
+    if ([self.query cacheExpired:@"postsApi/getAllFriendsPostsNext"]) {
+        [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
+            [self.mixpanel track:@"App Updated Content in Background"];
+            
+            if (error.code == 200 || error == nil) completionHandler(UIBackgroundFetchResultNewData);
+            else completionHandler(UIBackgroundFetchResultNewData);
+            
+        }];
         
-        if (error.code == 200) completionHandler(UIBackgroundFetchResultNewData);
-        else completionHandler(UIBackgroundFetchResultNewData);
+    }
+    else if ([self.query cacheExpired:@"channelsApi/getChannelsHotPostsNext"]) {
+        [self.query queryTimeline:BQueryTimelineTrending page:0 completion:^(NSArray *posts, NSError *error) {
+            [self.mixpanel track:@"App Updated Content in Background"];
+
+            if (error.code == 200 || error == nil) completionHandler(UIBackgroundFetchResultNewData);
+            else completionHandler(UIBackgroundFetchResultNewData);
+            
+        }];
+
+    }
+    else if ([self.query cacheExpired:@"channelsApi/getChannels"]) {
+        [self.query queryChannels:^(NSArray *channels, NSError *error) {
+            [self.mixpanel track:@"App Updated Content in Background"];
+            
+            if (error.code == 200 || error == nil) completionHandler(UIBackgroundFetchResultNewData);
+            else completionHandler(UIBackgroundFetchResultNewData);
+            
+        }];
         
-    }];
+    }
+    else if ([self.query cacheExpired:@"friendsApi/getRequests"]) {
+        [self.query queryRequests:^(NSArray *requests, NSError *error) {
+            [self.mixpanel track:@"App Updated Content in Background"];
+            
+            if (error.code == 200 || error == nil) completionHandler(UIBackgroundFetchResultNewData);
+            else completionHandler(UIBackgroundFetchResultNewData);
+            
+        }];
+        
+    }
+    else completionHandler(UIBackgroundFetchResultNewData);
     
 }
 
@@ -132,6 +175,7 @@
     [self.data synchronize];
     
     [self.timer invalidate];
+    [self applicationHandleSockets:true];
     
 }
 
@@ -144,19 +188,22 @@
     [self.data synchronize];
     
     [self.timer invalidate];
-   
+    [self applicationHandleSockets:true];
+
 }
 
 -(void)applicationDidEnterBackground:(UIApplication *)application {
-   
+
 }
 
 -(void)applicationWillEnterForeground:(UIApplication *)application {
-    
+    [self applicationHandleSockets:true];
+
 }
 
 -(void)applicationDidBecomeActive:(UIApplication *)application {
-    
+    [self applicationHandleSockets:false];
+
 }
 
 -(void)applicationRegisterPushNotifications {
@@ -197,6 +244,37 @@
     
 }
 
+-(void)webSocketDidOpen:(SRWebSocket *)webSocket {
+    NSLog(@"webSocketDidOpen %@" ,webSocket);
+    
+}
 
+-(void)webSocket:(SRWebSocket *)webSocket didReceiveMessageWithString:(NSString *)string {
+    NSLog(@"webSocketDidReceiveMessageWithString %@" ,string);
+
+}
+
+-(void)webSocket:(SRWebSocket *)webSocket didReceiveMessageWithData:(NSData *)data {
+    NSLog(@"webSocketdidReceiveMessageWithData %@" ,data);
+
+}
+
+-(void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
+    NSLog(@"webSocketdidFailWithError %@" ,error);
+
+}
+
+-(void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(nullable NSString *)reason wasClean:(BOOL)wasClean {
+    NSLog(@"webSocketDidOpen %@" ,webSocket);
+
+}
+
+-(void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    if (motion == UIEventSubtypeMotionShake) {
+        NSLog(@"shake device");
+        
+    }
+    
+}
 
 @end

@@ -10,6 +10,7 @@ PODS:
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
+  - SocketRocket (0.5.1)
   - TYBlurImage (1.2.1)
   - UIImage-Helpers (0.0.3)
 
@@ -21,6 +22,7 @@ DEPENDENCIES:
   - Mixpanel
   - SAMLabel
   - SDWebImage (~> 3.8)
+  - SocketRocket
   - TYBlurImage
   - UIImage-Helpers
 
@@ -32,9 +34,10 @@ SPEC CHECKSUMS:
   Mixpanel: 7bd8e176f088936bf6e283ade0d1f512f8e723bc
   SAMLabel: 3792d68d0a04da5600420843d44ec50631695c15
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   TYBlurImage: a931704cfbfb31aa00a5b658063e0742b34e4043
   UIImage-Helpers: 06b04a42bdd222844035602e87e936765c80f620
 
-PODFILE CHECKSUM: 7e9f34155cab3b44efc71817ea0342c34dc1ac4a
+PODFILE CHECKSUM: 0130b0a998387c817e92aa1cdcb01ab8b31be37b
 
 COCOAPODS: 1.2.0

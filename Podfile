@@ -15,6 +15,7 @@ target 'Blrrd' do
   pod 'DBImageColorPicker'
   pod 'GBDeviceInfo', '~>4.4.0'
   pod 'KVNBoundedImageView'
+  pod 'SocketRocket'
 
   target 'BlrrdTests' do
     inherit! :search_paths
