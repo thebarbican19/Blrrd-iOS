@@ -35,22 +35,32 @@
     
 }
 
--(void)collectionViewLoadContent:(NSArray *)content append:(BOOL)append loading:(BOOL)loading {
+-(void)collectionViewLoadContent:(NSArray *)content append:(BOOL)append loading:(BOOL)loading error:(NSError *)error {
     if (append) [self.content addObjectsFromArray:content];
     else self.content = [[NSMutableArray alloc] initWithArray:content];
     
-    if (self.content.count > 0) {
-        [self.placeholder setHidden:true];
-        
-    }
+    if (loading) [self.placeholder placeholderUpdateTitle:@"Loading..." instructions:@"This wont happen very often"];
     else {
-        if (loading) [self.placeholder placeholderUpdateTitle:@"Loading..." instructions:@"This wont happen very often"];
-        else [self.placeholder placeholderUpdateTitle:@"Shit!" instructions:@"Feed currently unavailable."];
-        [self.placeholder setHidden:false];
-        
+        if (self.content.count > 0) {
+            [self.placeholder setHidden:true];
 
+        }
+        else {
+            if ((error == nil || error.code == 200) && self.content.count == 0) {
+                [self.placeholder placeholderUpdateTitle:@"Whoops!" instructions:@"There is nothing here right now, check back later"];
+
+            }
+            else {
+                [self.placeholder placeholderUpdateTitle:@"Whoops!" instructions:error.domain];
+
+            }
+            
+            [self.placeholder setHidden:false];
+            
+        }
+        
     }
-    
+        
     [self.collectionView reloadData];
     
     [self.footer setFrame:CGRectMake(0.0, self.collectionView.collectionViewLayout.collectionViewContentSize.height - self.footer.bounds.size.height - 15.0, self.collectionView.bounds.size.width, self.footer.bounds.size.height)];
@@ -129,10 +139,7 @@
             
         }
         
-        //else if (self.error.code != 200 && !self.scrollend) [(GDStreamFooter *)[self.collection viewWithTag:100] informationSet:self.error.domain];
-        
     }
-    
     
 }
 

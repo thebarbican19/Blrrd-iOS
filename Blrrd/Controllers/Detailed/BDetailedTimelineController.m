@@ -15,13 +15,13 @@
 
 @implementation BDetailedTimelineController
 
--(void)viewDidLayoutSubviews {
+-(void)viewDidAppear:(BOOL)animated {
     [self.viewNavigation navigationTitle:[self.data objectForKey:@"name"]];
 
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    
+    [self viewContentRefresh:nil];
     
 }
 
@@ -55,14 +55,14 @@
     [self.view addSubview:self.viewTimeline.view];
     [self.view sendSubviewToBack:self.viewTimeline.view];
 
-    [self.viewTimeline collectionViewLoadContent:nil append:false loading:true];
+    [self.viewTimeline collectionViewLoadContent:nil append:false loading:true error:nil];
 
 }
 
 -(void)viewContentRefresh:(UIRefreshControl *)refresh {
     [self.query queryChannelByIdentifyer:[self.data objectForKey:@"name"] page:self.viewTimeline.pagenation completion:^(NSArray *channel, NSError *error) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self.viewTimeline collectionViewLoadContent:channel append:false loading:false];
+            [self.viewTimeline collectionViewLoadContent:channel append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
             
         }];
         
@@ -71,6 +71,31 @@
 }
 
 -(void)viewUpdateTimeline:(BQueryTimeline)timeline {
+    [self.viewTimeline.footer present:true status:nil];
+    [self.query queryChannelByIdentifyer:[self.data objectForKey:@"name"] page:self.viewTimeline.pagenation completion:^(NSArray *channel, NSError *error) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                [self.viewTimeline collectionViewLoadContent:channel append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
+                if ((error == nil || error.code == 200) && channel.count == 0) {
+                    [self.viewTimeline setScrollend:true];
+                    [self.viewTimeline.footer present:false status:@"that's all folks"];
+                    
+                }
+                else {
+                    [self.viewTimeline collectionViewLoadContent:channel append:self.viewTimeline.pagenation==0?false:true loading:false error:nil];
+                    if (error.code != 200 && error != nil) {
+                        [self.viewTimeline.footer present:false status:error.domain];
+                        
+                    }
+                    
+                }
+                
+            });
+            
+        }];
+        
+    }];
     
 }
 

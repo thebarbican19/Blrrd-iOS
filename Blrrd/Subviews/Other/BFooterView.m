@@ -59,9 +59,13 @@
                 [self.label setAlpha:1.0];
                 
             } completion:nil];
-            
+
         }];
+        
     }
+    
+    self.loading = loading;
+
     
 }
 

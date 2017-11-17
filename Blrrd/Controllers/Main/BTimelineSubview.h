@@ -30,7 +30,7 @@
 @property (nonatomic, strong) GDPlaceholderView *placeholder;
 @property (nonatomic, strong) BFooterView *footer;
 
--(void)collectionViewLoadContent:(NSArray *)content append:(BOOL)append loading:(BOOL)loading;
+-(void)collectionViewLoadContent:(NSArray *)content append:(BOOL)append loading:(BOOL)loading error:(NSError *)error;
 
 @end
 

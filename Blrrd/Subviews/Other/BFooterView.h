@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) BLMultiColorLoader *loader;
 @property (nonatomic, strong) SAMLabel *label;
+@property (nonatomic, assign) BOOL loading;
 
 -(void)present:(BOOL)loading status:(NSString *)status;
 

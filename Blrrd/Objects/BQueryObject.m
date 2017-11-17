@@ -142,7 +142,7 @@
 -(void)queryChannelByIdentifyer:(NSString *)identifyer page:(int)page completion:(void (^)(NSArray *channel, NSError *error))completion {
     NSString *endpoint = [NSString stringWithFormat:@"channelsApi/getChannelPosts"];
     NSString *endpointmethod = @"GET";
-    NSDictionary *endpointparams = @{@"channelname":identifyer, @"skipnumber":[NSNumber numberWithInt:page]};
+    NSDictionary *endpointparams = @{@"channelname":identifyer, @"skipnumber":@(page * 10)};
     
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
@@ -153,7 +153,7 @@
                 
                 [self cacheSave:channels endpointname:endpoint append:page==0?false:true expiry:60*5];
 
-                completion([self cacheRetrive:endpoint], [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
+                completion(channels, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
                 
             }
             else if (status.statusCode == 500) {
@@ -361,6 +361,7 @@
     NSError *err;
     if (error) err = [NSError errorWithDomain:error.localizedDescription code:error.code userInfo:nil];
     else if (message == nil && error == nil) err = [NSError errorWithDomain:@"unknown error" code:600 userInfo:nil];
+    else if (message == nil && error.localizedDescription != nil) [NSError errorWithDomain:error.localizedDescription code:error.code userInfo:nil];
     else err = [NSError errorWithDomain:message code:code userInfo:nil];
     
     if (err == nil || err.code == 200) {

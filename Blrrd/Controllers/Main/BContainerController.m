@@ -61,7 +61,7 @@
     self.view.backgroundColor = MAIN_BACKGROUND_COLOR;
     
     //[self.credentials destoryAllCredentials];
-    if (APP_DEBUG_MODE) [self.query cacheDestroy];
+    //if (APP_DEBUG_MODE) [self.query cacheDestroy];
     
     [self setNeedsStatusBarAppearanceUpdate];
     
@@ -137,15 +137,15 @@
         
     }
     
-    [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:true];
+    [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:true error:nil];
 
     if ([self.query cacheExpired:@"postsApi/getAllFriendsPostsNext"]) {
         [self.queue addOperationWithBlock:^{
             [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     if (self.timelineindex == 0) {
-                        [self.viewTimeline collectionViewLoadContent:posts append:false loading:false];
-                        
+                        [self.viewTimeline collectionViewLoadContent:posts append:false loading:false error:error];
+        
                     }
                     
                 }];
@@ -161,7 +161,7 @@
             [self.query queryTimeline:BQueryTimelineTrending page:0 completion:^(NSArray *posts, NSError *error) {
                 if (self.timelineindex == 1) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        [self.viewTimeline collectionViewLoadContent:posts append:false loading:false];
+                        [self.viewTimeline collectionViewLoadContent:posts append:false loading:false error:error];
                         
                     }];
                     
@@ -240,11 +240,11 @@
 
     if (!animated) {
         if (index == 0) {
-            [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:false];
+            [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:false error:nil];
             
         }
         else {
-            [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"channelsApi/getChannelsHotPostsNext"] append:false loading:false];
+            [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"channelsApi/getChannelsHotPostsNext"] append:false loading:nil error:nil];
             
         }
         
@@ -256,11 +256,11 @@
 
         } completion:^(BOOL finished) {
             if (index == 0) {
-                [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:false];
+                [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:false error:nil];
                 
             }
             else {
-                [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"channelsApi/getChannelsHotPostsNext"] append:false loading:false];
+                [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"channelsApi/getChannelsHotPostsNext"] append:false loading:false error:nil];
                 
             }
             
@@ -281,19 +281,23 @@
         [self.viewTimeline.footer present:true status:nil];
         [self.query queryTimeline:timeline page:self.viewTimeline.pagenation completion:^(NSArray *posts, NSError *error) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                if ((error == nil || error.code == 200) && posts.count == 0) {
-                    [self.viewTimeline setScrollend:true];
-                    [self.viewTimeline.footer present:false status:@"that's all folks"];
-                    
-                }
-                else {
-                    [self.viewTimeline collectionViewLoadContent:posts append:self.viewTimeline.pagenation==0?false:true loading:false];
-                    if (error.code != 200 && error != nil) {
-                        [self.viewTimeline.footer present:false status:error.domain];
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                    if ((error == nil || error.code == 200) && posts.count == 0) {
+                        [self.viewTimeline setScrollend:true];
+                        [self.viewTimeline.footer present:false status:@"that's all folks"];
                         
                     }
-                
-                }
+                    else {
+                        [self.viewTimeline collectionViewLoadContent:posts append:self.viewTimeline.pagenation==0?false:true loading:false error:nil];
+                        if (error.code != 200 && error != nil) {
+                            [self.viewTimeline.footer present:false status:error.domain];
+                            
+                        }
+                    
+                    }
+                    
+                });
                 
             }];
 
@@ -316,7 +320,6 @@
 }
 
 -(void)viewPresentChannel:(NSDictionary *)channel {
-    NSLog(@"viewPresentChannel %@" ,channel);
     BDetailedTimelineController *viewDetailed = [[BDetailedTimelineController alloc] init];
     viewDetailed.view.backgroundColor = self.view.backgroundColor;
     viewDetailed.data = channel;

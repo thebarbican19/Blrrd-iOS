@@ -40,17 +40,14 @@
     
 }
 
--(NSString *)time:(NSString *)timestamp {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZZZ";
-    
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[formatter dateFromString:timestamp] toDate:[NSDate date] options:0];
+-(NSString *)time:(NSDate *)timestamp {
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:timestamp toDate:[NSDate date] options:0];
     
     NSDateFormatter *formatted = [[NSDateFormatter alloc] init];
     formatted.dateFormat = @"d MMMM YYYY";
     
     if (components.day > 7) {
-        return [formatted stringFromDate:[formatter dateFromString:timestamp]];
+        return [formatted stringFromDate:timestamp];
         
     }
     else if (components.day > 0) {

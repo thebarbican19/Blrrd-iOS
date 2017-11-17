@@ -24,13 +24,16 @@
         label.font = [UIFont fontWithName:@"Nunito-Black" size:18];
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = @"Channel";
+        label.text = nil;
+        label.alpha = 0.0;
+        label.transform = CGAffineTransformMakeScale(0.9, 0.9);
         [self addSubview:label];
         
-        underline = [[UIView alloc] initWithFrame:CGRectMake(label.center.x - 10.0, self.bounds.size.height - 15.0, 20.0, 3.0)];
+        underline = [[UIView alloc] initWithFrame:CGRectMake(label.center.x - 10.0, self.bounds.size.height - 10.0, 20.0, 3.0)];
         underline.backgroundColor = UIColorFromRGB(0x69DCCB);
         underline.clipsToBounds = true;
         underline.layer.cornerRadius = 2;
+        underline.alpha = 0.0;
         [self addSubview:underline];
         
         back =  [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, self.bounds.size.height, self.bounds.size.height)];
@@ -45,9 +48,19 @@
 }
 
 -(void)navigationTitle:(NSString *)title {
-    label.text = title;
-    label.backgroundColor = [UIColor purpleColor];
+    [label setText:title];
+    [UIView animateWithDuration:0.15 delay:0.1 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [label setAlpha:1.0];
+        [label setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
 
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.2 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [underline setFrame:CGRectMake(label.center.x - 10.0, self.bounds.size.height - 15.0, 20.0, 3.0)];
+        [underline setAlpha:1.0];
+        
+    } completion:nil];
+    
 }
 
 @end

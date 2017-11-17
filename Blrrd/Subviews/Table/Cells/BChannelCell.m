@@ -33,7 +33,7 @@
         
         self.channel = [[SAMLabel alloc] initWithFrame:CGRectMake(12.0, 12.0, self.bounds.size.width - 24.0, self.bounds.size.height - 24.0)];
         self.channel.textAlignment = NSTextAlignmentLeft;
-        self.channel.font = [UIFont fontWithName:@"Nunito-Regular" size:15];
+        self.channel.font = [UIFont fontWithName:@"Nunito-Bold" size:15];
         self.channel.verticalTextAlignment = SAMLabelVerticalTextAlignmentBottom;
         self.channel.textColor = [UIColor whiteColor];
         self.channel.backgroundColor = [UIColor clearColor];
