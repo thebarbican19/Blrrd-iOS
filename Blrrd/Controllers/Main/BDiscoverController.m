@@ -38,8 +38,12 @@
 }
 
 -(void)viewPresentProfile {
-    NSLog(@"viewPresentProfile");
     [self.delegate viewPresentProfile];
+    
+}
+
+-(void)viewPresentSettings {
+    [self.delegate viewPresentSettings];
     
 }
 

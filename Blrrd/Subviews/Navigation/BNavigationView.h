@@ -14,11 +14,13 @@
     UIView *underline;
     CAGradientLayer *gradient;
     UIButton *back;
+    UIButton *action;
 
 }
 
 @property (nonatomic, strong) id <BNavigationDelegate> delegate;
 @property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *rightbutton;
 
 -(void)navigationTitle:(NSString *)title;
 

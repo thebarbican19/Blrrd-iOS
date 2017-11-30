@@ -28,7 +28,9 @@
         gallery.tag = 2;
         gallery.hidden = false;
         gallery.clipsToBounds = true;
-        gallery.layer.cornerRadius = gallery.bounds.size.height;
+        gallery.layer.borderWidth = 0.0;
+        gallery.layer.borderColor = [UIColor whiteColor].CGColor;
+        gallery.layer.cornerRadius = gallery.bounds.size.height / 2;
         [gallery setImage:[UIImage imageNamed:@"camera_gallery"] forState:UIControlStateNormal];
         [gallery addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
         [container addSubview:gallery];
@@ -72,18 +74,23 @@
     
 }
 
--(void)actionimage:(NSString *)image buttontag:(NSInteger)tag {
-    for (UIView *subview in container.subviews) {
-        if ([subview isKindOfClass:[UIButton class]]) {
-            UIButton *selected = (UIButton *)subview;
-            if (subview.tag == tag) {
-                [selected setImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
+-(void)actionimage:(UIImage *)image buttontag:(NSInteger)tag {
+    [UIView transitionWithView:self duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        for (UIView *subview in container.subviews) {
+            if ([subview isKindOfClass:[UIButton class]]) {
+                UIButton *selected = (UIButton *)subview;
+                if (subview.tag == tag) {
+                    [selected setImage:image forState:UIControlStateNormal];
+                    if (image.hasAlpha) [selected.layer setBorderWidth:0];
+                    else [selected.layer setBorderWidth:0.6];
 
+                }
+                
             }
             
         }
         
-    }
+    } completion:nil];
     
 }
 

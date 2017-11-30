@@ -43,6 +43,16 @@
         [back addTarget:self.delegate action:@selector(viewNavigationButtonTapped:)forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:back];
         
+        action = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 90.0, 0.0, 80.0, self.bounds.size.height)];
+        action.tag = 1;
+        action.backgroundColor = [UIColor clearColor];
+        action.hidden = self.rightbutton==nil?true:false;
+        [action.titleLabel setFont:[UIFont fontWithName:@"Nunito-ExtraBold" size:10]];
+        [action setTitleColor:UIColorFromRGB(0x69DCCB) forState:UIControlStateNormal];
+        [action setTitle:self.rightbutton.uppercaseString forState:UIControlStateNormal];
+        [action addTarget:self.delegate action:@selector(viewNavigationButtonTapped:)forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:action];
+    
     }
     
 }

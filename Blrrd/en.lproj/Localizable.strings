@@ -40,10 +40,31 @@
 "Canvas_UploadSucsessPlaceholder_Title" = "Shared!";
 "Canvas_UploadSucsessPlaceholder_Body" = "Your image has been shared. Tap to share another.";
 "Canvas_GalleryNothingSelectedError_Title" = "You have not selected an image...";
+"Canvas_GalleryDefault_Title" = "My Images";
 
 "Profile_SectionNotifications_Header" = "Notifications";
 "Profile_SectionRequests_Header" = "Friend Requests";
 "Profile_SectionYouMayKnow_Header" = "You may know";
 "Profile_MyPosts_Header" = "My Posts";
+"Profile_TimeViewed_Body" = "Total Time Viewed *%@*";
 
 "Profile_NotificationViewed_Body" = "*%@* viewed your post for *%@*"; //Joe viewed your post for 1 second
+
+"Settings_Title" = "Settings";
+"Settings_SectionAbout_Title" = "About";
+"Settings_SectionDanger_Title" = "Danger Zone";
+"Settings_ItemSaveimages_Title" = "Save Captured Images";
+"Settings_ItemPermissions_Title" = "App Permissions";
+"Settings_ItemShare_Title" = "Share Blrrd";
+"Settings_ItemFeedback_Title" = "Contact Us";
+"Settings_ItemTerms_Title" = "Terms & Conditions";
+"Settings_ItemCache_Title" = "Destory Cached Data";
+"Settings_ItemCacheDestroyed_Title" = "Cache Destoryed!";
+"Settings_ItemLogout_Title" = "Logout";
+"Settings_FeedbackPlaceholder_Text" = "Tell us what you think...";
+"Settings_FeedbackSend_Action" = "Send";
+"Settings_FeedbackEmptyMessage_Text" = "Please enter a message";
+"Settings_FeedbackPlaceholderSent_Title" = "Sent!";
+"Settings_FeedbackPlaceholderSent_Body" = "Thanks for your feedback";
+
+

@@ -61,7 +61,8 @@
     
     [cell.container setClipsToBounds:true];
     [cell.container.layer setCornerRadius:4.0];
-    
+    [cell.overlay setTransform:CGAffineTransformMakeScale(1.25, 1.25)];
+
     [cell.contentView.layer setShadowColor:UIColorFromRGB(0x000000).CGColor];
     [cell.contentView.layer setShadowOffset:CGSizeMake(0.0, 2.0)];
     [cell.contentView.layer setShadowRadius:9.0];
@@ -73,15 +74,15 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     BGalleryCell *cell = (BGalleryCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-    if (self.selected == nil && ![self.selected isEqual:[self.gallery objectAtIndex:indexPath.row]]) {
+    if (self.selected != [self.gallery objectAtIndex:indexPath.row]) {
         self.selected = [self.gallery objectAtIndex:indexPath.row];
-        
+
     }
     else {
         self.selected = nil;
-
-    }
         
+    }
+
     for (BGalleryCell *visible in self.collectionView.visibleCells) {
         [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
             if (cell == visible && self.selected != nil) {
@@ -91,12 +92,11 @@
             }
             else {
                 [visible.overlay setAlpha:0.0];
-                [visible.overlay setTransform:CGAffineTransformMakeScale(1.15, 1.15)];
+                [visible.overlay setTransform:CGAffineTransformMakeScale(1.25, 1.25)];
 
             }
             
         } completion:nil];
-
         
     }
     

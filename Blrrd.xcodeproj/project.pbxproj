@@ -10,6 +10,7 @@
 		10D81ABF3A18D93B28414C21 /* libPods-Blrrd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */; };
 		2BE2E861C4D7BD74507C4F52 /* libPods-BlrrdTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */; };
 		3C1837B2FB585C787DA1836D /* libPods-BlrrdUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */; };
+		7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7737127E1FCFBD4B00E507AE /* SafariServices.framework */; };
 		7757319C1FBE3F5E002E0CCE /* Nunito-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7757318E1FBE3F5B002E0CCE /* Nunito-ExtraLightItalic.ttf */; };
 		7757319D1FBE3F5E002E0CCE /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7757318F1FBE3F5B002E0CCE /* Nunito-ExtraBold.ttf */; };
 		7757319E1FBE3F5E002E0CCE /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731901FBE3F5C002E0CCE /* Nunito-Bold.ttf */; };
@@ -41,6 +42,10 @@
 		7778B1DE1FCD229C00E5B83D /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7778B1DD1FCD229C00E5B83D /* CoreImage.framework */; };
 		7778B1E11FCF3EB500E5B83D /* GDFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1DF1FCF3EB400E5B83D /* GDFeedbackController.m */; };
 		7778B1E41FCF415A00E5B83D /* UITextView+Placeholder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1E31FCF415A00E5B83D /* UITextView+Placeholder.m */; };
+		7778B1EB1FCFA42F00E5B83D /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1EA1FCFA42F00E5B83D /* UIImage+Alpha.m */; };
+		7778B1ED1FCFB03E00E5B83D /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7778B1EC1FCFB03E00E5B83D /* Settings.plist */; };
+		7778B1F01FCFB0C600E5B83D /* BSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1EF1FCFB0C600E5B83D /* BSettingsController.m */; };
+		7778B1F31FCFB3D800E5B83D /* BSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1F21FCFB3D800E5B83D /* BSettingsCell.m */; };
 		778D9B171FABB53600878A6A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B161FABB53600878A6A /* AppDelegate.m */; };
 		778D9B1D1FABB53600878A6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1B1FABB53600878A6A /* Main.storyboard */; };
 		778D9B1F1FABB53600878A6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1E1FABB53600878A6A /* Assets.xcassets */; };
@@ -95,6 +100,7 @@
 		4D03DFD143260305F4E5E860 /* Pods-Blrrd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blrrd.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Blrrd/Pods-Blrrd.debug.xcconfig"; sourceTree = "<group>"; };
 		525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EC6E94C2F62261082206C6F /* Pods-BlrrdUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdUITests/Pods-BlrrdUITests.release.xcconfig"; sourceTree = "<group>"; };
+		7737127E1FCFBD4B00E507AE /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		7757318E1FBE3F5B002E0CCE /* Nunito-ExtraLightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
 		7757318F1FBE3F5B002E0CCE /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
 		775731901FBE3F5C002E0CCE /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
@@ -138,6 +144,13 @@
 		7778B1E01FCF3EB500E5B83D /* GDFeedbackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDFeedbackController.h; sourceTree = "<group>"; };
 		7778B1E21FCF411200E5B83D /* UITextView+Placeholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Placeholder.h"; sourceTree = "<group>"; };
 		7778B1E31FCF415A00E5B83D /* UITextView+Placeholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Placeholder.m"; sourceTree = "<group>"; };
+		7778B1E91FCFA42E00E5B83D /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
+		7778B1EA1FCFA42F00E5B83D /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
+		7778B1EC1FCFB03E00E5B83D /* Settings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
+		7778B1EE1FCFB0C600E5B83D /* BSettingsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSettingsController.h; sourceTree = "<group>"; };
+		7778B1EF1FCFB0C600E5B83D /* BSettingsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSettingsController.m; sourceTree = "<group>"; };
+		7778B1F11FCFB3D800E5B83D /* BSettingsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSettingsCell.h; sourceTree = "<group>"; };
+		7778B1F21FCFB3D800E5B83D /* BSettingsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSettingsCell.m; sourceTree = "<group>"; };
 		778D9B121FABB53600878A6A /* Blrrd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blrrd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		778D9B151FABB53600878A6A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		778D9B161FABB53600878A6A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -203,6 +216,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */,
 				7778B1DE1FCD229C00E5B83D /* CoreImage.framework in Frameworks */,
 				7778B1D01FCCC43100E5B83D /* Photos.framework in Frameworks */,
 				7778B1CE1FCCC42C00E5B83D /* AVFoundation.framework in Frameworks */,
@@ -305,6 +319,8 @@
 		7778B1E51FCF6AE300E5B83D /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				7778B1EE1FCFB0C600E5B83D /* BSettingsController.h */,
+				7778B1EF1FCFB0C600E5B83D /* BSettingsController.m */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -346,6 +362,7 @@
 				778D9B201FABB53600878A6A /* LaunchScreen.storyboard */,
 				778D9B1E1FABB53600878A6A /* Assets.xcassets */,
 				778D9B231FABB53600878A6A /* Info.plist */,
+				7778B1EC1FCFB03E00E5B83D /* Settings.plist */,
 				778D9B4B1FABCC2700878A6A /* BConstants.h */,
 				778D9B501FABCC7700878A6A /* Localizable.strings */,
 				778D9B241FABB53600878A6A /* main.m */,
@@ -421,6 +438,8 @@
 				77BDA3E71FBDF95E00249572 /* BFriendCell.m */,
 				7778B1DA1FCD1F3E00E5B83D /* BGalleryCell.h */,
 				7778B1DB1FCD1F3E00E5B83D /* BGalleryCell.m */,
+				7778B1F11FCFB3D800E5B83D /* BSettingsCell.h */,
+				7778B1F21FCFB3D800E5B83D /* BSettingsCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -463,6 +482,8 @@
 		778D9B6E1FABF14E00878A6A /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				7778B1E91FCFA42E00E5B83D /* UIImage+Alpha.h */,
+				7778B1EA1FCFA42F00E5B83D /* UIImage+Alpha.m */,
 				7778B1E21FCF411200E5B83D /* UITextView+Placeholder.h */,
 				7778B1E31FCF415A00E5B83D /* UITextView+Placeholder.m */,
 				778D9B731FAC0E0F00878A6A /* UIImage+BlurExtension.h */,
@@ -524,6 +545,7 @@
 		DC2B262B6F1B871B7C26DD9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7737127E1FCFBD4B00E507AE /* SafariServices.framework */,
 				7778B1DD1FCD229C00E5B83D /* CoreImage.framework */,
 				7778B1CF1FCCC43100E5B83D /* Photos.framework */,
 				7778B1CD1FCCC42C00E5B83D /* AVFoundation.framework */,
@@ -680,6 +702,7 @@
 				775731A71FBE3F5E002E0CCE /* Nunito-ExtraLight.ttf in Resources */,
 				775731A01FBE3F5E002E0CCE /* Nunito-SemiBold.ttf in Resources */,
 				778D9B4E1FABCC7700878A6A /* Localizable.strings in Resources */,
+				7778B1ED1FCFB03E00E5B83D /* Settings.plist in Resources */,
 				775731A31FBE3F5E002E0CCE /* Nunito-BlackItalic.ttf in Resources */,
 				7757319D1FBE3F5E002E0CCE /* Nunito-ExtraBold.ttf in Resources */,
 				775731A41FBE3F5E002E0CCE /* Nunito-SemiBoldItalic.ttf in Resources */,
@@ -852,6 +875,7 @@
 				775731AD1FBE4A48002E0CCE /* BCanvasController.m in Sources */,
 				7778B1D91FCD16FA00E5B83D /* BGalleryController.m in Sources */,
 				775731B31FBE76B6002E0CCE /* BNavigationView.m in Sources */,
+				7778B1F01FCFB0C600E5B83D /* BSettingsController.m in Sources */,
 				779994B71FBB69110002531B /* BChannelController.m in Sources */,
 				77BDA3EE1FBE15D100249572 /* BTabbarView.m in Sources */,
 				778D9B561FABCE0700878A6A /* BAuthController.m in Sources */,
@@ -863,6 +887,7 @@
 				7778B1E11FCF3EB500E5B83D /* GDFeedbackController.m in Sources */,
 				778D9B6D1FABEC1600878A6A /* BBlurredCell.m in Sources */,
 				778D9B5F1FABD63700878A6A /* BQueryObject.m in Sources */,
+				7778B1F31FCFB3D800E5B83D /* BSettingsCell.m in Sources */,
 				77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */,
 				778D9B6A1FABEBD300878A6A /* BTimelineSubview.m in Sources */,
 				7778B1CA1FCC77FE00E5B83D /* BProfileHeader.m in Sources */,
@@ -877,6 +902,7 @@
 				778D9B171FABB53600878A6A /* AppDelegate.m in Sources */,
 				77656A9B1FB286E0006F0854 /* BSegmentControl.m in Sources */,
 				7778B1E41FCF415A00E5B83D /* UITextView+Placeholder.m in Sources */,
+				7778B1EB1FCFA42F00E5B83D /* UIImage+Alpha.m in Sources */,
 				7778B1D61FCCF16D00E5B83D /* BImageObject.m in Sources */,
 				778D9B721FABF18A00878A6A /* GDPlaceholderView.m in Sources */,
 				77BDA3E21FBD446000249572 /* BDiscoverController.m in Sources */,

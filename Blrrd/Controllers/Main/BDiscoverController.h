@@ -32,6 +32,7 @@
 @optional
 
 -(void)viewPresentProfile;
+-(void)viewPresentSettings;
 
 @end
 

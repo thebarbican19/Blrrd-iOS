@@ -106,6 +106,18 @@
     
 }
 
+-(void)imageReturnLatestImage:(void (^)(UIImage *image))completion {
+    PHFetchOptions *options = [[PHFetchOptions alloc] init];
+    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:false]];
+    PHFetchResult *fetch = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:options];
+
+    [self imagesFromAsset:fetch.firstObject thumbnail:true completion:^(NSDictionary *data, UIImage *image) {
+        completion(image);
+
+    }];
+    
+}
+
 -(void)imagesFromAlbum:(NSString *)album completion:(void (^)(NSArray *images))completion {
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
     options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:false]];

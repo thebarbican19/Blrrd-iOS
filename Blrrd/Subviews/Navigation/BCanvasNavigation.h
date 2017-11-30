@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GDStatusLabel.h"
+#import "UIImage+Alpha.h"
 
 typedef enum {
     BCanvasNavigationTypeCamera,
@@ -30,7 +31,7 @@ typedef enum {
 @property (nonatomic, strong) id <BCanvasNavigationDelegate> delegate;
 
 -(void)title:(NSString *)title;
--(void)actionimage:(NSString *)image buttontag:(NSInteger)tag;
+-(void)actionimage:(UIImage *)image buttontag:(NSInteger)tag;
 -(void)type:(BCanvasNavigationType)type;
 
 @end

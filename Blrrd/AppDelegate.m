@@ -30,6 +30,7 @@
     }
     
     if (![self.data boolForKey:@"app_installed"]) {
+        [self.credentials setAppSaveImages:true];
         if (!APP_DEBUG_MODE) [self.mixpanel track:@"App Installed" properties:nil];
 
     }
@@ -55,12 +56,14 @@
 }
 
 -(void)applicationHandleSockets:(BOOL)terminate {
+    /*
     self.credentials = [[BCredentialsObject alloc] init];
     self.sockets = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"ws://62.75.213.212:8000/ws/viewtimesNewApi/%@" ,self.credentials.userHandle]]];
     self.sockets.delegate = self;
     
     if (terminate) [self.sockets close];
     else if (self.sockets != nil) [self.sockets open];
+    */
     
 }
 

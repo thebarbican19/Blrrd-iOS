@@ -21,6 +21,8 @@
     self.imageobj = [[BImageObject alloc] init];
     self.imageobj.delegate = self;
     
+    self.credentials = [[BCredentialsObject alloc] init];
+    
     self.viewPlaceholder = [[GDPlaceholderView alloc] initWithFrame:[UIApplication sharedApplication].delegate.window.bounds];
     self.viewPlaceholder.delegate = self;
     self.viewPlaceholder.backgroundColor = [UIColor clearColor];
@@ -160,12 +162,12 @@
     [self.imageobj imageAuthorization:^(PHAuthorizationStatus status) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             if (status == PHAuthorizationStatusDenied || status == PHAuthorizationStatusRestricted) {
-                [self.viewNavigation actionimage:@"camera_gallery_disabled" buttontag:2];
+                [self.viewNavigation actionimage:[UIImage imageNamed:@"camera_gallery_disabled"] buttontag:2];
                 
             }
             else {
-                [self.viewNavigation actionimage:@"camera_gallery" buttontag:2];
-
+                [self.viewNavigation actionimage:[UIImage imageNamed:@"camera_gallery"] buttontag:2];
+        
             }
             
         }];
@@ -275,7 +277,7 @@
 }
 
 -(void)viewHandleImage:(UIImage *)image {
-    if (!self.gallerymode) {
+    if (!self.gallerymode && self.credentials.appSaveImages) {
         [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
             [PHAssetChangeRequest creationRequestForAssetFromImage:image];
             
@@ -323,7 +325,7 @@
     [self viewTermiateCamera];
     [self setFlash:!self.flash];
     [self viewCameraInitiate];
-    [self.viewNavigation actionimage:self.flash?@"camera_flash_selected":@"camera_flash" buttontag:3];
+    [self.viewNavigation actionimage:[UIImage imageNamed:self.flash?@"camera_flash_selected":@"camera_flash"] buttontag:3];
     
 }
 
@@ -349,8 +351,9 @@
                         [self.viewFrame.layer setMask:nil];
                         [self.viewNavigation type:BCanvasNavigationTypePick];
                         [self.viewGallery.imageobj imagesRetriveAlbums:^(NSArray *albums) {
-                            if (albums.count > 0) [self.viewNavigation title:albums.firstObject];
-
+                            //if (albums.count > 0) [self.viewNavigation title:albums.firstObject];
+                            [self.viewNavigation title:NSLocalizedString(@"Canvas_GalleryDefault_Title", nil)];
+                            
                         }];
 
                         [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
@@ -359,7 +362,7 @@
                         } completion:nil];
                 
                     }
-                    else [self.viewNavigation actionimage:@"camera_gallery_disabled" buttontag:2];
+                    else [self.viewNavigation actionimage:[UIImage imageNamed:@"camera_gallery_disabled"] buttontag:2];
                     
                 }];
                 
@@ -372,8 +375,9 @@
                 [self.viewFrame.layer setMask:nil];
                 [self.viewNavigation type:BCanvasNavigationTypePick];
                 [self.viewGallery.imageobj imagesRetriveAlbums:^(NSArray *albums) {
-                    if (albums.count > 0) [self.viewNavigation title:albums.firstObject];
-                    
+                    //if (albums.count > 0) [self.viewNavigation title:albums.firstObject];
+                    [self.viewNavigation title:NSLocalizedString(@"Canvas_GalleryDefault_Title", nil)];
+
                 }];
                 
                 [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
@@ -391,19 +395,16 @@
 
     }];
     
-    CAGradientLayer *topgradient = [CAGradientLayer layer];
-    topgradient.frame = self.viewGallery.collectionView.bounds;
-    topgradient.colors = @[(id)[[UIColor clearColor] CGColor], (id)[[UIColor blackColor] CGColor]];
-    topgradient.startPoint = CGPointMake(0.0, 0.0);
-    topgradient.endPoint = CGPointMake(0.0, 0.3);
-    [self.viewGallery.view.layer setMask:topgradient];
-
-    CAGradientLayer *bottomgradient = [CAGradientLayer layer];
-    bottomgradient.frame = self.viewGallery.collectionView.bounds;
-    bottomgradient.colors = @[(id)[[UIColor blackColor] CGColor], (id)[[UIColor clearColor] CGColor]];
-    bottomgradient.startPoint = CGPointMake(0.0, 0.75);
-    bottomgradient.endPoint = CGPointMake(0.0, 1.0);
-    [self.viewGallery.view.layer setMask:bottomgradient];
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = self.viewGallery.view.bounds;
+    gradient.colors = @[(id)[[UIColor clearColor] CGColor],
+                        (id)[[UIColor blackColor] CGColor],
+                        (id)[[UIColor blackColor] CGColor],
+                        (id)[[UIColor clearColor] CGColor]];
+    gradient.locations = @[@(0.05), @(0.25), @(0.7), @(0.9)];
+    gradient.startPoint = CGPointMake(0.0, 0.0);
+    gradient.endPoint = CGPointMake(0.0, 1.0);
+    [self.viewGallery.view.layer setMask:gradient];
     
     [self.view bringSubviewToFront:self.viewNavigation];
     

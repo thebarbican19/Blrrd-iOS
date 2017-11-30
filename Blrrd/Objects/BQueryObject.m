@@ -317,6 +317,36 @@
     
 }
 
+-(void)queryUserStats:(void (^)(NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"postsApi/getProfileStats"];
+    NSString *endpointmethod = @"GET";
+    NSDictionary *endpointparams = @{@"myusername":self.credentials.userHandle};
+    
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (data.length > 0 && !error) {
+            if (status.statusCode == 200) {
+                NSDictionary *stats = [[[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] objectForKey:@"data"] firstObject];
+                [self.credentials setUserTotalTime:[[stats objectForKey:@"totaltime"] intValue] append:false];
+                [self.credentials setUserEmail:[stats objectForKey:@"email"]];
+                [self.credentials setUserAvatar:[stats objectForKey:@"photo"]];
+
+            }
+            
+            completion([self requestErrorHandle:(int)status.statusCode message:error.domain error:nil endpoint:endpoint]);
+
+        }
+        else {
+            completion([self requestErrorHandle:(int)status.statusCode message:error.domain error:nil endpoint:endpoint]);
+            
+        }
+        
+    }];
+    
+    [task resume];
+    
+}
+
 -(void)postTime:(NSDictionary *)image secondsadded:(int)seconds completion:(void (^)(NSError *error))completion {
     NSString *uniqueid = [NSString stringWithFormat:@"%d" ,(int)[[NSDate date] timeIntervalSince1970]];
     NSString *endpoint = [NSString stringWithFormat:@"postsApi/addViewTime"];

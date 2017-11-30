@@ -16,6 +16,7 @@
 #import "BCanvasNavigation.h"
 #import "BImageObject.h"
 #import "BGalleryController.h"
+#import "BCredentialsObject.h"
 
 @interface BCanvasController : UIViewController <GDPlaceholderDelegate, BCanvasNavigationDelegate, BImageObjectDelegate, UITextViewDelegate>
 
@@ -30,6 +31,7 @@
 @property (nonatomic, strong) UCZProgressView *viewProgress;
 
 @property (nonatomic, strong) BImageObject *imageobj;
+@property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic) UIImage *image;
 @property (nonatomic) AVCaptureStillImageOutput *output;
 @property (nonatomic, strong) NSDictionary *outputsettings;

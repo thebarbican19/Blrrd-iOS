@@ -24,14 +24,16 @@
 -(NSString *)userEmail;
 -(NSURL *)userAvatar;
 -(BOOL)userPublic;
+-(int)userTotalTime;
+-(NSString *)userTotalTimeFormatted;
 
 -(BOOL)appRated;
 -(BOOL)appOnboarded;
+-(BOOL)appSaveImages;
 
 -(NSString *)devicePush;
 -(NSString *)deviceIdentifyer;
 -(BOOL)devicePushUploaded;
-
 
 -(void)setDeviceIdentifyer;
 -(void)setDevicePush:(NSString *)push;
@@ -39,11 +41,13 @@
 
 -(void)setAppOnboarded:(BOOL)onboarded;
 -(void)setAppRated:(BOOL)rated;
+-(void)setAppSaveImages:(BOOL)save;
 
 -(void)setUserEmail:(NSString *)email;
 -(void)setUserIdentifyer:(NSString *)key;
 -(void)setUserHandle:(NSString *)handle;
 -(void)setUserAvatar:(NSString *)url;
 -(void)setUserPublic:(BOOL)yes;
+-(void)setUserTotalTime:(int)seconds append:(BOOL)append;
 
 @end

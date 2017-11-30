@@ -30,6 +30,7 @@
 -(UIImage *)processImageCropWithFrame:(UIImage *)image rect:(CGRect)rect;
 
 -(void)imageAuthorization:(void (^)(PHAuthorizationStatus status))completion;
+-(void)imageReturnLatestImage:(void (^)(UIImage *image))completion;
 -(void)imagesFromAlbum:(NSString *)album completion:(void (^)(NSArray *images))completion;
 -(void)imagesFromAsset:(PHAsset *)asset thumbnail:(BOOL)thumbnail completion:(void (^)(NSDictionary *data, UIImage *image))completion;
 -(void)imagesRetriveAlbums:(void (^)(NSArray *albums))completion;

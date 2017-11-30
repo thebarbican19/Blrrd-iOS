@@ -27,6 +27,7 @@
     [self setUserEmail:nil];
     [self setUserHandle:nil];
     [self setUserIdentifyer:nil];
+    [self setUserTotalTime:0 append:false];
 
     if (!APP_DEBUG_MODE) {
         [self.mixpanel track:@"App Logged Out"];
@@ -80,6 +81,17 @@
 
 }
 
+-(int)userTotalTime {
+    return [[self.data objectForKey:@"user_total_seconds"] intValue];
+    
+}
+
+-(NSString *)userTotalTimeFormatted {
+    if (self.userTotalTime < 60) return [NSString stringWithFormat:@"%01ds" ,self.userTotalTime % 60];
+    else return [NSString stringWithFormat:@"%01dm %01ds" ,self.userTotalTime / 60 % 60, self.userTotalTime % 60];
+    
+}
+
 -(BOOL)appRated {
     return [[self.data objectForKey:@"app_rate"] boolValue];
 
@@ -87,6 +99,11 @@
 
 -(BOOL)appOnboarded {
     return [[self.data objectForKey:@"app_onboarding"] boolValue];
+
+}
+
+-(BOOL)appSaveImages {
+    return [[self.data objectForKey:@"app_save_images"] boolValue];
 
 }
 
@@ -126,6 +143,11 @@
     
 }
 
+-(void)setAppSaveImages:(BOOL)save {
+    [self.data setObject:[NSNumber numberWithBool:save] forKey:@"app_save_images"];
+    [self.data synchronize];
+    
+}
 
 -(void)setUserEmail:(NSString *)email {
     if (email) [self.data setObject:[email stringByCorrectingEmailTypos] forKey:@"user_email"];
@@ -163,6 +185,15 @@
     [self.data setObject:[NSNumber numberWithBool:yes] forKey:@"user_public"];
     [self.data synchronize];
     
+}
+
+-(void)setUserTotalTime:(int)seconds append:(BOOL)append {
+    int secondsset = seconds;
+    if (append) secondsset += self.userTotalTime;
+    
+    [self.data setObject:[NSNumber numberWithInt:secondsset] forKey:@"user_total_seconds"];
+    [self.data synchronize];
+
 }
 
 @end

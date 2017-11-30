@@ -48,15 +48,32 @@
         email.verticalTextAlignment = SAMLabelVerticalTextAlignmentTop;
         [self addSubview:email];
         
+        timeviewed = [[SAMLabel alloc] initWithFrame:CGRectMake(profile.bounds.size.width + 35.0, 80.0, 200.0, 16.0)];
+        timeviewed.backgroundColor = [UIColor clearColor];
+        timeviewed.layer.cornerRadius = 3.0;
+        timeviewed.clipsToBounds = true;
+        timeviewed.textAlignment = NSTextAlignmentLeft;
+        timeviewed.textColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+        timeviewed.font = [UIFont fontWithName:@"Nunito-Bold" size:9];
+        timeviewed.verticalTextAlignment = SAMLabelVerticalTextAlignmentMiddle;
+        [self addSubview:timeviewed];
+        
         gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
         gesture.delegate = self;
         gesture.enabled = true;
         [self addGestureRecognizer:gesture];
+        
+        settings = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 62.0, 20.0, 45.0, 45.0)];
+        settings.backgroundColor = [UIColor clearColor];
+        [settings setImage:[UIImage imageNamed:@"settings_icon"] forState:UIControlStateNormal];
+        [settings addTarget:self action:@selector(settings:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:settings];
 
     }
     
-    email.text = self.credentials.userEmail;
-    username.text = self.credentials.userHandle;
+    [email setText:self.credentials.userEmail];
+    [username setText:self.credentials.userHandle];
+    [timeviewed setAttributedText:self.format];
 
 }
 
@@ -65,6 +82,36 @@
         [self.delegate viewPresentProfile];
         
     }
+    
+}
+
+-(void)settings:(UIButton *)button {
+    if ([self.delegate respondsToSelector:@selector(viewPresentSettings)]) {
+        [self.delegate viewPresentSettings];
+        
+    }
+    
+}
+
+-(NSMutableAttributedString *)format {
+    NSString *text = [NSString stringWithFormat:NSLocalizedString(@"Profile_TimeViewed_Body", nil),  self.credentials.userTotalTimeFormatted];
+    NSMutableAttributedString *formatted = [[NSMutableAttributedString alloc] initWithString:text];
+    if (text) {
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\*[^\\*]+\\*" options:0 error:nil];
+        NSArray *formatMatches = [regex matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+        for (NSTextCheckingResult *match in formatMatches) {
+            [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Nunito-Black" size:timeviewed.font.pointSize] range:NSMakeRange(match.range.location, match.range.length)];
+            [formatted addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(match.range.location, match.range.length)];
+            
+        }
+        
+        [formatted.mutableString replaceOccurrencesOfString:@"*" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, formatted.string.length)];
+        [formatted.mutableString replaceOccurrencesOfString:@"*" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, formatted.string.length)];
+        
+    }
+    
+    return formatted;
+    
 }
 
 @end

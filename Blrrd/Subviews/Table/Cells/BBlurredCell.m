@@ -15,6 +15,7 @@
     self = [super initWithFrame:frame];
     self.mixpanel = [Mixpanel sharedInstance];
     self.query = [[BQueryObject alloc] init];
+    self.credentials = [[BCredentialsObject alloc] init];
     if (self) {
         self.avatar = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 26.0 ,26.0)];
         self.avatar.contentMode = UIViewContentModeScaleAspectFill;
@@ -152,9 +153,10 @@
     if (gesture == nil) {
         if (self.timer.isValid) {
             [self.timer invalidate];
-            [self setTimeviewed:0];
+            [self.credentials setUserTotalTime:self.timeviewed append:true];
             [self.query postTime:self.content secondsadded:self.timeviewed completion:^(NSError *error) {
                 if (error.code == 200) {
+                    [self setTimeviewed:0];
                     [self.mixpanel track:@"Image Revealed" properties:@{@"Image":[self.content objectForKey:@"publicpath"],
                                                                         @"ID":[self.content objectForKey:@"id"],
                                                                         @"User":[self.content objectForKey:@"username"]}];

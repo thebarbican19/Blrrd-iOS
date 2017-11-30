@@ -23,7 +23,6 @@
 @property (nonatomic, strong) BNavigationView *feedbackNavigation;
 @property (nonatomic, strong) GDPlaceholderView *feedbackPlaceholder;
 @property (nonatomic, strong) IBOutlet UITextView *feedbackEntry;
-@property (nonatomic, strong) IBOutlet UITextField *feedbackEmail;
 
 @property (nonatomic, strong) BCredentialsObject *credentials;
 

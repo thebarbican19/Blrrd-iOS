@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, BQueryTimeline) {
 -(void)queryNotifications:(void (^)(NSArray *notifications, NSError *error))completion;
 -(void)queryRequests:(void (^)(NSArray *requests, NSError *error))completion;
 -(void)querySuggestedUsers:(void (^)(NSArray *users, NSError *error))completion;
+-(void)queryUserStats:(void (^)(NSError *error))completion;
 
 -(void)postTime:(NSDictionary *)image secondsadded:(int)seconds completion:(void (^)(NSError *error))completion;
 -(void)postRequest:(NSString *)user request:(NSString *)request completion:(void (^)(NSError *error))completion;

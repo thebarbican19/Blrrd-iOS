@@ -18,6 +18,8 @@
     SAMLabel *username;
     SAMLabel *email;
     UITapGestureRecognizer *gesture;
+    UIButton *settings;
+    SAMLabel *timeviewed;
 
 }
 
@@ -31,6 +33,7 @@
 @optional
 
 -(void)viewPresentProfile;
+-(void)viewPresentSettings;
 
 @end
 

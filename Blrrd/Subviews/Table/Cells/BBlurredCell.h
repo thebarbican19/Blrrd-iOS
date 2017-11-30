@@ -11,6 +11,7 @@
 #import <UIImageView+WebCache.h>
 #import <Mixpanel.h>
 #import "BQueryObject.h"
+#import "BCredentialsObject.h"
 #import "SAMLabel.h"
 #import "GDStatusLabel.h"
 
@@ -20,6 +21,7 @@
 @property (nonatomic, strong) id <BBlurredCellDelegate> delegate;
 @property (nonatomic ,strong) Mixpanel *mixpanel;
 @property (nonatomic ,strong) BQueryObject *query;
+@property (nonatomic ,strong) BCredentialsObject *credentials;
 @property (nonatomic ,strong) NSMutableDictionary *content;
 @property (nonatomic ,strong) NSMutableDictionary *userdata;
 @property (nonatomic ,assign) int timeviewed;

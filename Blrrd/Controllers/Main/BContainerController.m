@@ -9,6 +9,7 @@
 #import "BContainerController.h"
 #import "BAuthController.h"
 #import "BDetailedTimelineController.h"
+#import "BSettingsController.h"
 #import "BConstants.h"
 
 @interface BContainerController ()
@@ -238,6 +239,17 @@
     }
     else [self.viewDiscover viewSetupSuggested:[self.query cacheRetrive:@"userApi/getAllUsers/"] limit:0];
     
+    [self.queue addOperationWithBlock:^{
+        [self.query queryUserStats:^(NSError *error) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.viewDiscover.header setNeedsDisplay];
+                
+            }];
+            
+        }];
+        
+    }];
+    
 }
 
 -(void)viewSwitchTimeline:(int)index animated:(BOOL)animated {
@@ -360,7 +372,7 @@
             [self.viewContainer setFrame:CGRectMake(0.0, 0.0, self.viewContainer.bounds.size.width, self.view.bounds.size.height + APP_STATUSBAR_HEIGHT)];
         }
         else {
-            if (!self.viewCanvas.uploading) [self.viewCanvas viewTermiateCamera];
+            [self.viewCanvas viewTermiateCamera];
             [self.viewTabbar viewUpdateWithTheme:BTabbarViewThemeDefault];
             [self.viewContainer setFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.viewContainer.bounds.size.width, self.view.bounds.size.height - MAIN_TABBAR_HEIGHT)];
             
@@ -374,7 +386,11 @@
         
     }
     
-    if (index == 2) [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    if (index == 2) {
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+        [self.viewDiscover.header setNeedsDisplay];
+        
+    }
     
     self.viewindex = index;
     
@@ -390,7 +406,6 @@
 }
 
 -(void)viewPresentProfile {
-    NSLog(@"sdleegate viewPresentProfile");
     BDetailedTimelineController *viewDetailed = [[BDetailedTimelineController alloc] init];
     viewDetailed.view.backgroundColor = self.view.backgroundColor;
     viewDetailed.type = BDetailedViewTypeProfile;
@@ -400,6 +415,13 @@
     
 }
 
+-(void)viewPresentSettings {
+    BSettingsController *viewSettings = [[BSettingsController alloc] init];
+    viewSettings.view.backgroundColor = self.view.backgroundColor;
+
+    [self.navigationController pushViewController:viewSettings animated:true];
+
+}
 
 -(void)viewScrolled:(float)position {
     if (position > self.scrollpos && position >= 0) {
