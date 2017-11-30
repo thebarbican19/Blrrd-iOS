@@ -215,6 +215,7 @@
     NSDictionary *endpointparams = @{@"username":self.credentials.userHandle};
     
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"posted_datetime" ascending:false];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username != %@" ,self.credentials.userHandle];
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
         if (data.length > 0 && !error) {
@@ -224,12 +225,12 @@
                     NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:item];
                     [append setObject:[self requestTimestamp:[item objectForKey:@"posted_datetime"]] forKey:@"posted_datetime"];
                     [notifications addObject:append];
-
+                    
                 }
                 
-                [self cacheSave:[notifications sortedArrayUsingDescriptors:@[sort]] endpointname:endpoint append:false expiry:60*30];
+                [self cacheSave:[[notifications filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]] endpointname:endpoint append:false expiry:60*30];
                 
-                completion([notifications sortedArrayUsingDescriptors:@[sort]], [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
+                completion([[notifications filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]], [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
                 
             }
             else if (status.statusCode == 500) {
@@ -401,10 +402,22 @@
     
 }
 
--(void)cacheDestroy {
-    for (NSString *key in [[self.data dictionaryRepresentation] allKeys]) {
-        if ([key containsString:@"cache"]) [self.data removeObjectForKey:key];
+-(void)cacheDestroy:(NSString *)endpoint {
+    if (endpoint == nil) {
+        for (NSString *key in [[self.data dictionaryRepresentation] allKeys]) {
+            if ([key containsString:@"cache"]) {
+                [self.data removeObjectForKey:key];
+                [self.data synchronize];
+                
+            }
+            
+        }
         
+    }
+    else {
+        [self.data removeObjectForKey:[NSString stringWithFormat:@"cache_%@" ,endpoint]];
+        [self.data synchronize];
+
     }
     
 }

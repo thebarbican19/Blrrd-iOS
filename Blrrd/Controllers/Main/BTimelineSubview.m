@@ -106,6 +106,11 @@
     
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"Selected: %@" ,[self.content objectAtIndex:indexPath.row]);
+    
+}
+
 -(void)collectionViewRevealed:(BBlurredCell *)revealed {
     for (BBlurredCell *cell in self.collectionView.visibleCells) {
         if (cell != revealed) [cell reveal:nil];

@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, BQueryTimeline) {
 
 -(id)cacheRetrive:(NSString *)endpoint;
 -(BOOL)cacheExpired:(NSString *)endpoint;
--(void)cacheDestroy;
+-(void)cacheDestroy:(NSString *)endpoint;
 
 @end
 

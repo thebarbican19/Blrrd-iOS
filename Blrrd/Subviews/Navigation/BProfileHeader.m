@@ -53,8 +53,8 @@
         timeviewed.layer.cornerRadius = 3.0;
         timeviewed.clipsToBounds = true;
         timeviewed.textAlignment = NSTextAlignmentLeft;
-        timeviewed.textColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-        timeviewed.font = [UIFont fontWithName:@"Nunito-Bold" size:9];
+        timeviewed.textColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+        timeviewed.font = [UIFont fontWithName:@"Nunito-SemiBold" size:9];
         timeviewed.verticalTextAlignment = SAMLabelVerticalTextAlignmentMiddle;
         [self addSubview:timeviewed];
         
@@ -63,7 +63,7 @@
         gesture.enabled = true;
         [self addGestureRecognizer:gesture];
         
-        settings = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 62.0, 20.0, 45.0, 45.0)];
+        settings = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 62.0, 22.0, 45.0, 45.0)];
         settings.backgroundColor = [UIColor clearColor];
         [settings setImage:[UIImage imageNamed:@"settings_icon"] forState:UIControlStateNormal];
         [settings addTarget:self action:@selector(settings:) forControlEvents:UIControlEventTouchUpInside];

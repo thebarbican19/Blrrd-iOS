@@ -163,10 +163,11 @@
 
 -(void)uploadImageWithCaption:(UIImage *)image caption:(NSString *)caption {
     NSDateFormatter *formatdate = [[NSDateFormatter alloc] init];
-    formatdate.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZZZ";
-//    NSString *formatcaption =  [caption stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [formatdate setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZ"];
+    NSMutableString *formatdata = [[NSMutableString alloc] init];
+    [formatdata appendString:@"data:image/jpeg;base64,"];
+    [formatdata appendString:[UIImageJPEGRepresentation(image, 1.0) base64EncodedStringWithOptions:0]];
     NSString *formatid = [NSString stringWithFormat:@"%d" ,(int)[[NSDate date] timeIntervalSince1970]];
-    NSString *formatdata = [UIImageJPEGRepresentation(image, 1.0) base64EncodedStringWithOptions:0];
     NSString *endpoint = [NSString stringWithFormat:@"%@postsApi/addPost/" ,APP_HOST_URL];
     NSString *endpointmethod = @"POST";
     NSDictionary *endpointparams = @{@"username":self.credentials.userHandle,
@@ -174,7 +175,7 @@
                                      @"last_sectotal":@(0),
                                      @"sectotal":@(0),
                                      @"channel":@"",
-                                     @"foto":@"<base64 encoded data>",
+                                     @"foto":formatdata,
                                      @"fontSize":@"12",
                                      @"posted_datetime":[formatdate stringFromDate:[NSDate date]],
                                      @"id":formatid,
@@ -193,7 +194,6 @@
 }
 
 -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)currentTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
-    NSLog(@"uploaded: %f/%f" ,(float)totalBytesWritten ,(float)totalBytesExpectedToWrite)
     
     if ([self.delegate respondsToSelector:@selector(imageUploadedBytesWithPercentage:)]) {
         [self.delegate imageUploadedBytesWithPercentage:((double)totalBytesWritten / (double)totalBytesExpectedToWrite)];
@@ -203,23 +203,42 @@
 }
 
 -(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error {
-    NSLog(@"Error: %@" ,error);
-    if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
-        [self.delegate imageUploadedWithErrors:error];
+    if (error == nil) {
+        if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
+            [self.delegate imageUploadedBytesWithPercentage:1.0];
+            [self.query cacheDestroy:@"postsApi/getAllFriendsPostsNext"];
+            [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
+                [self.delegate imageUploadedWithErrors:[NSError errorWithDomain:@"no errors" code:200 userInfo:nil]];
+
+            }];
+            
+        }
         
     }
+    else {
+        if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
+            [self.delegate imageUploadedWithErrors:error];
+            
+        }
+        
+    }
+    NSLog(@"Error: %@" ,error);
         
 }
 
 -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)download didFinishDownloadingToURL:(NSURL *)location {
     NSLog(@"Completed!");
     if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
-        [self.delegate imageUploadedWithErrors:[NSError errorWithDomain:@"no errors" code:200 userInfo:nil]];
+        [self.delegate imageUploadedBytesWithPercentage:0.9];
+        [self.query cacheDestroy:@"postsApi/getAllFriendsPostsNext"];
+        [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
+            [self.delegate imageUploadedBytesWithPercentage:1.0];
+            [self.delegate imageUploadedWithErrors:[NSError errorWithDomain:@"no errors" code:200 userInfo:nil]];
+            
+        }];
         
     }
     
 }
-
-
 
 @end

@@ -11,6 +11,7 @@
 #import "BSectionHeader.h"
 #import "BSettingsCell.h"
 #import "GDFeedbackController.h"
+#import "BDocumentController.h"
 
 @interface BSettingsController ()
 
@@ -198,29 +199,44 @@
     }
     
     if ([key isEqualToString:@"terms"]) {
-        self.safari = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://www.instagram.com/blrrd_app/"]];
-        if (APP_DEVICE_FLOAT >= 11.0) {
-            self.safari.dismissButtonStyle = SFSafariViewControllerDismissButtonStyleDone;
+        BDocumentController *viewDocument = [[BDocumentController alloc] init];
+        viewDocument.header = NSLocalizedString(localized, nil);
+        viewDocument.file = [[NSBundle mainBundle] pathForResource:@"terms" ofType:@"pdf"];
+        
+        [self.navigationController pushViewController:viewDocument animated:true];
+
+    }
+    
+    if ([key isEqualToString:@"instagram"]) {
+        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"instagram://"]]) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"instagram://user?username=blrrd_app"]];
             
         }
         else {
-            self.safari.preferredBarTintColor = [UIColor whiteColor];
-            self.safari.preferredControlTintColor =  UIColorFromRGB(0x69DCCB);
+            self.safari = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://www.instagram.com/blrrd_app/"]];
+            if (APP_DEVICE_FLOAT >= 11.0) {
+                self.safari.dismissButtonStyle = SFSafariViewControllerDismissButtonStyleDone;
+                
+            }
+            else {
+                self.safari.preferredBarTintColor = [UIColor whiteColor];
+                self.safari.preferredControlTintColor =  UIColorFromRGB(0x69DCCB);
+                
+            }
+            self.safari.view.tintColor = UIColorFromRGB(0x69DCCB);
+            self.safari.delegate = self;
+            
+            [self presentViewController:self.safari animated:true completion:^{
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
+
+            }];
             
         }
-        self.safari.view.tintColor = UIColorFromRGB(0x69DCCB);
-        self.safari.delegate = self;
-        
-        [self presentViewController:self.safari animated:true completion:^{
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
-            [self.mixpanel track:@"App Terms & Conditions Viewed"];
-
-        }];
         
     }
     
     if ([key isEqualToString:@"cache"]) {
-        [self.query cacheDestroy];
+        [self.query cacheDestroy:nil];
         [self.mixpanel track:@"App Cache Manually Destroyed"];
         [UIView animateWithDuration:0.2 animations:^{
             [cell.name setAlpha:0.6];
@@ -239,7 +255,6 @@
     
     [self.viewTable deselectRowAtIndexPath:indexPath animated:true];
 
-    
 }
 
 -(void)tableViewSwitch:(UISwitch *)sender {

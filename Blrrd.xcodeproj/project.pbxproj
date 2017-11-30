@@ -11,6 +11,8 @@
 		2BE2E861C4D7BD74507C4F52 /* libPods-BlrrdTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */; };
 		3C1837B2FB585C787DA1836D /* libPods-BlrrdUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */; };
 		7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7737127E1FCFBD4B00E507AE /* SafariServices.framework */; };
+		773712821FD0654000E507AE /* BDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 773712811FD0654000E507AE /* BDocumentController.m */; };
+		773712891FD06B5300E507AE /* terms.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 773712881FD06B5300E507AE /* terms.pdf */; };
 		7757319C1FBE3F5E002E0CCE /* Nunito-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7757318E1FBE3F5B002E0CCE /* Nunito-ExtraLightItalic.ttf */; };
 		7757319D1FBE3F5E002E0CCE /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7757318F1FBE3F5B002E0CCE /* Nunito-ExtraBold.ttf */; };
 		7757319E1FBE3F5E002E0CCE /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 775731901FBE3F5C002E0CCE /* Nunito-Bold.ttf */; };
@@ -101,6 +103,9 @@
 		525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EC6E94C2F62261082206C6F /* Pods-BlrrdUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdUITests/Pods-BlrrdUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7737127E1FCFBD4B00E507AE /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		773712801FD0654000E507AE /* BDocumentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDocumentController.h; sourceTree = "<group>"; };
+		773712811FD0654000E507AE /* BDocumentController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BDocumentController.m; sourceTree = "<group>"; };
+		773712881FD06B5300E507AE /* terms.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = terms.pdf; sourceTree = "<group>"; };
 		7757318E1FBE3F5B002E0CCE /* Nunito-ExtraLightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
 		7757318F1FBE3F5B002E0CCE /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
 		775731901FBE3F5C002E0CCE /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
@@ -261,9 +266,18 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		773712871FD06B4600E507AE /* Documents */ = {
+			isa = PBXGroup;
+			children = (
+				773712881FD06B5300E507AE /* terms.pdf */,
+			);
+			path = Documents;
+			sourceTree = "<group>";
+		};
 		7757318C1FBE3F20002E0CCE /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				773712871FD06B4600E507AE /* Documents */,
 				7757318D1FBE3F27002E0CCE /* Fonts */,
 			);
 			path = Assets;
@@ -511,6 +525,8 @@
 			children = (
 				779994B01FBA155C0002531B /* BFooterView.h */,
 				779994B11FBA155C0002531B /* BFooterView.m */,
+				773712801FD0654000E507AE /* BDocumentController.h */,
+				773712811FD0654000E507AE /* BDocumentController.m */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -699,6 +715,7 @@
 				775731A21FBE3F5E002E0CCE /* Nunito-BoldItalic.ttf in Resources */,
 				7757319C1FBE3F5E002E0CCE /* Nunito-ExtraLightItalic.ttf in Resources */,
 				775731A51FBE3F5E002E0CCE /* Nunito-ExtraBoldItalic.ttf in Resources */,
+				773712891FD06B5300E507AE /* terms.pdf in Resources */,
 				775731A71FBE3F5E002E0CCE /* Nunito-ExtraLight.ttf in Resources */,
 				775731A01FBE3F5E002E0CCE /* Nunito-SemiBold.ttf in Resources */,
 				778D9B4E1FABCC7700878A6A /* Localizable.strings in Resources */,
@@ -883,6 +900,7 @@
 				779994B21FBA155C0002531B /* BFooterView.m in Sources */,
 				779994BA1FBB69270002531B /* BChannelCell.m in Sources */,
 				7778B1DC1FCD1F3E00E5B83D /* BGalleryCell.m in Sources */,
+				773712821FD0654000E507AE /* BDocumentController.m in Sources */,
 				775731B01FBE50B5002E0CCE /* BSectionHeader.m in Sources */,
 				7778B1E11FCF3EB500E5B83D /* GDFeedbackController.m in Sources */,
 				778D9B6D1FABEC1600878A6A /* BBlurredCell.m in Sources */,

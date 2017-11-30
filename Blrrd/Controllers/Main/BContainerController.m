@@ -61,9 +61,6 @@
     self.navigationController.navigationBarHidden = true;
     self.view.backgroundColor = MAIN_BACKGROUND_COLOR;
     
-    //[self.credentials destoryAllCredentials];
-    //if (APP_DEBUG_MODE) [self.query cacheDestroy];
-    
     [self setNeedsStatusBarAppearanceUpdate];
     
 }

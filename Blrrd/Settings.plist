@@ -44,6 +44,12 @@
 				<key>switch</key>
 				<false/>
 			</dict>
+			<dict>
+				<key>key</key>
+				<string>instagram</string>
+				<key>switch</key>
+				<false/>
+			</dict>
 		</array>
 	</dict>
 	<dict>

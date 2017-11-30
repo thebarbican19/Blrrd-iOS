@@ -107,7 +107,7 @@
     [self.user setText:[[self.userdata objectForKey:@"username"] lowercaseString]];
     [self.avatar sd_setImageWithURL:[NSURL URLWithString:[self.userdata objectForKey:@"photo"]]];
     [self.time setText:self.timeformatted animate:false];
-    [self.timestamp setText:[self time:[content objectForKey:@"last_viewtime_datetime"]]];
+    [self.timestamp setText:[self time:[content objectForKey:@"posted_datetime"]]];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self blur:[NSURL URLWithString:[content objectForKey:@"publicpath"]]];
@@ -132,7 +132,7 @@
 }
 
 -(void)givetime:(NSTimer *)timer {
-    if (timer != nil) {
+    if (timer != nil && ![[self.content objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
         [self setExistingtimeviewed:self.existingtimeviewed+1];
         [self setTimeviewed:self.timeviewed+1];
         [self.time setText:self.timeformatted animate:true];
@@ -140,7 +140,7 @@
 
     }
     
-    if (self.timeviewed > 35) [self reveal:nil];
+    if (self.timeviewed > 60) [self reveal:nil];
     
 }
 
@@ -153,17 +153,20 @@
     if (gesture == nil) {
         if (self.timer.isValid) {
             [self.timer invalidate];
-            [self.credentials setUserTotalTime:self.timeviewed append:true];
-            [self.query postTime:self.content secondsadded:self.timeviewed completion:^(NSError *error) {
-                if (error.code == 200) {
-                    [self setTimeviewed:0];
-                    [self.mixpanel track:@"Image Revealed" properties:@{@"Image":[self.content objectForKey:@"publicpath"],
-                                                                        @"ID":[self.content objectForKey:@"id"],
-                                                                        @"User":[self.content objectForKey:@"username"]}];
+            if (![[self.content objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
+                [self.credentials setUserTotalTime:self.timeviewed append:true];
+                [self.query postTime:self.content secondsadded:self.timeviewed completion:^(NSError *error) {
+                    if (error.code == 200) {
+                        [self setTimeviewed:0];
+                        [self.mixpanel track:@"Image Revealed" properties:@{@"Image":[self.content objectForKey:@"publicpath"],
+                                                                            @"ID":[self.content objectForKey:@"id"],
+                                                                            @"User":[self.content objectForKey:@"username"]}];
+                        
+                    }
                     
-                }
+                }];
                 
-            }];
+            }
             
 
         }

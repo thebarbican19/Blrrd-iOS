@@ -44,7 +44,7 @@
         placeholderProgress.backgroundColor = [UIColor clearColor];
         placeholderProgress.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         placeholderProgress.indeterminate = true;
-        placeholderProgress.radius = 30.0;
+        placeholderProgress.radius = 40.0;
         placeholderProgress.alpha = 0.0;
         placeholderProgress.tintColor = [UIColor colorWithWhite:1.0 alpha:0.9];
         placeholderProgress.transform = CGAffineTransformMakeScale(1.0, 1.0);
