@@ -21,7 +21,7 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    //[self performSelector:@selector(viewAuthenticate) withObject:nil afterDelay:3.0];
+    [self performSelector:@selector(viewAuthenticate) withObject:nil afterDelay:3.0];
 
 }
 
@@ -52,7 +52,7 @@
 -(void)viewAuthenticate {
     [self.query authenticationLoginWithCredentials:@{@"username":@"emanuel.vila", @"password":@"Florian1"} completion:^(NSDictionary *user, NSError *error) {
         if (error.code == 200 && user) {
-            [self.status setText:@"Sucsessful! Loading timeline..."];
+            [self.status setText:NSLocalizedString(@"Authentication_StatusSucsess_Text", nil)];
             [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
                 if (error.code == 200) [self viewDismiss];
                 else [self.status setText:error.domain];

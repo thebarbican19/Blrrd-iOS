@@ -26,6 +26,8 @@
 @property (nonatomic, strong) BUsageObject *usage;
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic) int timelineindex;
+@property (nonatomic) int viewindex;
+@property (nonatomic) float scrollpos;
 @property (nonatomic) NSOperationQueue *queue;
 
 @property (nonatomic, strong) BTabbarView *viewTabbar;

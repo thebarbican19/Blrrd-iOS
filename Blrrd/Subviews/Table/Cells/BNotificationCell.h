@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) UILabel *status;
 @property (nonatomic, strong) UILabel *timestamp;
+@property (nonatomic, strong) UIImageView *image;
 
 -(void)content:(NSDictionary *)item;
 

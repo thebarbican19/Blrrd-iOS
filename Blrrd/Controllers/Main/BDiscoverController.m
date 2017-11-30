@@ -23,13 +23,24 @@
     
     self.sections = [[NSMutableArray alloc] initWithObjects:@[], @[], @[], nil];
     
+    self.header = [[BProfileHeader alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, 120.0)];
+    self.header.backgroundColor = [UIColor clearColor];
+    self.header.delegate = self;
+    
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     [self.tableView setSeparatorColor:[UIColor clearColor]];
     [self.tableView registerClass:[BNotificationCell class] forCellReuseIdentifier:@"notification"];
     [self.tableView registerClass:[BFriendCell class] forCellReuseIdentifier:@"friends"];
+    [self.tableView setTableHeaderView:self.header];
     [self.tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, 20.0)]];
 
+}
+
+-(void)viewPresentProfile {
+    NSLog(@"viewPresentProfile");
+    [self.delegate viewPresentProfile];
+    
 }
 
 -(void)viewSetupNotification:(NSArray *)notification limit:(int)limit {
@@ -110,9 +121,9 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     BSectionHeader *header = [[BSectionHeader alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, 35.0)];
-    if (section == 0) header.name = @"Notifications";
-    else if (section == 1) header.name = @"Friend Requests";
-    else if (section == 2) header.name = @"You may know";
+    if (section == 0) header.name = NSLocalizedString(@"Profile_SectionNotifications_Header", nil);
+    else if (section == 1) header.name = NSLocalizedString(@"Profile_SectionRequests_Header", nil);
+    else if (section == 2) header.name = NSLocalizedString(@"Profile_SectionYouMayKnow_Header", nil);
     header.tag = section;
     header.backgroundColor = [UIColor clearColor];
     if ([[self.sections objectAtIndex:section] count] == 0) header.hidden = true;
@@ -135,6 +146,20 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [[self.sections objectAtIndex:section] count];
     
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        BNotificationCell *notification = (BNotificationCell *)cell;
+        notification.status.frame = CGRectMake(19.0, 0.0, cell.contentView.bounds.size.width - 16.0 , cell.contentView.bounds.size.height - 12.0);
+        notification.timestamp.frame = CGRectMake(19.0, cell.contentView.bounds.size.height - 18.0, cell.contentView.bounds.size.width - 16.0 ,8.0);
+        notification.image.frame = CGRectMake(cell.contentView.bounds.size.width - (cell.contentView.bounds.size.height + 2.0), 3.0, cell.contentView.bounds.size.height - 6.0, cell.contentView.bounds.size.height - 6.0);
+
+    }
+    else {
+
+    }
+
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -11,10 +11,23 @@
 #import "BSectionHeader.h"
 #import "BNavigationView.h"
 
-@interface BDetailedTimelineController : UIViewController <BTimelineDelegate, BNavigationDelegate>
+#import "BUsageObject.h"
+#import "BCredentialsObject.h"
+
+typedef enum {
+    BDetailedViewTypeChannel,
+    BDetailedViewTypeProfile
+    
+} BDetailedViewType;
+
+@interface BDetailedTimelineController : UIViewController <BTimelineDelegate, BNavigationDelegate, BUsageDelegate>
 
 @property (nonatomic, strong) BQueryObject *query;
+@property (nonatomic, strong) BUsageObject *usage;
+@property (nonatomic, strong) BCredentialsObject *credentials;
+
 @property (nonatomic, strong) NSDictionary *data;
+@property (nonatomic, assign) BDetailedViewType type;
 
 @property (nonatomic, strong) UICollectionViewFlowLayout *viewTimelineLayout;
 @property (nonatomic, strong) BTimelineSubview *viewTimeline;

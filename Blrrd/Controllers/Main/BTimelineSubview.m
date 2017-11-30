@@ -39,7 +39,7 @@
     if (append) [self.content addObjectsFromArray:content];
     else self.content = [[NSMutableArray alloc] initWithArray:content];
     
-    if (loading) [self.placeholder placeholderUpdateTitle:@"Loading..." instructions:@"This wont happen very often"];
+    if (loading) [self.placeholder placeholderUpdateTitle:NSLocalizedString(@"Timeline_PlaceholderLoading_Title", nil   ) instructions:NSLocalizedString(@"Timeline_PlaceholderLoading_Body", nil)];
     else {
         if (self.content.count > 0) {
             [self.placeholder setHidden:true];
@@ -47,11 +47,11 @@
         }
         else {
             if ((error == nil || error.code == 200) && self.content.count == 0) {
-                [self.placeholder placeholderUpdateTitle:@"Whoops!" instructions:@"There is nothing here right now, check back later"];
+                [self.placeholder placeholderUpdateTitle:NSLocalizedString(@"Timeline_PlaceholderError_Title", nil)  instructions:NSLocalizedString(@"Timeline_PlaceholderNoContent_Body", nil)];
 
             }
             else {
-                [self.placeholder placeholderUpdateTitle:@"Whoops!" instructions:error.domain];
+                [self.placeholder placeholderUpdateTitle:NSLocalizedString(@"Timeline_PlaceholderError_Title", nil) instructions:error.domain];
 
             }
             
@@ -87,7 +87,7 @@
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(self.view.bounds.size.width - 30.0, self.view.bounds.size.width - 30.0);
+    return CGSizeMake(self.view.bounds.size.width - 30.0, self.view.bounds.size.width + 2.0);
     
 }
 
@@ -138,6 +138,11 @@
             self.pages = self.scrollheight;
             
         }
+        
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(viewScrolled:)]) {
+        [self.delegate viewScrolled:(float)scrollView.contentOffset.y];
         
     }
     

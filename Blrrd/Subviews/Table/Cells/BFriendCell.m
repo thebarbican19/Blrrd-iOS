@@ -24,7 +24,7 @@
         self.avatar.contentMode = UIViewContentModeScaleAspectFill;
         self.avatar.image = nil;
         self.avatar.backgroundColor = [UIColor lightGrayColor];
-        self.avatar.layer.cornerRadius = 8.0;
+        self.avatar.layer.cornerRadius = self.avatar.bounds.size.height / 2;
         self.avatar.clipsToBounds = true;
         [self.contentView addSubview:self.avatar];
         

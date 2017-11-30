@@ -24,7 +24,7 @@
 }
 
 -(void)authenticationLoginWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion {
-    NSString *endpoint = @"userApi/checkUser/";
+    NSString *endpoint = @"userApi/checkUser";
     NSString *endpointmethod = @"POST";
     
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:@[credentials] method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -174,6 +174,41 @@
     
 }
 
+-(void)queryUserPosts:(int)page completion:(void (^)(NSArray *items, NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"postsApi/getAllProfilePostsNext"];
+    NSString *endpointmethod = @"GET";
+    NSDictionary *endpointparams = @{@"myusername":self.credentials.userHandle, @"skipnumber":@(page * 10)};
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (data.length > 0 && !error) {
+            if (status.statusCode == 200) {
+                NSMutableArray *posts = [[NSMutableArray alloc] init];
+                [posts addObjectsFromArray:[[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] objectForKey:@"data"]];
+                
+                [self cacheSave:posts endpointname:endpoint append:page==0?false:true expiry:60*60*24*4];
+                
+                completion(posts, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
+                
+            }
+            else if (status.statusCode == 500) {
+                completion(nil, [self requestErrorHandle:401 message:@"credentials incorrect" error:nil endpoint:endpoint]);
+                
+            }
+            
+        }
+        else {
+            completion(nil, [self requestErrorHandle:(int)status.statusCode message:error.domain error:nil endpoint:endpoint]);
+            
+        }
+        
+    }];
+    
+    [task resume];
+    
+    
+}
+
+
 -(void)queryNotifications:(void (^)(NSArray *notifications, NSError *error))completion {
     NSString *endpoint = [NSString stringWithFormat:@"postsApi/getViewTimesNewApi"];
     NSString *endpointmethod = @"GET";
@@ -217,7 +252,7 @@
 -(void)queryRequests:(void (^)(NSArray *requests, NSError *error))completion {
     NSString *endpoint = [NSString stringWithFormat:@"friendsApi/getRequests"];
     NSString *endpointmethod = @"GET";
-    NSDictionary *endpointparams = @{@"username":self.credentials.userHandle, @"gettype":@"notfriend"};
+    NSDictionary *endpointparams = @{@"username":self.credentials.userHandle, @"gettype":@"notfriends"};
 
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
@@ -252,7 +287,7 @@
     NSString *endpoint = [NSString stringWithFormat:@"userApi/getAllUsers"];
     NSString *endpointmethod = @"GET";
     NSDictionary *endpointparams = @{@"myusername":self.credentials.userHandle, @"gettype":@"members"};
-    
+
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
         if (data.length > 0 && !error) {
@@ -299,6 +334,10 @@
     }];
     
     [task resume];
+    
+}
+
+-(void)postRequest:(NSString *)user request:(NSString *)request completion:(void (^)(NSError *error))completion {
     
 }
 

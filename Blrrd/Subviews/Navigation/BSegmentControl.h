@@ -20,10 +20,9 @@ typedef NS_ENUM(NSInteger, BSegmentType) {
     UIView *rectangle;
     UIView *container;
     CAGradientLayer *gradient;
+    UIVisualEffectView *effect;
 
 }
-
--(void)selected:(NSIndexPath *)index animated:(BOOL)animated;
 
 @property (nonatomic, strong) id <BSegmentDelegate> delegate;
 @property (nonatomic, strong) NSMutableArray *buttons;

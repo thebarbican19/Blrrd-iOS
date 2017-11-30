@@ -215,15 +215,15 @@
         
     }
     else if (components.day > 0) {
-        return [NSString stringWithFormat:@"%d %@ ago" ,(int)components.day, components.day==1?@"day":@"days"];
+        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.day, components.day==1?NSLocalizedString(@"Timestamp_Day", nil):NSLocalizedString(@"Timestamp_Days", nil)];
         
     }
     else if (components.hour > 0) {
-        return [NSString stringWithFormat:@"%d %@ ago" ,(int)components.hour, components.hour==1?@"hour":@"hour"];
+        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.hour, components.hour==1?NSLocalizedString(@"Timestamp_Hour", nil):NSLocalizedString(@"Timestamp_Hours", nil)];
         
     }
     else if (components.minute > 0) {
-        return [NSString stringWithFormat:@"%d %@ ago" ,(int)components.minute, components.minute==1?@"minute":@"minutes"];
+        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Minute", nil):NSLocalizedString(@"Timestamp_Minutes", nil)];
         
     }
     else {

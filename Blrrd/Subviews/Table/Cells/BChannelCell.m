@@ -46,7 +46,17 @@
 }
 
 -(void)content:(NSDictionary *)content index:(NSIndexPath *)index {
-    [self.channel setText:[content objectForKey:@"name"]];
+    NSString *firstword = [[[content objectForKey:@"name"] componentsSeparatedByString:@" "] firstObject];
+    NSString *localised = [NSString stringWithFormat:@"Timeline_Channel%@_Body" ,firstword];
+    
+    if (![NSLocalizedString(localised, nil) containsString:@"Timeline_"]) {
+        [self.channel setText:NSLocalizedString(localised, nil)];
+    }
+    else {
+        [self.channel setText:@"Not found"];
+
+    }
+        
     [self image:[NSURL URLWithString:[content objectForKey:@"backgroundimage"]]];
     
 }

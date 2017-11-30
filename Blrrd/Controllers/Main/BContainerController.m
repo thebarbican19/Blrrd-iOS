@@ -69,7 +69,8 @@
 
 -(void)viewSetup {
     if (![self.view.subviews containsObject:self.viewContainer]) {
-        self.viewContainer = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + MAIN_TABBAR_HEIGHT))];
+        //NSLog(@"safe area: %f / %f" ,self.view.safeAreaLayoutGuide.layoutFrame.size.height ,self.view.bounds.size.height);
+        self.viewContainer = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + MAIN_TABBAR_HEIGHT + 0.0))];
         self.viewContainer.backgroundColor = [UIColor clearColor];
         self.viewContainer.scrollEnabled = false;
         self.viewContainer.pagingEnabled = true;
@@ -88,19 +89,33 @@
         self.viewTimeline.delegate = self;
         self.viewTimeline.timeline = BQueryTimelineFriends;
         [self addChildViewController:self.viewTimeline];
-        [self.viewContainer addSubview:self.viewTimeline.view];
+
+        self.viewChannelsLayout = [[UICollectionViewFlowLayout alloc] init];
+        self.viewChannelsLayout.minimumLineSpacing = 14.0;
+        self.viewChannelsLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+        self.viewChannelsLayout.sectionInset = UIEdgeInsetsMake(100.0, 14.0, 14.0, 14.0);
         
-        self.viewSegment = [[BSegmentControl alloc] initWithFrame:CGRectMake(self.view.center.x - 80.0, 28.0, 160.0, 50.0)];
-        self.viewSegment.backgroundColor = [UIColorFromRGB(0x3B3B4D) colorWithAlphaComponent:0.2];
+        self.viewChannels = [[BChannelController alloc] initWithCollectionViewLayout:self.viewChannelsLayout];
+        self.viewChannels.collectionView.frame = CGRectMake(self.viewContainer.bounds.size.width * 0, 0.0, self.viewContainer.bounds.size.width, self.viewContainer.bounds.size.height);
+        self.viewChannels.collectionView.backgroundColor = [UIColor clearColor];
+        self.viewChannels.collectionView.showsHorizontalScrollIndicator = false;
+        self.viewChannels.collectionView.alpha = 0.0;
+        self.viewChannels.collectionView.hidden = false;
+        self.viewChannels.delegate = self;
+        [self addChildViewController:self.viewChannels];
+
+        self.viewSegment = [[BSegmentControl alloc] initWithFrame:CGRectMake(self.view.center.x - 100.0, 22.0, 200.0, 50.0)];
+        self.viewSegment.background = [UIColorFromRGB(0x18132B) colorWithAlphaComponent:0.85];
         self.viewSegment.delegate = self;
-        self.viewSegment.buttons = @[@"timeline_segment_friends", @"timeline_segment_trending"].mutableCopy;
+        self.viewSegment.buttons = @[@"timeline_segment_friends", @"timeline_segment_discover", @"timeline_segment_trending"].mutableCopy;
         self.viewSegment.type = BSegmentTypeBox;
         self.viewSegment.index = 0;
         self.viewSegment.selecedtextcolor = [UIColor colorWithWhite:1.0 alpha:1.0];
         self.viewSegment.textcolor = [UIColor colorWithWhite:1.0 alpha:0.5];
         self.viewSegment.layer.cornerRadius = self.viewSegment.bounds.size.height / 2;
         self.viewSegment.clipsToBounds = true;
-        [self.viewTimelineLayout.collectionView addSubview:self.viewSegment];
+        self.viewSegment.backgroundColor = [UIColor clearColor];
+        [self.viewContainer addSubview:self.viewSegment];
         
         self.viewCanvas = [[BCanvasController alloc] init];
         self.viewCanvas.view.frame = CGRectMake(self.viewContainer.bounds.size.width * 1, 0.0, self.viewContainer.bounds.size.width, self.viewContainer.bounds.size.height);
@@ -111,26 +126,14 @@
         self.viewDiscover = [[BDiscoverController alloc] init];
         self.viewDiscover.tableView.frame = CGRectMake(self.viewContainer.bounds.size.width * 2, 0.0, self.viewContainer.bounds.size.width, self.viewContainer.bounds.size.height);
         self.viewDiscover.tableView.backgroundColor = [UIColor clearColor];
+        self.viewDiscover.delegate = self;
         [self addChildViewController:self.viewDiscover];
         [self.viewContainer addSubview:self.viewDiscover.view];
-        
-        self.viewChannelsLayout = [[UICollectionViewFlowLayout alloc] init];
-        self.viewChannelsLayout.minimumLineSpacing = 14.0;
-        self.viewChannelsLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        self.viewChannelsLayout.sectionInset = UIEdgeInsetsMake(14.0, 14.0, 14.0, 14.0);
-        
-        self.viewChannels = [[BChannelController alloc] initWithCollectionViewLayout:self.viewChannelsLayout];
-        self.viewChannels.collectionView.frame = CGRectMake(0.0, 0.0, self.viewContainer.bounds.size.width, 175.0);
-        self.viewChannels.collectionView.backgroundColor = [UIColor clearColor];
-        self.viewChannels.collectionView.showsHorizontalScrollIndicator = false;
-        self.viewChannels.delegate = self;
-        [self addChildViewController:self.viewChannels];
-        [self.viewDiscover.tableView setTableHeaderView:self.viewChannels.collectionView];
-        
+
         self.viewTabbar = [[BTabbarView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewContainer.bounds.size.height, self.viewContainer.bounds.size.width, MAIN_TABBAR_HEIGHT)];
-        self.viewTabbar.buttons = @[@{@"image":@"tabbar_home", @"text":@"home"} ,
+        self.viewTabbar.buttons = @[@{@"image":@"tabbar_home", @"text":NSLocalizedString(@"Main_TabbarHome_Text", nil)} ,
                                     @{@"image":@"tabbar_camera"},
-                                    @{@"image":@"tabbar_discover", @"text":@"discovery"}];
+                                    @{@"image":@"tabbar_profile", @"text":NSLocalizedString(@"Main_TabbarProfile_Text", nil)}];
         self.viewTabbar.delegate = self;
         self.viewTabbar.backgroundColor = [UIColor clearColor];
         [self.view addSubview:self.viewTabbar];
@@ -176,7 +179,10 @@
         [self.queue addOperationWithBlock:^{
             [self.query queryChannels:^(NSArray *channels, NSError *error) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    [self.viewChannels viewSetupContent:channels];
+                    if (self.timelineindex == 1) {
+                        [self.viewChannels viewSetupContent:channels];
+
+                    }
                     
                 }];
                 
@@ -236,44 +242,79 @@
 
 -(void)viewSwitchTimeline:(int)index animated:(BOOL)animated {
     if (index == 0) [self.viewTimeline setTimeline:BQueryTimelineFriends];
-    else [self.viewTimeline setTimeline:BQueryTimelineTrending];
+    else if (index == 2) [self.viewTimeline setTimeline:BQueryTimelineTrending];
 
     if (!animated) {
         if (index == 0) {
+            [self.viewChannels.view removeFromSuperview];
+            [self.viewContainer addSubview:self.viewTimeline.view];
             [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:false error:nil];
             
         }
+        else if (index == 1) {
+            [self.viewTimeline.view removeFromSuperview];
+            [self.viewContainer addSubview:self.viewChannels.view];
+            [self.viewChannels viewSetupContent:[self.query cacheRetrive:@"channelsApi/getChannels"]];
+        }
         else {
+            [self.viewChannels.view removeFromSuperview];
+            [self.viewContainer addSubview:self.viewTimeline.view];
             [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"channelsApi/getChannelsHotPostsNext"] append:false loading:nil error:nil];
             
         }
         
+        [self.viewContainer bringSubviewToFront:self.viewSegment];
+        [self.viewContainer bringSubviewToFront:self.viewTabbar];
+        
     }
     else {
         [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.viewChannels.collectionView setFrame:CGRectMake(0.0, 40.0, self.view.bounds.size.width, self.viewContainer.bounds.size.height)];
+            [self.viewChannels.collectionView setAlpha:0.0];
             [self.viewTimeline.collectionView setFrame:CGRectMake(0.0, 40.0, self.view.bounds.size.width, self.viewContainer.bounds.size.height)];
             [self.viewTimeline.collectionView setAlpha:0.0];
 
         } completion:^(BOOL finished) {
             if (index == 0) {
+                [self.viewChannels.view removeFromSuperview];
+                [self.viewContainer addSubview:self.viewTimeline.view];
                 [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:false error:nil];
                 
             }
+            else if (index == 1) {
+                [self.viewTimeline.view removeFromSuperview];
+                [self.viewContainer addSubview:self.viewChannels.view];
+                [self.viewChannels viewSetupContent:[self.query cacheRetrive:@"channelsApi/getChannels"]];
+                
+            }
             else {
+                [self.viewChannels.view removeFromSuperview];
+                [self.viewContainer addSubview:self.viewTimeline.view];
                 [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"channelsApi/getChannelsHotPostsNext"] append:false loading:false error:nil];
                 
             }
             
+            [self.viewContainer bringSubviewToFront:self.viewSegment];
+            [self.viewContainer bringSubviewToFront:self.viewTabbar];
+            
             [UIView animateWithDuration:0.35 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                [self.viewTimeline.collectionView setFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.viewContainer.bounds.size.height)];
-                [self.viewTimeline.collectionView setAlpha:1.0];
+                if (index == 1) {
+                    [self.viewChannels.collectionView setFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.viewContainer.bounds.size.height)];
+                    [self.viewChannels.collectionView setAlpha:1.0];
+                    
+                }
+                else {
+                    [self.viewTimeline.collectionView setFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.viewContainer.bounds.size.height)];
+                    [self.viewTimeline.collectionView setAlpha:1.0];
+                    
+                }
                 
             } completion:nil];
             
         }];
         
     }
-    
+
 }
 
 -(void)viewUpdateTimeline:(BQueryTimeline)timeline {
@@ -285,7 +326,7 @@
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
                     if ((error == nil || error.code == 200) && posts.count == 0) {
                         [self.viewTimeline setScrollend:true];
-                        [self.viewTimeline.footer present:false status:@"that's all folks"];
+                        [self.viewTimeline.footer present:false status:NSLocalizedString(@"Timeline_ScrollEnd_Title", nil)];
                         
                     }
                     else {
@@ -308,15 +349,35 @@
 }
 
 -(void)viewPresentSubviewWithIndex:(int)index animated:(BOOL)animated {
-    if (index == 1) [self.viewCanvas viewInitiateCamera];
-    [UIView animateWithDuration:animated?0.15:0.0 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        [self.viewContainer setContentOffset:CGPointMake(self.view.bounds.size.width * index, 0.0)];
+    if (self.viewindex == 1 && index == 1) {
+        if (!self.viewCanvas.uploading) [self.viewCanvas viewCaptureImage];
         
-    } completion:^(BOOL finished) {
-        if (index != 1) [self.viewCanvas viewTermiateCamera];
+    }
+    else {
+        if (index == 1) {
+            if (!self.viewCanvas.uploading) [self.viewCanvas viewAuthorizeCamera:false];
+            [self.viewTabbar viewUpdateWithTheme:BTabbarViewThemeTransparent];
+            [self.viewContainer setFrame:CGRectMake(0.0, 0.0, self.viewContainer.bounds.size.width, self.view.bounds.size.height + APP_STATUSBAR_HEIGHT)];
+        }
+        else {
+            if (!self.viewCanvas.uploading) [self.viewCanvas viewTermiateCamera];
+            [self.viewTabbar viewUpdateWithTheme:BTabbarViewThemeDefault];
+            [self.viewContainer setFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.viewContainer.bounds.size.width, self.view.bounds.size.height - MAIN_TABBAR_HEIGHT)];
+            
+            
+        }
         
-    }];
+        [UIView animateWithDuration:animated?0.15:0.0 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.viewContainer setContentOffset:CGPointMake(self.view.bounds.size.width * index, 0.0)];
+            
+        } completion:nil];
         
+    }
+    
+    if (index == 2) [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
+    self.viewindex = index;
+    
 }
 
 -(void)viewPresentChannel:(NSDictionary *)channel {
@@ -325,6 +386,37 @@
     viewDetailed.data = channel;
     
     [self.navigationController pushViewController:viewDetailed animated:true];
+    
+}
+
+-(void)viewPresentProfile {
+    NSLog(@"sdleegate viewPresentProfile");
+    BDetailedTimelineController *viewDetailed = [[BDetailedTimelineController alloc] init];
+    viewDetailed.view.backgroundColor = self.view.backgroundColor;
+    viewDetailed.type = BDetailedViewTypeProfile;
+    viewDetailed.data = @{@"name":NSLocalizedString(@"Profile_MyPosts_Header", nil)};
+    
+    [self.navigationController pushViewController:viewDetailed animated:true];
+    
+}
+
+
+-(void)viewScrolled:(float)position {
+    if (position > self.scrollpos && position >= 0) {
+        self.viewSegment.alpha = self.viewSegment.alpha - 0.08;
+        self.viewSegment.transform = CGAffineTransformMakeScale(self.viewSegment.transform.a - 0.002, self.viewSegment.transform.d - 0.002);
+
+    }
+    else {
+        [UIView animateWithDuration:0.3 delay:0.1 options:UIViewAnimationOptionCurveEaseIn|UIViewAnimationOptionBeginFromCurrentState animations:^{
+            self.viewSegment.alpha = 1.0;
+            self.viewSegment.transform = CGAffineTransformMakeScale(1.0, 1.0);
+
+        } completion:nil];
+
+    }
+    
+    self.scrollpos = fabsf(position);
     
 }
 

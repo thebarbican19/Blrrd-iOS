@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    BTabbarViewThemeDefault,
+    BTabbarViewThemeTransparent
+    
+} BTabbarViewTheme;
+
 @protocol BTabbarDelegate;
 @interface BTabbarView : UIView {
     UIView *container;
@@ -17,6 +23,8 @@
 
 @property (nonatomic, strong) id <BTabbarDelegate> delegate;
 @property (nonatomic, strong) NSArray *buttons;
+
+-(void)viewUpdateWithTheme:(BTabbarViewTheme)theme;
 
 @end
 

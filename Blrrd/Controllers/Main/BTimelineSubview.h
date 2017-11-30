@@ -40,5 +40,6 @@
 
 -(void)viewContentRefresh:(UIRefreshControl *)refresh;
 -(void)viewUpdateTimeline:(BQueryTimeline)timeline;
+-(void)viewScrolled:(float)position;
 
 @end

@@ -21,6 +21,8 @@
         statusLabel.font = self.fount;
         statusLabel.backgroundColor = [UIColor clearColor];
         statusLabel.numberOfLines = 1;
+        statusLabel.shadowColor = [UIColor blackColor];
+        statusLabel.shadowOffset = CGSizeMake(0.0, 0.1);
         if ([self.content isKindOfClass:[NSAttributedString class]]) statusLabel.attributedText = self.content;
         else if ([self.content isKindOfClass:[NSString class]]) statusLabel.text = self.content;
         [self addSubview:statusLabel];

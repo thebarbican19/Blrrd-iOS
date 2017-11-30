@@ -6,3 +6,44 @@
   Copyright © 2017 Blrrd Ltd. All rights reserved.
 */
 
+"Authentication_StatusSucsess_Text" = "Sucsessful! Loading timeline...";
+
+"Main_TabbarHome_Text" = "home";
+"Main_TabbarProfile_Text" = "profile";
+
+"Timeline_PlaceholderLoading_Title" = "Loading...";
+"Timeline_PlaceholderLoading_Body" = "This wont happen very often";
+"Timeline_PlaceholderError_Title" = "Whoops!";
+"Timeline_PlaceholderNoContent_Body" = "There is nothing here right now, check back later!";
+"Timeline_ScrollEnd_Title" = "that's all folks";
+
+"Timeline_ChannelPhotography_Body" = "Photography";
+"Timeline_ChannelLifestyle_Body" = "Photography";
+"Timeline_ChannelArt_Body" = "Art & Design";
+"Timeline_ChannelOthers_Body" = "Others";
+
+"Timestamp_Format" = "%d %@ ago"; // 12 minutes ago
+"Timestamp_Days" = "days";//plural
+"Timestamp_Day" = "day";
+"Timestamp_Hours" = "hours";//plural
+"Timestamp_Hour" = "hour";
+"Timestamp_Minutes" = "minutes";//plural
+"Timestamp_Minute" = "minute";
+
+"Canvas_CameraUnauthorized_Title" = "Nope!";
+"Canvas_CameraUnauthorized_Body" = "It looks like camera access has been disabled. Tap to allow it.";
+"Canvas_CameraApproveImage_Title" = "Select this image?";
+"Canvas_UploadCaptionError_Title" = "Add a caption";
+"Canvas_UploadProcessing_Title" = "Uploading...";
+"Canvas_UploadErrorPlaceholder_Title" = "Whoops!";
+"Canvas_UploadErrorPlaceholder_Body" = "An unknown error occured";
+"Canvas_UploadSucsessPlaceholder_Title" = "Shared!";
+"Canvas_UploadSucsessPlaceholder_Body" = "Your image has been shared. Tap to share another.";
+"Canvas_GalleryNothingSelectedError_Title" = "You have not selected an image...";
+
+"Profile_SectionNotifications_Header" = "Notifications";
+"Profile_SectionRequests_Header" = "Friend Requests";
+"Profile_SectionYouMayKnow_Header" = "You may know";
+"Profile_MyPosts_Header" = "My Posts";
+
+"Profile_NotificationViewed_Body" = "*%@* viewed your post for *%@*"; //Joe viewed your post for 1 second

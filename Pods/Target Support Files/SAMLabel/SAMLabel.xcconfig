@@ -1,6 +1,6 @@
 CONFIGURATION_BUILD_DIR = $PODS_CONFIGURATION_BUILD_DIR/SAMLabel
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/SAMLabel" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/BLMultiColorLoader" "${PODS_ROOT}/Headers/Public/DBImageColorPicker" "${PODS_ROOT}/Headers/Public/GBDeviceInfo" "${PODS_ROOT}/Headers/Public/KVNBoundedImageView" "${PODS_ROOT}/Headers/Public/Mixpanel" "${PODS_ROOT}/Headers/Public/SAMLabel" "${PODS_ROOT}/Headers/Public/SDWebImage" "${PODS_ROOT}/Headers/Public/SocketRocket" "${PODS_ROOT}/Headers/Public/TYBlurImage" "${PODS_ROOT}/Headers/Public/UIImage-Helpers"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/SAMLabel" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/BLMultiColorLoader" "${PODS_ROOT}/Headers/Public/DBImageColorPicker" "${PODS_ROOT}/Headers/Public/GBDeviceInfo" "${PODS_ROOT}/Headers/Public/GPUImage" "${PODS_ROOT}/Headers/Public/KVNBoundedImageView" "${PODS_ROOT}/Headers/Public/Mixpanel" "${PODS_ROOT}/Headers/Public/SAMLabel" "${PODS_ROOT}/Headers/Public/SDWebImage" "${PODS_ROOT}/Headers/Public/SocketRocket" "${PODS_ROOT}/Headers/Public/TYBlurImage" "${PODS_ROOT}/Headers/Public/UCZProgressView" "${PODS_ROOT}/Headers/Public/UIImage-Helpers"
 OTHER_LDFLAGS = -framework "UIKit"
 PODS_BUILD_DIR = $BUILD_DIR
 PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)

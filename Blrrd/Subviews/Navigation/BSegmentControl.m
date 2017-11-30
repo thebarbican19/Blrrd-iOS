@@ -24,8 +24,13 @@
         self.backgroundColor = self.background;
 
         container = [[UIView alloc] initWithFrame:self.bounds];
-        container.backgroundColor = self.background;
+        container.backgroundColor = [self.background colorWithAlphaComponent:0.1];
         [self addSubview:container];
+        
+        effect = [[UIVisualEffectView alloc] initWithEffect: [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
+        effect.frame = container.bounds;
+        effect.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        [container addSubview:effect];
         
         if (self.type == BSegmentTypeUnderline) {
             underline = [[UIView alloc] initWithFrame:CGRectMake(5.0, container.bounds.size.height - 2.0, self.bounds.size.width / self.buttons.count - 10.0, 2.0)];

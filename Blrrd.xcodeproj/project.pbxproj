@@ -30,6 +30,17 @@
 		77656A981FB26478006F0854 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77656A971FB26477006F0854 /* UserNotifications.framework */; };
 		77656A9B1FB286E0006F0854 /* BSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656A9A1FB286DF006F0854 /* BSegmentControl.m */; };
 		77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656AA01FB29623006F0854 /* GDStatusLabel.m */; };
+		7778B1CA1FCC77FE00E5B83D /* BProfileHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1C91FCC77FE00E5B83D /* BProfileHeader.m */; };
+		7778B1CC1FCCC42500E5B83D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7778B1CB1FCCC42500E5B83D /* QuartzCore.framework */; };
+		7778B1CE1FCCC42C00E5B83D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7778B1CD1FCCC42C00E5B83D /* AVFoundation.framework */; };
+		7778B1D01FCCC43100E5B83D /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7778B1CF1FCCC43100E5B83D /* Photos.framework */; };
+		7778B1D31FCCC4CE00E5B83D /* BCanvasNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1D21FCCC4CE00E5B83D /* BCanvasNavigation.m */; };
+		7778B1D61FCCF16D00E5B83D /* BImageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1D51FCCF16D00E5B83D /* BImageObject.m */; };
+		7778B1D91FCD16FA00E5B83D /* BGalleryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1D81FCD16FA00E5B83D /* BGalleryController.m */; };
+		7778B1DC1FCD1F3E00E5B83D /* BGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1DB1FCD1F3E00E5B83D /* BGalleryCell.m */; };
+		7778B1DE1FCD229C00E5B83D /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7778B1DD1FCD229C00E5B83D /* CoreImage.framework */; };
+		7778B1E11FCF3EB500E5B83D /* GDFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1DF1FCF3EB400E5B83D /* GDFeedbackController.m */; };
+		7778B1E41FCF415A00E5B83D /* UITextView+Placeholder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1E31FCF415A00E5B83D /* UITextView+Placeholder.m */; };
 		778D9B171FABB53600878A6A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B161FABB53600878A6A /* AppDelegate.m */; };
 		778D9B1D1FABB53600878A6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1B1FABB53600878A6A /* Main.storyboard */; };
 		778D9B1F1FABB53600878A6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1E1FABB53600878A6A /* Assets.xcassets */; };
@@ -109,6 +120,24 @@
 		77656A9A1FB286DF006F0854 /* BSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSegmentControl.m; sourceTree = "<group>"; };
 		77656AA01FB29623006F0854 /* GDStatusLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDStatusLabel.m; sourceTree = "<group>"; };
 		77656AA11FB29624006F0854 /* GDStatusLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDStatusLabel.h; sourceTree = "<group>"; };
+		7778B1C81FCC77FE00E5B83D /* BProfileHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BProfileHeader.h; sourceTree = "<group>"; };
+		7778B1C91FCC77FE00E5B83D /* BProfileHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BProfileHeader.m; sourceTree = "<group>"; };
+		7778B1CB1FCCC42500E5B83D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7778B1CD1FCCC42C00E5B83D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		7778B1CF1FCCC43100E5B83D /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		7778B1D11FCCC4CE00E5B83D /* BCanvasNavigation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCanvasNavigation.h; sourceTree = "<group>"; };
+		7778B1D21FCCC4CE00E5B83D /* BCanvasNavigation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCanvasNavigation.m; sourceTree = "<group>"; };
+		7778B1D41FCCF16D00E5B83D /* BImageObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BImageObject.h; sourceTree = "<group>"; };
+		7778B1D51FCCF16D00E5B83D /* BImageObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BImageObject.m; sourceTree = "<group>"; };
+		7778B1D71FCD16FA00E5B83D /* BGalleryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BGalleryController.h; sourceTree = "<group>"; };
+		7778B1D81FCD16FA00E5B83D /* BGalleryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BGalleryController.m; sourceTree = "<group>"; };
+		7778B1DA1FCD1F3E00E5B83D /* BGalleryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BGalleryCell.h; sourceTree = "<group>"; };
+		7778B1DB1FCD1F3E00E5B83D /* BGalleryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BGalleryCell.m; sourceTree = "<group>"; };
+		7778B1DD1FCD229C00E5B83D /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		7778B1DF1FCF3EB400E5B83D /* GDFeedbackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDFeedbackController.m; sourceTree = "<group>"; };
+		7778B1E01FCF3EB500E5B83D /* GDFeedbackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDFeedbackController.h; sourceTree = "<group>"; };
+		7778B1E21FCF411200E5B83D /* UITextView+Placeholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Placeholder.h"; sourceTree = "<group>"; };
+		7778B1E31FCF415A00E5B83D /* UITextView+Placeholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Placeholder.m"; sourceTree = "<group>"; };
 		778D9B121FABB53600878A6A /* Blrrd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blrrd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		778D9B151FABB53600878A6A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		778D9B161FABB53600878A6A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -174,6 +203,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7778B1DE1FCD229C00E5B83D /* CoreImage.framework in Frameworks */,
+				7778B1D01FCCC43100E5B83D /* Photos.framework in Frameworks */,
+				7778B1CE1FCCC42C00E5B83D /* AVFoundation.framework in Frameworks */,
+				7778B1CC1FCCC42500E5B83D /* QuartzCore.framework in Frameworks */,
 				779994AC1FB9EBED0002531B /* CoreMotion.framework in Frameworks */,
 				779994AB1FB9EB130002531B /* Accelerate.framework in Frameworks */,
 				77656A981FB26478006F0854 /* UserNotifications.framework in Frameworks */,
@@ -261,8 +294,19 @@
 				77656A9A1FB286DF006F0854 /* BSegmentControl.m */,
 				775731B11FBE76B6002E0CCE /* BNavigationView.h */,
 				775731B21FBE76B6002E0CCE /* BNavigationView.m */,
+				7778B1C81FCC77FE00E5B83D /* BProfileHeader.h */,
+				7778B1C91FCC77FE00E5B83D /* BProfileHeader.m */,
+				7778B1D11FCCC4CE00E5B83D /* BCanvasNavigation.h */,
+				7778B1D21FCCC4CE00E5B83D /* BCanvasNavigation.m */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		7778B1E51FCF6AE300E5B83D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		778D9B091FABB53600878A6A = {
@@ -336,6 +380,8 @@
 				778D9B5E1FABD63700878A6A /* BQueryObject.m */,
 				779994AD1FBA03830002531B /* BUsageObject.h */,
 				779994AE1FBA03830002531B /* BUsageObject.m */,
+				7778B1D41FCCF16D00E5B83D /* BImageObject.h */,
+				7778B1D51FCCF16D00E5B83D /* BImageObject.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -345,6 +391,7 @@
 			children = (
 				778D9B641FABEB6000878A6A /* Main */,
 				778D9B631FABEB5600878A6A /* Auth */,
+				7778B1E51FCF6AE300E5B83D /* Settings */,
 				775731AA1FBE4A19002E0CCE /* Detailed */,
 			);
 			path = Controllers;
@@ -372,6 +419,8 @@
 				77BDA3E41FBD4C4A00249572 /* BNotificationCell.m */,
 				77BDA3E61FBDF95E00249572 /* BFriendCell.h */,
 				77BDA3E71FBDF95E00249572 /* BFriendCell.m */,
+				7778B1DA1FCD1F3E00E5B83D /* BGalleryCell.h */,
+				7778B1DB1FCD1F3E00E5B83D /* BGalleryCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -405,6 +454,8 @@
 				77BDA3E11FBD446000249572 /* BDiscoverController.m */,
 				775731AB1FBE4A48002E0CCE /* BCanvasController.h */,
 				775731AC1FBE4A48002E0CCE /* BCanvasController.m */,
+				7778B1D71FCD16FA00E5B83D /* BGalleryController.h */,
+				7778B1D81FCD16FA00E5B83D /* BGalleryController.m */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -412,6 +463,8 @@
 		778D9B6E1FABF14E00878A6A /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				7778B1E21FCF411200E5B83D /* UITextView+Placeholder.h */,
+				7778B1E31FCF415A00E5B83D /* UITextView+Placeholder.m */,
 				778D9B731FAC0E0F00878A6A /* UIImage+BlurExtension.h */,
 				778D9B591FABD27800878A6A /* NSString+EmailAddresses.h */,
 				778D9B581FABD27800878A6A /* NSString+EmailAddresses.m */,
@@ -426,6 +479,8 @@
 				778D9B711FABF18A00878A6A /* GDPlaceholderView.m */,
 				77656AA11FB29624006F0854 /* GDStatusLabel.h */,
 				77656AA01FB29623006F0854 /* GDStatusLabel.m */,
+				7778B1E01FCF3EB500E5B83D /* GDFeedbackController.h */,
+				7778B1DF1FCF3EB400E5B83D /* GDFeedbackController.m */,
 			);
 			path = Grado;
 			sourceTree = "<group>";
@@ -469,6 +524,10 @@
 		DC2B262B6F1B871B7C26DD9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7778B1DD1FCD229C00E5B83D /* CoreImage.framework */,
+				7778B1CF1FCCC43100E5B83D /* Photos.framework */,
+				7778B1CD1FCCC42C00E5B83D /* AVFoundation.framework */,
+				7778B1CB1FCCC42500E5B83D /* QuartzCore.framework */,
 				779994AA1FB9EB130002531B /* Accelerate.framework */,
 				779994A81FB9EAEF0002531B /* CoreMotion.framework */,
 				77656A971FB26477006F0854 /* UserNotifications.framework */,
@@ -791,6 +850,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				775731AD1FBE4A48002E0CCE /* BCanvasController.m in Sources */,
+				7778B1D91FCD16FA00E5B83D /* BGalleryController.m in Sources */,
 				775731B31FBE76B6002E0CCE /* BNavigationView.m in Sources */,
 				779994B71FBB69110002531B /* BChannelController.m in Sources */,
 				77BDA3EE1FBE15D100249572 /* BTabbarView.m in Sources */,
@@ -798,20 +858,26 @@
 				778D9B5A1FABD27900878A6A /* NSString+EmailAddresses.m in Sources */,
 				779994B21FBA155C0002531B /* BFooterView.m in Sources */,
 				779994BA1FBB69270002531B /* BChannelCell.m in Sources */,
+				7778B1DC1FCD1F3E00E5B83D /* BGalleryCell.m in Sources */,
 				775731B01FBE50B5002E0CCE /* BSectionHeader.m in Sources */,
+				7778B1E11FCF3EB500E5B83D /* GDFeedbackController.m in Sources */,
 				778D9B6D1FABEC1600878A6A /* BBlurredCell.m in Sources */,
 				778D9B5F1FABD63700878A6A /* BQueryObject.m in Sources */,
 				77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */,
 				778D9B6A1FABEBD300878A6A /* BTimelineSubview.m in Sources */,
+				7778B1CA1FCC77FE00E5B83D /* BProfileHeader.m in Sources */,
 				77BDA3EB1FBDFE1E00249572 /* BDetailedTimelineController.m in Sources */,
 				778D9B4A1FABCC1400878A6A /* BCredentialsObject.m in Sources */,
 				77BDA3E81FBDF95E00249572 /* BFriendCell.m in Sources */,
 				778D9B251FABB53600878A6A /* main.m in Sources */,
 				77BDA3E51FBD4C4A00249572 /* BNotificationCell.m in Sources */,
 				779994AF1FBA03830002531B /* BUsageObject.m in Sources */,
+				7778B1D31FCCC4CE00E5B83D /* BCanvasNavigation.m in Sources */,
 				778D9B621FABEB5100878A6A /* BContainerController.m in Sources */,
 				778D9B171FABB53600878A6A /* AppDelegate.m in Sources */,
 				77656A9B1FB286E0006F0854 /* BSegmentControl.m in Sources */,
+				7778B1E41FCF415A00E5B83D /* UITextView+Placeholder.m in Sources */,
+				7778B1D61FCCF16D00E5B83D /* BImageObject.m in Sources */,
 				778D9B721FABF18A00878A6A /* GDPlaceholderView.m in Sources */,
 				77BDA3E21FBD446000249572 /* BDiscoverController.m in Sources */,
 			);

@@ -78,6 +78,11 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/BLMultiColorLoader/BLMultiColorLoader.bundle"
+  install_resource "GPUImage/framework/Resources/lookup.png"
+  install_resource "GPUImage/framework/Resources/lookup_amatorka.png"
+  install_resource "GPUImage/framework/Resources/lookup_miss_etikate.png"
+  install_resource "GPUImage/framework/Resources/lookup_soft_elegance_1.png"
+  install_resource "GPUImage/framework/Resources/lookup_soft_elegance_2.png"
   install_resource "Mixpanel/Mixpanel/Images/MPArrowLeft.png"
   install_resource "Mixpanel/Mixpanel/Images/MPArrowLeft@2x.png"
   install_resource "Mixpanel/Mixpanel/Images/MPArrowRight.png"
@@ -98,6 +103,11 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/BLMultiColorLoader/BLMultiColorLoader.bundle"
+  install_resource "GPUImage/framework/Resources/lookup.png"
+  install_resource "GPUImage/framework/Resources/lookup_amatorka.png"
+  install_resource "GPUImage/framework/Resources/lookup_miss_etikate.png"
+  install_resource "GPUImage/framework/Resources/lookup_soft_elegance_1.png"
+  install_resource "GPUImage/framework/Resources/lookup_soft_elegance_2.png"
   install_resource "Mixpanel/Mixpanel/Images/MPArrowLeft.png"
   install_resource "Mixpanel/Mixpanel/Images/MPArrowLeft@2x.png"
   install_resource "Mixpanel/Mixpanel/Images/MPArrowRight.png"

@@ -16,7 +16,9 @@ target 'Blrrd' do
   pod 'GBDeviceInfo', '~>4.4.0'
   pod 'KVNBoundedImageView'
   pod 'SocketRocket'
-
+  pod 'GPUImage'
+  pod 'UCZProgressView'
+  
   target 'BlrrdTests' do
     inherit! :search_paths
     # Pods for testing

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SAMLabel.h"
+#import "UCZProgressView.h"
 
 @protocol GDPlaceholderDelegate;
 @interface GDPlaceholderView : UIView {
@@ -16,7 +17,8 @@
     UIImageView *placeholderImage;
     UIView *placeholderContainer;
     UITapGestureRecognizer *placeholderGesture;
-    
+    UCZProgressView *placeholderProgress;
+
 }
 
 @property (nonatomic, strong) id <GDPlaceholderDelegate> delegate;
@@ -27,7 +29,7 @@
 @property (nonatomic, strong) NSString *key;
 
 -(void)placeholderUpdateTitle:(NSString *)title instructions:(NSString *)instructions;
--(void)placeholderLoading:(BOOL)loading;
+-(void)placeholderLoading:(double)progress;
 -(void)placeholderUpdateImage:(UIImage *)image animate:(BOOL)animate;
 -(void)placeholderResizeFrame;
 -(void)placeholderUpdateColor:(UIColor *)color animate:(BOOL)animate;

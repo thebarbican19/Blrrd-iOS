@@ -33,11 +33,13 @@
             UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(button.frame.origin.x, i==1?-5.0:4.0,  button.bounds.size.width, button.bounds.size.height + (i==1?10.0:-18.0))];
             image.image = [UIImage imageNamed:[[self.buttons objectAtIndex:i] objectForKey:@"image"]];
             image.backgroundColor = [UIColor clearColor];
+            image.tag = i;
             image.contentMode = UIViewContentModeCenter;
             [container addSubview:image];
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.origin.x, button.bounds.size.height - 14.0, button.bounds.size.width, 9.0)];
             label.textAlignment = NSTextAlignmentCenter;
+            label.tag = i;
             label.text = [[[self.buttons objectAtIndex:i] objectForKey:@"text"] uppercaseString];
             label.textColor = [UIColor whiteColor];
             label.font = [UIFont fontWithName:@"Nunito-ExtraBold" size:8];
@@ -50,8 +52,96 @@
 }
 
 -(void)selected:(UIButton *)button {
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    animation.duration = 0.1;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    animation.autoreverses = true;
+    animation.repeatCount = 1;
+    
+    for (UIView *subview in container.subviews) {
+        if (subview.tag == 0 || subview.tag == 2) animation.toValue = [NSNumber numberWithFloat:0.92];
+        else animation.toValue = [NSNumber numberWithFloat:1.05];
+
+        if ([subview isKindOfClass:[UIImageView class]]) {
+            UIImageView *image = (UIImageView *)subview;
+            if (button.tag == subview.tag) {
+                [image.layer addAnimation:animation forKey:nil];
+                
+            }
+
+        }
+        
+    }
+    
     if ([self.delegate respondsToSelector:@selector(viewPresentSubviewWithIndex:animated:)]) {
         [self.delegate viewPresentSubviewWithIndex:(int)button.tag animated:true];
+        
+    }
+    
+}
+
+-(void)viewUpdateWithTheme:(BTabbarViewTheme)theme {
+    for (UIView *subview in container.subviews) {
+        [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            if (theme == BTabbarViewThemeDefault) {
+                if ([subview isKindOfClass:[UILabel class]]) {
+                    [(UILabel *)subview setAlpha:1.0];
+
+                }
+                
+                if ([subview isKindOfClass:[UIImageView class]]) {
+                    [(UIImageView *)subview setAlpha:1.0];
+                    [(UIImageView *)subview setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
+                    
+                    if (subview.tag == 0 || subview.tag == 2) {
+                        CGRect imageframe = [(UIImageView *)subview frame];
+                        imageframe.origin.y = 4.0;
+                        
+                        [(UIImageView *)subview setFrame:imageframe];
+                        
+                    }
+
+                }
+                
+            }
+            else {
+                if ([subview isKindOfClass:[UILabel class]]) {
+                    [(UILabel *)subview setAlpha:0.0];
+
+                }
+                
+                if ([subview isKindOfClass:[UIImageView class]]) {
+                    if (subview.tag == 0 || subview.tag == 2) {
+                        [(UIImageView *)subview setAlpha:0.7];
+                        [(UIImageView *)subview setTransform:CGAffineTransformMakeScale(0.6, 0.6)];
+                        
+                        CGRect imageframe = [(UIImageView *)subview frame];
+                        imageframe.origin.y = 14.0;
+                        
+                        [(UIImageView *)subview setFrame:imageframe];
+
+                    }
+                    else {
+                        [(UIImageView *)subview setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
+
+                    }
+                    
+                }
+                
+            }
+            
+        } completion:nil];
+        
+    }
+    
+    if (theme == BTabbarViewThemeDefault) {
+        [container setBackgroundColor:UIColorFromRGB(0x181426)];
+        [hairline setHidden:false];
+
+    }
+    else {
+        [container setBackgroundColor:[UIColor clearColor]];
+        [hairline setHidden:true];
         
     }
     

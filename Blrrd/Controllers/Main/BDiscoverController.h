@@ -7,15 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BProfileHeader.h"
+#import "BCredentialsObject.h"
 
 @protocol BDiscoverDelegate;
-@interface BDiscoverController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
+@interface BDiscoverController : UITableViewController <UITableViewDelegate, UITableViewDataSource, BProfileHeaderDelegate>
 
 @property (nonatomic, strong) id <BDiscoverDelegate> delegate;
 @property (nonatomic, strong) NSMutableArray *notifications;
 @property (nonatomic, strong) NSMutableArray *suggested;
 @property (nonatomic, strong) NSMutableArray *requests;
 @property (nonatomic, strong) NSMutableArray *sections;
+@property (nonatomic, strong) BProfileHeader *header;
+@property (nonatomic, strong) BCredentialsObject *credentials;
 
 -(void)viewSetupNotification:(NSArray *)notification limit:(int)limit;
 -(void)viewSetupSuggested:(NSArray *)suggested limit:(int)limit;
@@ -27,6 +31,7 @@
 
 @optional
 
+-(void)viewPresentProfile;
 
 @end
 

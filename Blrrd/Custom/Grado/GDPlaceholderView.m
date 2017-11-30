@@ -39,6 +39,17 @@
         placeholderGesture.enabled = self.gesture;
         [self addGestureRecognizer:placeholderGesture];
         
+        placeholderProgress = [[UCZProgressView alloc] initWithFrame:CGRectMake((self.bounds.size.width / 2) - 25.0, (self.bounds.size.height / 2) - 25.0, 50.0, 50.0)];
+        placeholderProgress.showsText = false;
+        placeholderProgress.backgroundColor = [UIColor clearColor];
+        placeholderProgress.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        placeholderProgress.indeterminate = true;
+        placeholderProgress.radius = 30.0;
+        placeholderProgress.alpha = 0.0;
+        placeholderProgress.tintColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+        placeholderProgress.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        [self addSubview:placeholderProgress];
+        
     }
     
 }
@@ -53,20 +64,21 @@
 }
 
 -(void)placeholderUpdateTitle:(NSString *)title instructions:(NSString *)instructions {
+    NSLog(@"updating placeholder");
     self.text = title!=nil?title:@"";
     self.instructions = instructions!=nil?instructions:@"";
     
     dispatch_async(dispatch_get_main_queue(), ^{
         if (![placeholderTitle.attributedText isEqual:[self format:title subtitle:instructions]]) {
             [placeholderTitle setAttributedText:[self format:title subtitle:instructions]];
-            [placeholderTitle setAlpha:1.0];
 
         }
         else {
             [placeholderTitle setAttributedText:[self format:title subtitle:instructions]];
-            [placeholderTitle setAlpha:1.0];
             
         }
+        
+        [self placeholderLoading:0];
         
     });
 
@@ -89,27 +101,40 @@
     
 }
 
--(void)placeholderLoading:(BOOL)loading {
+-(void)placeholderLoading:(double)progress {
+    CGRect titleframe = placeholderTitle.frame;
+    if (progress > 0) titleframe.origin.y += 20.0;
+    else titleframe.origin.y = 20.0;
     [UIView animateWithDuration:0.2 animations:^{
-        if (loading) {
-            placeholderAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-            placeholderAnimation.duration = 0.9;
-            placeholderAnimation.toValue = [NSNumber numberWithFloat:1.1];
-            placeholderAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            placeholderAnimation.autoreverses = true;
-            placeholderAnimation.repeatCount = HUGE_VALF;
-            
-            [placeholderImage.layer addAnimation:placeholderAnimation forKey:nil];
-            [placeholderGesture setEnabled:false];
-
+        if (progress > 0) {
+            [placeholderTitle setFrame:titleframe];
+            [placeholderTitle setAlpha:0.0];
+        
         }
         else {
-            [placeholderImage.layer removeAllAnimations];
-            [placeholderGesture setEnabled:true];
-
+            [placeholderProgress setAlpha:0.0];
+            [placeholderProgress setTransform:CGAffineTransformMakeScale(0.9, 0.9)];
+            
         }
+    
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.2 animations:^{
+            if (progress > 0) {
+                [placeholderProgress setAlpha:1.0];
+                [placeholderProgress setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
+
+            }
+            else {
+                [placeholderTitle setFrame:titleframe];
+                [placeholderTitle setAlpha:1.0];
                 
-    } completion:nil];
+            }
+            
+        } completion:nil];
+        
+    }];
+    
+    if (progress) [placeholderProgress setProgress:progress animated:true];
     
 }
 

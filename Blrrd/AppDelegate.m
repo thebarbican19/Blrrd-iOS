@@ -44,6 +44,9 @@
     
     [application setMinimumBackgroundFetchInterval:APP_DEBUG_MODE?UIApplicationBackgroundFetchIntervalMinimum:3600*3];
     
+    [[UITextField appearance] setTintColor:UIColorFromRGB(0x69DCCB)];
+    [[UITextView appearance] setTintColor:UIColorFromRGB(0x69DCCB)];
+    
     [self.data setBool:true forKey:@"app_installed"];
     [self.data synchronize];
     
@@ -267,14 +270,6 @@
 -(void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(nullable NSString *)reason wasClean:(BOOL)wasClean {
     NSLog(@"webSocketDidOpen %@" ,webSocket);
 
-}
-
--(void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-    if (motion == UIEventSubtypeMotionShake) {
-        NSLog(@"shake device");
-        
-    }
-    
 }
 
 @end
