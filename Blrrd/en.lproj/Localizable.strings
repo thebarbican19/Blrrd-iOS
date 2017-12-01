@@ -6,7 +6,20 @@
   Copyright © 2017 Blrrd Ltd. All rights reserved.
 */
 
-"Authentication_StatusSucsess_Text" = "Sucsessful! Loading timeline...";
+"Authentication_StatusSucsess_Text" = "Just hold on a little longer while we load your timeline";
+"Authentication_StatusSucsess_Title" = "Boom!";
+"Authentication_StatusError_Title" = "Oh no!";
+
+"Authentication_FormEmail_Title" = "Email";
+"Authentication_FormPassword_Title" = "Password";
+"Authentication_FormUsername_Title" = "Username";
+"Authentication_FormEmail_Placeholder" = "you@domain.com";
+"Authentication_FormPassword_Placeholder" = "Password";
+"Authentication_FormUsername_Placeholder" = "blrrduser1";
+"Authentication_SignupButton_Title" = "Signup";
+"Authentication_LoginButton_Title" = "Login";
+"Authentication_SignupAction_Title" = "Sign Me Up!";
+"Authentication_LoginAction_Title" = "Log Me In!";
 
 "Main_TabbarHome_Text" = "home";
 "Main_TabbarProfile_Text" = "profile";
@@ -42,6 +55,7 @@
 "Canvas_GalleryNothingSelectedError_Title" = "You have not selected an image...";
 "Canvas_GalleryDefault_Title" = "My Images";
 
+"Profile_SectionImages_Header" = "My Recent Uploads";
 "Profile_SectionNotifications_Header" = "Notifications";
 "Profile_SectionRequests_Header" = "Friend Requests";
 "Profile_SectionYouMayKnow_Header" = "You may know";
@@ -67,5 +81,7 @@
 "Settings_FeedbackEmptyMessage_Text" = "Please enter a message";
 "Settings_FeedbackPlaceholderSent_Title" = "Sent!";
 "Settings_FeedbackPlaceholderSent_Body" = "Thanks for your feedback";
+"Settings_Share_Body" = "Check out Blrrd!";
+
 
 

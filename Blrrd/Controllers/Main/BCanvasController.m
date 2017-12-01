@@ -401,7 +401,7 @@
                         (id)[[UIColor blackColor] CGColor],
                         (id)[[UIColor blackColor] CGColor],
                         (id)[[UIColor clearColor] CGColor]];
-    gradient.locations = @[@(0.05), @(0.25), @(0.7), @(0.9)];
+    gradient.locations = @[@(0.05), @(0.18), @(0.7), @(0.9)];
     gradient.startPoint = CGPointMake(0.0, 0.0);
     gradient.endPoint = CGPointMake(0.0, 1.0);
     [self.viewGallery.view.layer setMask:gradient];
@@ -496,14 +496,12 @@
 }
 
 -(void)imageUploadedBytesWithPercentage:(double)percentage {
-    NSLog(@"imageUploadedBytesWithPercentage %f" ,percentage);
     [self.viewPlaceholder placeholderLoading:percentage];
 
 }
 
 -(void)imageUploadedWithErrors:(NSError *)error {
-    NSLog(@"imageUploadedWithErrors; %@" ,error)
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void) {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void) {
         [self setUploading:false];
         if (error.code != 200) {
             [self.viewPlaceholder setKey:@"retry"];

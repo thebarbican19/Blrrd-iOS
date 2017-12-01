@@ -26,7 +26,6 @@
 
 #define APP_HOST_URL @"http://62.75.213.212:8000/"
 #define APP_BUNDLE_NAME [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]
-//#define APP_SHORT_URL @"http://apple.co/2fXuzEY"
 #define APP_STORE_ID @"1177562048"
 #define APP_STORE_URL @"https://itunes.apple.com/us/app/blrrd/id1177562048?ls=1&mt=8"
 #define APP_DEVICE [[UIDevice currentDevice] systemVersion]

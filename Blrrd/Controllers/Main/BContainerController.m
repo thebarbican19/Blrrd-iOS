@@ -8,7 +8,6 @@
 
 #import "BContainerController.h"
 #import "BAuthController.h"
-#import "BDetailedTimelineController.h"
 #import "BSettingsController.h"
 #import "BConstants.h"
 
@@ -21,7 +20,7 @@
 -(void)viewCheckAuthenticaion {
     if (self.credentials.userKey == nil) {
         BAuthController *viewAuthenticate = [[BAuthController alloc] init];
-        viewAuthenticate.view.backgroundColor = [UIColor blackColor];
+        viewAuthenticate.view.backgroundColor = MAIN_BACKGROUND_COLOR;
     
         [self.navigationController presentViewController:viewAuthenticate animated:false completion:nil];
         
@@ -67,7 +66,6 @@
 
 -(void)viewSetup {
     if (![self.view.subviews containsObject:self.viewContainer]) {
-        //NSLog(@"safe area: %f / %f" ,self.view.safeAreaLayoutGuide.layoutFrame.size.height ,self.view.bounds.size.height);
         self.viewContainer = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + MAIN_TABBAR_HEIGHT + 0.0))];
         self.viewContainer.backgroundColor = [UIColor clearColor];
         self.viewContainer.scrollEnabled = false;
@@ -77,7 +75,7 @@
         [self.view addSubview:self.viewContainer];
         
         self.viewTimelineLayout = [[UICollectionViewFlowLayout alloc] init];
-        self.viewTimelineLayout.minimumLineSpacing = 75.0;
+        self.viewTimelineLayout.minimumLineSpacing = 55.0;
         self.viewTimelineLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
         self.viewTimelineLayout.sectionInset = UIEdgeInsetsMake(100.0, 15.0, 100.0, 15.0);
 
@@ -137,7 +135,7 @@
         [self.view addSubview:self.viewTabbar];
         
     }
-    
+
     [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:true error:nil];
 
     if ([self.query cacheExpired:@"postsApi/getAllFriendsPostsNext"]) {
@@ -205,6 +203,21 @@
         
     }
     else [self.viewDiscover viewSetupNotification:[self.query cacheRetrive:@"postsApi/getViewTimesNewApi"] limit:6];
+    
+    if ([self.query cacheExpired:@"postsApi/getAllProfilePostsNext"]) {
+        [self.queue addOperationWithBlock:^{
+            [self.query queryUserPosts:0 completion:^(NSArray *items, NSError *error) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    [self.viewDiscover viewSetupRecentPosts:items];
+                    
+                }];
+                
+            }];
+            
+        }];
+        
+    }
+    else [self.viewDiscover viewSetupRecentPosts:[self.query cacheRetrive:@"postsApi/getAllProfilePostsNext"]];
     
     if ([self.query cacheExpired:@"friendsApi/getRequests"]) {
         [self.queue addOperationWithBlock:^{
@@ -383,6 +396,7 @@
         
     }
     
+    if (index == 0) [self.viewTimeline.collectionView reloadData];
     if (index == 2) {
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
         [self.viewDiscover.header setNeedsDisplay];
@@ -397,6 +411,7 @@
     BDetailedTimelineController *viewDetailed = [[BDetailedTimelineController alloc] init];
     viewDetailed.view.backgroundColor = self.view.backgroundColor;
     viewDetailed.data = channel;
+    viewDetailed.delegate = self;
     
     [self.navigationController pushViewController:viewDetailed animated:true];
     
@@ -407,7 +422,8 @@
     viewDetailed.view.backgroundColor = self.view.backgroundColor;
     viewDetailed.type = BDetailedViewTypeProfile;
     viewDetailed.data = @{@"name":NSLocalizedString(@"Profile_MyPosts_Header", nil)};
-    
+    viewDetailed.delegate = self;
+
     [self.navigationController pushViewController:viewDetailed animated:true];
     
 }

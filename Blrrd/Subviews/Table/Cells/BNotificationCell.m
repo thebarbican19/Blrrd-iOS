@@ -83,9 +83,16 @@
     if (text) {
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\*[^\\*]+\\*" options:0 error:nil];
         NSArray *formatMatches = [regex matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+        int matchint = 0;
         for (NSTextCheckingResult *match in formatMatches) {
             [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Nunito-Bold" size:self.status.font.pointSize] range:NSMakeRange(match.range.location, match.range.length)];
             [formatted addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(match.range.location, match.range.length)];
+            if (matchint == 0) {
+                [formatted addAttributes:@{@"tappable":@(true), @"type":@"profile"} range:NSMakeRange(match.range.location, match.range.length)];
+                
+            }
+            
+            matchint ++;
 
         }
         

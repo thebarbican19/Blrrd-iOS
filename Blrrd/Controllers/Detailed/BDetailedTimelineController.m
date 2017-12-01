@@ -30,6 +30,12 @@
     
 }
 
+-(void)viewPresentSubviewWithIndex:(int)index animated:(BOOL)animated {
+    [self.delegate viewPresentSubviewWithIndex:index animated:animated];
+    [self.navigationController popToRootViewControllerAnimated:false];
+
+}
+
 -(void)viewDidLoad {
     [super viewDidLoad];
 
@@ -55,13 +61,22 @@
     self.viewTimelineLayout.sectionInset = UIEdgeInsetsMake(85.0, 15.0, 100.0, 15.0);
     
     self.viewTimeline = [[BTimelineSubview alloc] initWithCollectionViewLayout:self.viewTimelineLayout];
-    self.viewTimeline.collectionView.frame = CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height - APP_STATUSBAR_HEIGHT);
+    self.viewTimeline.collectionView.frame = CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + MAIN_TABBAR_HEIGHT));
     self.viewTimeline.collectionView.backgroundColor = [UIColor clearColor];
     self.viewTimeline.delegate = self;
     self.viewTimeline.timeline = BQueryTimelineChannel;
     [self addChildViewController:self.viewTimeline];
     [self.view addSubview:self.viewTimeline.view];
     [self.view sendSubviewToBack:self.viewTimeline.view];
+    
+    self.viewTabbar = [[BTabbarView alloc] initWithFrame:CGRectMake(0.0, self.view.bounds.size.height - MAIN_TABBAR_HEIGHT, self.view.bounds.size.width, MAIN_TABBAR_HEIGHT)];
+    self.viewTabbar.buttons = @[@{@"image":@"tabbar_home", @"text":NSLocalizedString(@"Main_TabbarHome_Text", nil)} ,
+                                @{@"image":@"tabbar_camera"},
+                                @{@"image":@"tabbar_profile", @"text":NSLocalizedString(@"Main_TabbarProfile_Text", nil)}];
+    self.viewTabbar.delegate = self;
+    self.viewTabbar.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.viewTabbar];
+    [self.viewTabbar viewUpdateWithTheme:BTabbarViewThemeDefault];
 
     [self.viewTimeline collectionViewLoadContent:nil append:false loading:true error:nil];
 

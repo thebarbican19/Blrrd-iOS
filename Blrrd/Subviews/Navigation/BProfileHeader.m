@@ -8,13 +8,21 @@
 
 #import "BProfileHeader.h"
 #import "BConstants.h"
+#import "BProfileCell.h"
 
 @implementation BProfileHeader
 
 -(void)drawRect:(CGRect)rect {
     self.credentials = [[BCredentialsObject alloc] init];
+    self.query = [[BQueryObject alloc] init];
     if (![self.subviews containsObject:profile]) {
-        profile = [[UIImageView alloc] initWithFrame:CGRectMake(16.0, 18.0, self.bounds.size.height - 32.0 ,self.bounds.size.height - 32.0)];
+        self.backgroundColor = UIColorFromRGB(0x181426);
+        
+        hairline = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.bounds.size.height - 0.5, self.bounds.size.width, 0.5)];
+        hairline.backgroundColor = UIColorFromRGB(0x23232B);
+        [self addSubview:hairline];
+
+        profile = [[UIImageView alloc] initWithFrame:CGRectMake(16.0, 18.0, 120.0 - 32.0 ,120.0 - 32.0)];
         profile.contentMode = UIViewContentModeScaleAspectFill;
         profile.backgroundColor = [UIColor darkGrayColor];
         profile.layer.cornerRadius = profile.bounds.size.width / 2;
@@ -65,7 +73,8 @@
         
         settings = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 62.0, 22.0, 45.0, 45.0)];
         settings.backgroundColor = [UIColor clearColor];
-        [settings setImage:[UIImage imageNamed:@"settings_icon"] forState:UIControlStateNormal];
+        settings.hidden = !self.owner;
+        [settings setImage:[UIImage imageNamed:@"profile_settings_icon"] forState:UIControlStateNormal];
         [settings addTarget:self action:@selector(settings:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:settings];
 
@@ -74,7 +83,7 @@
     [email setText:self.credentials.userEmail];
     [username setText:self.credentials.userHandle];
     [timeviewed setAttributedText:self.format];
-
+    
 }
 
 -(void)tapped:(UIGestureRecognizer *)gesture {

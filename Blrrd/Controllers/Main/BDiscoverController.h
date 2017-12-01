@@ -9,18 +9,23 @@
 #import <UIKit/UIKit.h>
 #import "BProfileHeader.h"
 #import "BCredentialsObject.h"
+#import "BQueryObject.h"
+#import "BProfileContainerCell.h"
 
 @protocol BDiscoverDelegate;
-@interface BDiscoverController : UITableViewController <UITableViewDelegate, UITableViewDataSource, BProfileHeaderDelegate>
+@interface BDiscoverController : UITableViewController <UITableViewDelegate, UITableViewDataSource, BProfileHeaderDelegate, BProfileContainerDelegate>
 
 @property (nonatomic, strong) id <BDiscoverDelegate> delegate;
+@property (nonatomic, strong) NSMutableArray *myposts;
 @property (nonatomic, strong) NSMutableArray *notifications;
 @property (nonatomic, strong) NSMutableArray *suggested;
 @property (nonatomic, strong) NSMutableArray *requests;
 @property (nonatomic, strong) NSMutableArray *sections;
 @property (nonatomic, strong) BProfileHeader *header;
 @property (nonatomic, strong) BCredentialsObject *credentials;
+@property (nonatomic, strong) BQueryObject *query;
 
+-(void)viewSetupRecentPosts:(NSArray *)posts;
 -(void)viewSetupNotification:(NSArray *)notification limit:(int)limit;
 -(void)viewSetupSuggested:(NSArray *)suggested limit:(int)limit;
 -(void)viewSetupRequests:(NSArray *)requests limit:(int)limit;

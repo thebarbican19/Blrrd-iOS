@@ -18,8 +18,9 @@
 #import "BChannelController.h"
 #import "BCanvasController.h"
 #import "BTabbarView.h"
+#import "BDetailedTimelineController.h"
 
-@interface BContainerController : UIViewController <BSegmentDelegate, BQueryDelegate, BTimelineDelegate, BUsageDelegate, BDiscoverDelegate, BTabbarDelegate, BChannelDelegate>
+@interface BContainerController : UIViewController <BSegmentDelegate, BQueryDelegate, BTimelineDelegate, BUsageDelegate, BDiscoverDelegate, BTabbarDelegate, BChannelDelegate, BDetailedTimelineDelegate>
 
 @property (nonatomic, retain) AppDelegate *appdel;
 @property (nonatomic, strong) BQueryObject *query;

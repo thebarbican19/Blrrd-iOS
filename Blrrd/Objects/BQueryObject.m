@@ -61,7 +61,48 @@
 }
 
 -(void)authenticationSignupWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion {
+    NSString *endpoint = @"userApi/regUser";
+    NSString *endpointmethod = @"POST";
     
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:@[credentials] method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (data.length > 0 && !error) {
+            if (status.statusCode == 200) {
+                NSString *endpoint = [NSString stringWithFormat:@"userApi/getUserData"];
+                NSString *endpointmethod = @"GET";
+
+                NSURLSessionTask *taskuserdata = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:@{@"username":[credentials objectForKey:@"username"]} method:endpointmethod] completionHandler:^(NSData *userdata, NSURLResponse *response, NSError *error) {
+                    NSDictionary *user = [[NSJSONSerialization JSONObjectWithData:userdata options:0 error:nil] firstObject];
+                    NSLog(@"useer %@" ,user);
+                    [self.credentials setUserIdentifyer:[user objectForKey:@"id"]];
+                    [self.credentials setUserEmail:[user objectForKey:@"email"]];
+                    [self.credentials setUserHandle:[user objectForKey:@"username"]];
+                    [self.credentials setUserAvatar:[user objectForKey:@"photo"]];
+                    [self.credentials setUserPublic:[[user objectForKey:@"publicuser"] boolValue]];
+                    [self.credentials setDevicePush:[user objectForKey:@"pushId"]];
+                    
+                    [self.mixpanel.people set:@{@"$name":self.credentials.userHandle==nil?@"Unknown User":self.credentials.userHandle,
+                                                @"$email":self.credentials.userEmail==nil?@"":self.credentials.userEmail}];
+                    [self.mixpanel identify:self.credentials.userKey];
+                    
+                    completion(user, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
+                    
+                }];
+                
+                [taskuserdata resume];
+                
+            }
+            else if (status.statusCode == 500) {
+                completion(nil, [self requestErrorHandle:401 message:@"credentials incorrect" error:nil endpoint:endpoint]);
+                
+            }
+            
+        }
+        else completion(nil, [self requestErrorHandle:(int)error.code message:nil error:error endpoint:endpoint]);
+        
+    }];
+    
+    [task resume];
 }
 
 -(void)queryTimeline:(BQueryTimeline)type page:(int)page completion:(void (^)(NSArray *posts, NSError *error))completion {

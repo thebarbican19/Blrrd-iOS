@@ -176,7 +176,7 @@
     }
     
     if ([key isEqualToString:@"share"]) {
-        NSArray *shareitems = @[@"Check out Blrrd", [NSURL URLWithString:APP_STORE_URL]];
+        NSArray *shareitems = @[NSLocalizedString(@"Settings_Share_Body", nil), [NSURL URLWithString:@"http://blrrd.co"]];
         UIActivityViewController *share = [[UIActivityViewController alloc] initWithActivityItems:shareitems applicationActivities:nil];
         [super presentViewController:share animated:true completion:^{
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
@@ -247,10 +247,10 @@
     }
     
     if ([key isEqualToString:@"logout"]) {
+        [self.query cacheDestroy:nil];
         [self.credentials destoryAllCredentials];
         [self.navigationController popViewControllerAnimated:true];
 
-        
     }
     
     [self.viewTable deselectRowAtIndexPath:indexPath animated:true];

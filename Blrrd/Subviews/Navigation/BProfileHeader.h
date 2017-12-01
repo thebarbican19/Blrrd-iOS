@@ -9,22 +9,28 @@
 #import <UIKit/UIKit.h>
 #import <UIImageView+WebCache.h>
 #import "BCredentialsObject.h"
+#import "BQueryObject.h"
 #import "SAMLabel.h"
 
 @protocol BProfileHeaderDelegate;
-@interface BProfileHeader : UIView <UIGestureRecognizerDelegate> {
+@interface BProfileHeader : UIView <UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource> {
     UIImageView *profile;
     UIView *halo;
+    UIView *hairline;
     SAMLabel *username;
     SAMLabel *email;
     UITapGestureRecognizer *gesture;
     UIButton *settings;
     SAMLabel *timeviewed;
+    UICollectionView *collection;
+    UICollectionViewFlowLayout *layout;
 
 }
 
 @property (nonatomic, strong) id <BProfileHeaderDelegate> delegate;
 @property (nonatomic, strong) BCredentialsObject *credentials;
+@property (nonatomic, strong) BQueryObject *query;
+@property (nonatomic, assign) BOOL owner;
 
 @end
 

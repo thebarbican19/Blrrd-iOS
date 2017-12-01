@@ -66,5 +66,18 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>co.blrrd.blrrd</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>shwifty</string>
+				<string>instagram</string>
+				<string>blrrd</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

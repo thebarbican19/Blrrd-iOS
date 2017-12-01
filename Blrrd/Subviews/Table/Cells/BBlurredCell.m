@@ -173,23 +173,27 @@
         
     }
     else if (gesture.state == UIGestureRecognizerStateBegan) {
-        [self setTimeviewed:0];
-        [self.mixpanel timeEvent:@"Image Revealed"];
-        if ([self.delegate respondsToSelector:@selector(collectionViewRevealed:)]) {
-            [self.delegate collectionViewRevealed:self];
+        if (self.imagerevealed == false) {
+            [self setTimeviewed:0];
+            [self.mixpanel timeEvent:@"Image Revealed"];
+            if ([self.delegate respondsToSelector:@selector(collectionViewRevealed:)]) {
+                [self.delegate collectionViewRevealed:self];
+                
+            }
             
+            if (!self.timer.isValid) {
+                self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(givetime:) userInfo:nil repeats:true];
+                
+            }
+                
         }
         
-        if (self.timer.isValid == false) {
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(givetime:) userInfo:nil repeats:true];
-            
-        }
+        [self setImagerevealed:!self.imagerevealed];
 
     }
     
-    
     [UIView animateWithDuration:gesture==nil?0.2:0.4 delay:0.0 options:(gesture==nil?UIViewAnimationOptionCurveEaseIn:UIViewAnimationOptionCurveEaseOut) animations:^{
-        if (gesture != nil) {
+        if (gesture != nil && self.imagerevealed) {
             [self.subtitle setAlpha:0.0];
             [self.overlay setAlpha:0.0];
             [self.image setTransform:CGAffineTransformMakeScale(1.0, 1.0)];

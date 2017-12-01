@@ -43,7 +43,7 @@
         placeholderProgress.showsText = false;
         placeholderProgress.backgroundColor = [UIColor clearColor];
         placeholderProgress.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
-        placeholderProgress.indeterminate = true;
+        placeholderProgress.indeterminate = self.spinner;
         placeholderProgress.radius = 40.0;
         placeholderProgress.alpha = 0.0;
         placeholderProgress.tintColor = [UIColor colorWithWhite:1.0 alpha:0.9];
@@ -134,7 +134,7 @@
         
     }];
     
-    if (progress) [placeholderProgress setProgress:progress animated:true];
+    if (progress && self.spinner == false) [placeholderProgress setProgress:progress animated:true];
     
 }
 

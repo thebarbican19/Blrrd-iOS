@@ -26,6 +26,7 @@
 @property (nonatomic ,strong) NSMutableDictionary *userdata;
 @property (nonatomic ,assign) int timeviewed;
 @property (nonatomic ,assign) int existingtimeviewed;
+@property (nonatomic ,assign) BOOL imagerevealed;
 @property (nonatomic ,strong) NSTimer *timer;
 
 @property (nonatomic ,strong) UIView *container;

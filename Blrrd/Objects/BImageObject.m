@@ -205,9 +205,10 @@
 -(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error {
     if (error == nil) {
         if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
-            [self.delegate imageUploadedBytesWithPercentage:1.0];
+            [self.delegate imageUploadedBytesWithPercentage:0.9];
             [self.query cacheDestroy:@"postsApi/getAllFriendsPostsNext"];
             [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
+                [self.delegate imageUploadedBytesWithPercentage:1.0];
                 [self.delegate imageUploadedWithErrors:[NSError errorWithDomain:@"no errors" code:200 userInfo:nil]];
 
             }];
@@ -229,11 +230,14 @@
 -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)download didFinishDownloadingToURL:(NSURL *)location {
     NSLog(@"Completed!");
     if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
-        [self.delegate imageUploadedBytesWithPercentage:0.9];
+        [self.delegate imageUploadedBytesWithPercentage:0.85];
         [self.query cacheDestroy:@"postsApi/getAllFriendsPostsNext"];
         [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
-            [self.delegate imageUploadedBytesWithPercentage:1.0];
-            [self.delegate imageUploadedWithErrors:[NSError errorWithDomain:@"no errors" code:200 userInfo:nil]];
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.delegate imageUploadedBytesWithPercentage:1.0];
+                [self.delegate imageUploadedWithErrors:[NSError errorWithDomain:@"no errors" code:200 userInfo:nil]];
+                
+            }];
             
         }];
         
