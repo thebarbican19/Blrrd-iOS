@@ -28,6 +28,7 @@
 
 @property (nonatomic, strong) NSString *message;
 @property (nonatomic, strong) NSDictionary *userdata;
+@property (nonatomic, strong) NSDictionary *imagedata;
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSString *placeholder;
 @property (nonatomic, strong) NSString *header;

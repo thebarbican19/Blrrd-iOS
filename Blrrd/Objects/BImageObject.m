@@ -25,7 +25,7 @@
 }
 
 -(UIImage *)processImageScaleToScreen:(UIImage *)image {
-    float scale = [UIApplication sharedApplication].delegate.window.bounds.size.height / image.size.height;
+    float scale = [UIApplication sharedApplication].delegate.window.bounds.size.width / image.size.width;
     float height = image.size.height * scale;
     float width = image.size.width * scale;
     
@@ -34,6 +34,15 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
+    
+}
+
+-(UIImage *)processImageToSize:(UIImage *)image size:(CGSize)size {
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *output = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return output;
     
 }
 
@@ -94,6 +103,56 @@
     
 }
 
+-(CVPixelBufferRef)processImageCreatePixelBuffer:(UIImage *)original {
+    CGImageRef image = original.CGImage;
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
+                             nil];
+    
+    CVPixelBufferRef pxbuffer = NULL;
+    
+    CGFloat frameWidth = CGImageGetWidth(image);
+    CGFloat frameHeight = CGImageGetHeight(image);
+    
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                          frameWidth,
+                                          frameHeight,
+                                          kCVPixelFormatType_32ARGB,
+                                          (__bridge CFDictionaryRef) options,
+                                          &pxbuffer);
+    
+    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    NSParameterAssert(pxdata != NULL);
+    
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    CGContextRef context = CGBitmapContextCreate(pxdata,
+                                                 frameWidth,
+                                                 frameHeight,
+                                                 8,
+                                                 CVPixelBufferGetBytesPerRow(pxbuffer),
+                                                 rgbColorSpace,
+                                                 (CGBitmapInfo)kCGImageAlphaNoneSkipFirst);
+    NSParameterAssert(context);
+    CGContextConcatCTM(context, CGAffineTransformIdentity);
+    CGContextDrawImage(context, CGRectMake(0,
+                                           0,
+                                           frameWidth,
+                                           frameHeight),
+                       image);
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+    
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+    
+    return pxbuffer;
+    
+}
+
 -(void)imageAuthorization:(void (^)(PHAuthorizationStatus status))completion {
     if ([PHPhotoLibrary authorizationStatus] == PHAuthorizationStatusNotDetermined) {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus authorizationStatus) {
@@ -114,6 +173,8 @@
     [self imagesFromAsset:fetch.firstObject thumbnail:true completion:^(NSDictionary *data, UIImage *image) {
         completion(image);
 
+    } withProgressHandler:^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
+        
     }];
     
 }
@@ -137,10 +198,36 @@
     
 }
 
--(void)imagesFromAsset:(PHAsset *)asset thumbnail:(BOOL)thumbnail completion:(void (^)(NSDictionary *data, UIImage *image))completion {
+-(void)imagesFromAsset:(PHAsset *)asset thumbnail:(BOOL)thumbnail completion:(void (^)(NSDictionary *data, UIImage *image))completion withProgressHandler:(PHAssetImageProgressHandler)process {
+    PHImageRequestOptions  *options = [[PHImageRequestOptions alloc] init];
+    options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+    options.synchronous = true;
+    options.networkAccessAllowed = true;
+    options.progressHandler = process;
+    
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset targetSize:CGSizeMake(thumbnail?100.0:asset.pixelWidth, thumbnail?100.0:asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage* image, NSDictionary *info) {
-        completion(info, image);
+        if ([[info valueForKey:PHImageResultIsInCloudKey] boolValue]) {
+            [manager requestImageDataForAsset:asset options:options resultHandler:^(NSData *imageData, NSString * dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+                BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
+                if (downloadFinined) {
+                    completion(info, [UIImage imageWithData:imageData]);
+                    NSLog(@"Image downloaded %@" ,info);
+                    
+                }
+                else {
+                    NSLog(@"Image downloading icloud %@" ,info);
+                    
+                }
+                
+                
+            }];
+            
+        }
+        else {
+            completion(info, image);
+            
+        }
         
     }];
     
@@ -190,6 +277,41 @@
     NSURLSessionTask *task = [session dataTaskWithRequest:request];
     
     [task resume];
+    
+}
+
+-(void)uploadRemove:(NSDictionary *)post completion:(void (^)(NSError *error))completion {
+    if ([[post objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
+        NSString *endpoint = [NSString stringWithFormat:@"%@postsApi/deletePost/" ,APP_HOST_URL];
+        NSString *endpointmethod = @"POST";
+        NSDictionary *endpointparams = @{@"postId":[post objectForKey:@"id"], @"postUsername:":self.credentials.userHandle};
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:endpoint] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:40];
+        [request setHTTPMethod:endpointmethod];
+        [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:endpointparams options:NSJSONWritingPrettyPrinted error:nil]];
+        
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+        NSURLSessionTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+            if (status.statusCode == 200) {
+                completion([NSError errorWithDomain:@"all okay" code:200 userInfo:nil]);
+
+            }
+            else {
+                if (error) completion(error);
+                else completion([NSError errorWithDomain:@"unknown error" code:status.statusCode userInfo:nil]);
+                
+            }
+
+        }];
+        
+        [task resume];
+                                  
+    }
+    else {
+        completion([NSError errorWithDomain:@"post cannot be develted by you" code:401 userInfo:nil]);
+        
+    }
     
 }
 

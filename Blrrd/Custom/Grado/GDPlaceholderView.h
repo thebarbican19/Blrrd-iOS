@@ -28,6 +28,7 @@
 @property (nonatomic, strong) UIColor *textcolor;
 @property (nonatomic, strong) NSString *key;
 @property (nonatomic, assign) BOOL spinner;
+@property (nonatomic, strong) UIImage *icon;
 
 -(void)placeholderUpdateTitle:(NSString *)title instructions:(NSString *)instructions;
 -(void)placeholderLoading:(double)progress;

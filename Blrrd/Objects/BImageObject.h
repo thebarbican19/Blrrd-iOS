@@ -11,6 +11,9 @@
 #import <Mixpanel.h>
 #import <Photos/Photos.h>
 #import <CoreImage/CoreImage.h>
+#import <CoreML/CoreML.h>
+
+#import "GoogLeNetPlaces.h"
 
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
@@ -28,14 +31,17 @@
 -(UIImage *)processImageRemoveOrentation:(UIImage*)image;
 -(UIImage *)processImageCompress:(UIImage *)image quality:(float)quality;
 -(UIImage *)processImageCropWithFrame:(UIImage *)image rect:(CGRect)rect;
+-(UIImage *)processImageToSize:(UIImage *)image size:(CGSize)size;
+-(CVPixelBufferRef)processImageCreatePixelBuffer:(UIImage *)original;
 
 -(void)imageAuthorization:(void (^)(PHAuthorizationStatus status))completion;
 -(void)imageReturnLatestImage:(void (^)(UIImage *image))completion;
 -(void)imagesFromAlbum:(NSString *)album completion:(void (^)(NSArray *images))completion;
--(void)imagesFromAsset:(PHAsset *)asset thumbnail:(BOOL)thumbnail completion:(void (^)(NSDictionary *data, UIImage *image))completion;
+-(void)imagesFromAsset:(PHAsset *)asset thumbnail:(BOOL)thumbnail completion:(void (^)(NSDictionary *data, UIImage *image))completion withProgressHandler:(PHAssetImageProgressHandler)process;
 -(void)imagesRetriveAlbums:(void (^)(NSArray *albums))completion;
 
 -(void)uploadImageWithCaption:(UIImage *)image caption:(NSString *)caption;
+-(void)uploadRemove:(NSDictionary *)post completion:(void (^)(NSError *error))completion;
 
 @end
 

@@ -54,7 +54,7 @@
         header.fount = [UIFont fontWithName:@"Nunito-Bold" size:14];
         header.colour = [UIColor colorWithWhite:1.0 alpha:0.8];
         header.alignment = NSTextAlignmentCenter;
-        header.content = @"Content";
+        header.content = nil;
         [container addSubview:header];
         
         upload = [[UIButton alloc] initWithFrame:CGRectMake(container.bounds.size.width, 0.0, container.bounds.size.height, container.bounds.size.height)];

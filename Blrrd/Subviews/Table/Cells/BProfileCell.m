@@ -23,6 +23,7 @@
         self.seconds.clipsToBounds = true;
         self.seconds.textAlignment = NSTextAlignmentCenter;
         self.seconds.textColor = [UIColor whiteColor];
+        self.seconds.numberOfLines = 2;
         self.seconds.font = [UIFont fontWithName:@"Nunito-Bold" size:15];
         [self.contentView addSubview:self.seconds];
         
@@ -33,16 +34,30 @@
 }
 
 -(void)content:(NSDictionary *)content {
-    [self image:[NSURL URLWithString:[content objectForKey:@"publicpath"]]];
-    [self timeformatted:[[content objectForKey:@"sectotal"] intValue]];
+    if ([[content objectForKey:@"type"] containsString:@"showall"]) {
+        [self image:[NSURL URLWithString:[content objectForKey:@"publicpath"]] blur:true];
+        [self.seconds setText:@"+"];
+        
+    }
+    else {
+        [self image:[NSURL URLWithString:[content objectForKey:@"publicpath"]] blur:false];
+        [self timeformatted:[[content objectForKey:@"sectotal"] intValue]];
+
+    }
     
 }
 
--(void)image:(NSURL *)url {
+-(void)image:(NSURL *)url blur:(BOOL)blur {
     [self.image sd_setImageWithURL:url completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         [UIView transitionWithView:self duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             if (image.CGImage != NULL && image.CGImage != nil) {
                 [self.image setImage:image];
+                
+                if (blur) {
+                    [self.image setImage:[UIImage ty_imageByApplyingBlurToImage:image withRadius:60.0 tintColor:[UIColor colorWithWhite:0.0 alpha:0.15] saturationDeltaFactor:1.0 maskImage:nil]];
+                    
+                }
+
                 
             }
             

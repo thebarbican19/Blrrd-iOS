@@ -10,12 +10,18 @@
 #import <UIImage+BlurEffects.h>
 #import <UIImageView+WebCache.h>
 
+typedef NS_ENUM(NSInteger, BNotificationCellType) {
+    BNotificationCellTypeAllTime,
+    BNotificationCellTypeUser
+    
+};
+
 @interface BNotificationCell : UITableViewCell
 
 @property (nonatomic, strong) UILabel *status;
 @property (nonatomic, strong) UILabel *timestamp;
 @property (nonatomic, strong) UIImageView *image;
 
--(void)content:(NSDictionary *)item;
+-(void)content:(NSDictionary *)item type:(BNotificationCellType)type;
 
 @end

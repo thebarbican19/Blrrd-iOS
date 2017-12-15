@@ -12,6 +12,8 @@
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self.query = [[BQueryObject alloc] init];
+    self.query.debug = true;
     if (self) {
         self.user = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 0.0, self.bounds.size.width - 64.0 , self.bounds.size.height)];
         self.user.clipsToBounds = true;
@@ -28,6 +30,14 @@
         self.avatar.clipsToBounds = true;
         [self.contentView addSubview:self.avatar];
         
+        self.follow = [[BFollowAction alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - (100 + 55.0), 10.0, 100, self.contentView.bounds.size.height - 20.0)];
+        self.follow.backgroundColor = [UIColor clearColor];
+        self.follow.delegate = self;
+        self.follow.alpha = 1.0;
+        self.follow.transform = CGAffineTransformMakeScale(0.9, 0.9);
+        self.follow.style = BFollowActionStyleIconAndText;
+        [self.contentView addSubview:self.follow];
+
     }
     
     return self;
@@ -35,11 +45,18 @@
 }
 
 -(void)content:(NSDictionary *)item {
+    self.data = [[NSDictionary alloc] initWithDictionary:item];
     if ([[item objectForKey:@"username"] isEqual:[NSNull null]]) [self.user setText:[item objectForKey:@"requestto"]];
     else [self.user setText:[item objectForKey:@"username"]];
-    
+            
     [self avatar:[NSURL URLWithString:[item objectForKey:@"photo"]]];
-    
+
+    [UIView animateWithDuration:0.2 animations:^{
+        [self.follow setAlpha:1.0];
+        [self.follow setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
+        
+    }];
+
 }
 
 -(void)avatar:(NSURL *)url {
@@ -53,6 +70,32 @@
         } completion:nil];
         
     }];
+    
+}
+
+-(void)followActionWasTapped:(BFollowAction *)action {
+    if ([self.query friendCheck:[self.data objectForKey:@"username"]]) {
+        [self.query postRequest:[self.data objectForKey:@"username"] request:@"remove" completion:^(NSError *error) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.follow followSetType:BFollowActionTypeUnfollowed animate:true];
+                [self.follow setFrame:CGRectMake(self.contentView.bounds.size.width - (self.follow.followSizeUpdate + 60.0), 10.0, self.follow.followSizeUpdate, self.contentView.bounds.size.height - 20.0)];
+
+            }];
+            
+        }];
+        
+    }
+    else {
+        [self.query postRequest:[self.data objectForKey:@"username"] request:@"add" completion:^(NSError *error) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.follow followSetType:BFollowActionTypeFollowed animate:true];
+                [self.follow setFrame:CGRectMake(self.contentView.bounds.size.width - (self.follow.followSizeUpdate + 60.0), 10.0, self.follow.followSizeUpdate, self.contentView.bounds.size.height - 20.0)];
+
+            }];
+            
+        }];
+        
+    }
     
 }
 

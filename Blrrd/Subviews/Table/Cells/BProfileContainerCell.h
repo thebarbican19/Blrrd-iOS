@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <UIImage+BlurEffects.h>
+
 #import "BProfileImagesController.h"
 
 @protocol BProfileContainerDelegate;

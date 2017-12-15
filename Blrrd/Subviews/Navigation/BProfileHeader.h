@@ -11,9 +11,10 @@
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
 #import "SAMLabel.h"
+#import "GDStatusLabel.h"
 
 @protocol BProfileHeaderDelegate;
-@interface BProfileHeader : UIView <UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource> {
+@interface BProfileHeader : UIView <UIGestureRecognizerDelegate> {
     UIImageView *profile;
     UIView *halo;
     UIView *hairline;
@@ -21,9 +22,8 @@
     SAMLabel *email;
     UITapGestureRecognizer *gesture;
     UIButton *settings;
+    UIButton *friends;
     SAMLabel *timeviewed;
-    UICollectionView *collection;
-    UICollectionViewFlowLayout *layout;
 
 }
 
@@ -40,6 +40,7 @@
 
 -(void)viewPresentProfile;
 -(void)viewPresentSettings;
+-(void)viewPresentFriends;
 
 @end
 

@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <UIImage+BlurEffects.h>
+
 #import "BProfileHeader.h"
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
@@ -25,9 +27,7 @@
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic, strong) BQueryObject *query;
 
--(void)viewSetupRecentPosts:(NSArray *)posts;
 -(void)viewSetupNotification:(NSArray *)notification limit:(int)limit;
--(void)viewSetupSuggested:(NSArray *)suggested limit:(int)limit;
 -(void)viewSetupRequests:(NSArray *)requests limit:(int)limit;
 
 @end
@@ -38,6 +38,8 @@
 
 -(void)viewPresentProfile;
 -(void)viewPresentSettings;
-
+-(void)viewPresentFriends;
+-(void)viewPresentFriendProfile:(NSDictionary *)data;
+-(void)viewPresentImageWithData:(NSDictionary *)data;
 @end
 

@@ -10,12 +10,26 @@
 #import <UIImage+BlurEffects.h>
 #import <UIImageView+WebCache.h>
 
-@interface BFriendCell : UITableViewCell
+#import "BFollowAction.h"
+#import "BQueryObject.h"
 
+@protocol BFriendDelegateCell;
+@interface BFriendCell : UITableViewCell <BFollowActionDelegate>
+
+@property (nonatomic, strong) id <BFriendDelegateCell> delegate;
 @property (nonatomic, strong) UILabel *user;
 @property (nonatomic, strong) UIImageView *avatar;
-@property (nonatomic, strong) UIButton *request;
+@property (nonatomic, strong) BFollowAction *follow;
+
+@property (nonatomic, strong) NSDictionary *data;
+@property (nonatomic, strong) BQueryObject *query;
 
 -(void)content:(NSDictionary *)item;
+
+@end
+
+@protocol BFriendDelegateCell <NSObject>
+
+@optional
 
 @end

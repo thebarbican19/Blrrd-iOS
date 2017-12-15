@@ -6,13 +6,37 @@
   Copyright © 2017 Blrrd Ltd. All rights reserved.
 */
 
-"Authentication_StatusSucsess_Text" = "Just hold on a little longer while we load your timeline";
-"Authentication_StatusSucsess_Title" = "Boom!";
-"Authentication_StatusError_Title" = "Oh no!";
+"Onboarding_Tagling_Text" = "the social appreciation network";
+"Onboarding_ActionSignup_Text" = "SIGNUP";
+"Onboarding_ActionLogin_Text" = "Already have a Blrrd Account, Login?";
+"Onboarding_ActionTerms_Text" = "Terms";
+"Onboarding_ActionAuthorizeNotifications_Text" = "AUTHORIZE NOTIFICATIONS";
+"Onboarding_ActionComplete_Text" = "Go!";
+"Onboarding_ActionUpdating_Text" = "Updating...";
+"Onboarding_Authorization_Text" = "Please allow Push Potifications so we can update you with stuff!";
+"Onboarding_SetupLoading_Text" = "Almost done, we are just loading your timeline...";
+"Onboarding_SetupComplete_Text" = "Everything is ready for you, welcome to Blrrd!";
+"Onboarding_SetupLoginComplete_Text" = "Everything is ready for you, welcome back to Blrrd!";
 
-"Authentication_FormEmail_Title" = "Email";
-"Authentication_FormPassword_Title" = "Password";
-"Authentication_FormUsername_Title" = "Username";
+"Authenticate_Loading_Title" = "Authenticating...";
+"Authenticate_UsernameTaken_Error" = "Username not available.";
+"Authenticate_UsernameChecking_Error" = "Checking...";
+"Authenticate_UsernameInvalid_Error" = "Username contains invalid characters.";
+"Authenticate_UsernameOkay_Error" = "Great choice!";
+"Authenticate_EmailOkay_Error" = "That looks right!";
+"Authenticate_EmailInvalid_Error" = "Hmmm, something doesn't look quite right.";
+"Authenticate_UsernameExists_Error" = "This username is in use. Please use a different one.";
+"Authenticate_PasswordUnsecure_Error" = "Come on, you can do better than that! Add some numbers to make it more secure.";
+"Authenticate_PasswordIncorrect_Error" = "Whoops, it looks like your username or password was incorrect.";
+"Authenticate_PasswordOkay_Error" = "Perfect!";
+"Authenticate_RePasswordOkay_Error" = "Looking good!";
+"Authenticate_RePasswordUnmatched_Error" = "Passwords do not match.";
+
+"Authentication_FormEmail_Title" = "Enter your email address";
+"Authentication_FormPassword_Title" = "Now your password...";
+"Authentication_FormRePassword_Title" = "And your password one more time...";
+"Authentication_FormUsername_Title" = "Pick an awesome username";
+"Authentication_FormLoginUsername_Title" = "Your username";
 "Authentication_FormEmail_Placeholder" = "you@domain.com";
 "Authentication_FormPassword_Placeholder" = "Password";
 "Authentication_FormUsername_Placeholder" = "blrrduser1";
@@ -20,6 +44,8 @@
 "Authentication_LoginButton_Title" = "Login";
 "Authentication_SignupAction_Title" = "Sign Me Up!";
 "Authentication_LoginAction_Title" = "Log Me In!";
+"Authentication_NextAction_Title" = "Next";
+"Authentication_RetryAction_Title" = "Retry";
 
 "Main_TabbarHome_Text" = "home";
 "Main_TabbarProfile_Text" = "profile";
@@ -29,6 +55,10 @@
 "Timeline_PlaceholderError_Title" = "Whoops!";
 "Timeline_PlaceholderNoContent_Body" = "There is nothing here right now, check back later!";
 "Timeline_ScrollEnd_Title" = "that's all folks";
+"Timeline_ActionSheetDelete_Text" = "Delete";
+"Timeline_ActionSheetReport_Text" = "Report";
+"Timeline_ActionSheetShare_Text" = "Share";
+"Timeline_ActionDismissShare_Text" = "Dismiss";
 
 "Timeline_ChannelPhotography_Body" = "Photography";
 "Timeline_ChannelLifestyle_Body" = "Photography";
@@ -55,14 +85,16 @@
 "Canvas_GalleryNothingSelectedError_Title" = "You have not selected an image...";
 "Canvas_GalleryDefault_Title" = "My Images";
 
-"Profile_SectionImages_Header" = "My Recent Uploads";
+"Profile_SectionImages_Header" = "My Recent Uploads (%d)";
 "Profile_SectionNotifications_Header" = "Notifications";
 "Profile_SectionRequests_Header" = "Friend Requests";
 "Profile_SectionYouMayKnow_Header" = "You may know";
 "Profile_MyPosts_Header" = "My Posts";
 "Profile_TimeViewed_Body" = "Total Time Viewed *%@*";
 
-"Profile_NotificationViewed_Body" = "*%@* viewed your post for *%@*"; //Joe viewed your post for 1 second
+"Profile_NotificationBasic_Body" = "viewed for *%@* %@"; //Joe viewed your post for 1 second
+"Profile_NotificationDetailed_Body" = "*%@* viewed your post"; //Joe viewed your post again
+"Profile_UnknownUserPlaceholder_Text" = "Unknown User";
 
 "Settings_Title" = "Settings";
 "Settings_SectionAbout_Title" = "About";
@@ -73,15 +105,28 @@
 "Settings_ItemInstagram_Title" = "Follow us on Instagram";
 "Settings_ItemFeedback_Title" = "Contact Us";
 "Settings_ItemTerms_Title" = "Terms & Conditions";
-"Settings_ItemCache_Title" = "Destory Cached Data";
-"Settings_ItemCacheDestroyed_Title" = "Cache Destoryed!";
+"Settings_ItemCache_Title" = "Destroy Cached Data";
+"Settings_ItemCacheDestroyed_Title" = "Cache Destroyed!";
 "Settings_ItemLogout_Title" = "Logout";
 "Settings_FeedbackPlaceholder_Text" = "Tell us what you think...";
 "Settings_FeedbackSend_Action" = "Send";
+"Settings_FeedbackRetry_Action" = "Retry";
 "Settings_FeedbackEmptyMessage_Text" = "Please enter a message";
+"Settings_FeedbackNavigationSending_Title" = "Sending...";
 "Settings_FeedbackPlaceholderSent_Title" = "Sent!";
 "Settings_FeedbackPlaceholderSent_Body" = "Thanks for your feedback";
 "Settings_Share_Body" = "Check out Blrrd!";
+
+"Friend_ErrorPlaceholder_Title" = "Oh No!";
+"Friend_EmptyPlaceholder_Title" = "Not Found";
+"Friend_EmptyPlaceholder_Body" = "Try refining your search";
+"Friend_SearchPlaceholder_Text" = "Search Blrrd Users";
+"Friend_Header_Text" = "Add Friends!";
+"Friend_ActionFollow_Text" = "Follow";
+"Friend_ActionFollowing_Text" = "Following";
+
+"ImageDetailed_Report_Title" = "Reporting Image";
+"ImageDetailed_ReportSend_Placeholder" = "Reason for reporting this image?";
 
 
 

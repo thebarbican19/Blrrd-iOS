@@ -20,9 +20,10 @@
 
 @property (nonatomic, strong) id <BNavigationDelegate> delegate;
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *rightbutton;
+@property (nonatomic, strong) id rightbutton;
 
 -(void)navigationTitle:(NSString *)title;
+-(void)navigationRightButton:(id)buton;
 
 @end
 

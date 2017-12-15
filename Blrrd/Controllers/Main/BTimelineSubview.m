@@ -8,6 +8,7 @@
 
 #import "BTimelineSubview.h"
 #import "BConstants.h"
+#import "GDFeedbackController.h"
 
 @interface BTimelineSubview ()
 
@@ -17,6 +18,12 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.appdel = (AppDelegate*) [[UIApplication sharedApplication] delegate];
+
+    self.imageobj = [[BImageObject alloc] init];
+    
+    self.credentials = [[BCredentialsObject alloc] init];
     
     self.placeholder = [[GDPlaceholderView alloc] initWithFrame:CGRectMake(0.0, self.collectionView.contentInset.top, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height - self.collectionView.contentInset.top)];
     self.placeholder.delegate = self;
@@ -29,6 +36,13 @@
     self.footer = [[BFooterView alloc] initWithFrame:CGRectMake(0.0, self.collectionView.collectionViewLayout.collectionViewContentSize.height - 45.0, self.collectionView.bounds.size.width, 40.0)];
     self.footer.backgroundColor = [UIColor clearColor];
     [self.collectionView addSubview:self.footer];
+    
+    self.actionsheet = [[GDActionSheet alloc] initWithFrame:super.view.bounds];
+    self.actionsheet.viewColour = [UIColor whiteColor];
+    self.actionsheet.delegate = self;
+    self.actionsheet.cancelText = NSLocalizedString(@"Timeline_ActionDismissShare_Text", nil);
+    self.actionsheet.cancelAction = false;
+    self.actionsheet.presentAction = false;
     
     [self.collectionView registerClass:[BBlurredCell class] forCellWithReuseIdentifier:@"item"];
     [self.collectionView reloadData];
@@ -94,6 +108,7 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     BBlurredCell *cell = (BBlurredCell *)[self.collectionView dequeueReusableCellWithReuseIdentifier:@"item" forIndexPath:indexPath];
 
+    [cell setIndexpath:indexPath];
     [cell setDelegate:self];
     [cell content:[self.content objectAtIndex:indexPath.row] index:indexPath];
     
@@ -106,14 +121,39 @@
     
 }
 
--(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Selected: %@" ,[self.content objectAtIndex:indexPath.row]);
-    
-}
-
 -(void)collectionViewRevealed:(BBlurredCell *)revealed {
     for (BBlurredCell *cell in self.collectionView.visibleCells) {
         if (cell != revealed) [cell reveal:nil];
+        
+    }
+    
+    [self.appdel applicationRatePrompt];
+    
+}
+
+-(void)collectionViewPresentOptions:(BBlurredCell *)item {
+    NSDictionary *data = [self.content objectAtIndex:item.indexpath.row];
+    NSMutableArray *buttons = [[NSMutableArray alloc] init];
+    if ([[data objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
+        [buttons addObject:@{@"key":@"delete", @"title":NSLocalizedString(@"Timeline_ActionSheetDelete_Text", nil)}];
+        
+    }
+    else {
+        [buttons addObject:@{@"key":@"report", @"title":NSLocalizedString(@"Timeline_ActionSheetReport_Text", nil)}];
+
+    }
+    
+    [self.actionsheet setIndexPath:item.indexpath];
+    [self.actionsheet setKey:@"options"];
+    [self.actionsheet setButtons:buttons];
+    [self.actionsheet presentActionAlert];
+    
+    
+}
+
+-(void)collectionViewPresentProfile:(BBlurredCell *)item {
+    if ([self.delegate respondsToSelector:@selector(viewPresentFriendProfile:)]) {
+        [self.delegate viewPresentFriendProfile:item.userdata];
         
     }
     
@@ -163,6 +203,42 @@
         
     }
     
+}
+
+-(void)actionSheetTappedButton:(GDActionSheet *)action index:(NSInteger)index {
+    NSDictionary *data = [self.content objectAtIndex:action.indexPath.row];
+    if ([action.key isEqualToString:@"options"]) {
+        if ([[[action.buttons objectAtIndex:index] objectForKey:@"key"] isEqualToString:@"delete"]) {
+            [self.collectionView performBatchUpdates:^{
+                [self.content removeObjectAtIndex:action.indexPath.row];
+                [self.collectionView deleteItemsAtIndexPaths:@[action.indexPath]];
+                
+            } completion:^(BOOL finished) {
+                
+            }];
+            
+            [self.imageobj uploadRemove:data completion:^(NSError *error) {
+                if (error.code != 200) {
+                   
+                    
+                }
+                
+            }];
+            
+        }
+        else if ([[[action.buttons objectAtIndex:index] objectForKey:@"key"] isEqualToString:@"report"]) {
+            GDFeedbackController *viewFeedback = [[GDFeedbackController alloc] init];
+            viewFeedback.type = @"report";
+            viewFeedback.imagedata = data;
+            viewFeedback.placeholder = NSLocalizedString(@"ImageDetailed_ReportSend_Placeholder", nil);
+            viewFeedback.header = NSLocalizedString(@"ImageDetailed_Report_Title", nil);
+            
+            [self.navigationController pushViewController:viewFeedback animated:true];
+            
+        }
+        
+    }
+
 }
 
 

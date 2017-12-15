@@ -27,37 +27,46 @@
     NSString *endpoint = @"userApi/checkUser";
     NSString *endpointmethod = @"POST";
     
-    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:@[credentials] method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
-        if (data.length > 0 && !error) {
-            if (status.statusCode == 200) {
-                NSDictionary *user = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                [self.credentials setUserIdentifyer:[user objectForKey:@"id"]];
-                [self.credentials setUserEmail:[user objectForKey:@"email"]];
-                [self.credentials setUserHandle:[user objectForKey:@"username"]];
-                [self.credentials setUserAvatar:[user objectForKey:@"photo"]];
-                [self.credentials setUserPublic:[[user objectForKey:@"publicuser"] boolValue]];
-                [self.credentials setDevicePush:[user objectForKey:@"pushId"]];
+    if ([[credentials objectForKey:@"username"] length] > 0 && [[credentials objectForKey:@"password"] length] > 0) {
+        NSLog(@"credentials %@" ,credentials);
+        NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:@[credentials] method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+            if (data.length > 0 && !error) {
+                if (status.statusCode == 200) {
+                    NSDictionary *user = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                    [self.credentials setUserIdentifyer:[user objectForKey:@"id"]];
+                    [self.credentials setUserEmail:[user objectForKey:@"email"]];
+                    [self.credentials setUserHandle:[user objectForKey:@"username"]];
+                    [self.credentials setUserAvatar:[user objectForKey:@"photo"]];
+                    [self.credentials setUserPublic:[[user objectForKey:@"publicuser"] boolValue]];
+                    [self.credentials setDevicePush:[user objectForKey:@"pushId"]];
+                    [self.credentials setUserPassword:[user objectForKey:@"password"]];
 
-                [self.mixpanel.people set:@{@"$name":self.credentials.userHandle==nil?@"Unknown User":self.credentials.userHandle,
-                                          @"$email":self.credentials.userEmail==nil?@"":self.credentials.userEmail}];
-                [self.mixpanel identify:self.credentials.userKey];
-                
-                completion(user, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
+                    NSLog(@"useer %@" ,user);
+                    
+                    [self.mixpanel.people set:@{@"$name":self.credentials.userHandle==nil?@"Unknown User":self.credentials.userHandle,
+                                              @"$email":self.credentials.userEmail==nil?@"":self.credentials.userEmail}];
+                    [self.mixpanel identify:self.credentials.userKey];
+                    [self.mixpanel track:@"App Logged In"];
+                    
+                    completion(user, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
+                    
+                }
+                else if (status.statusCode == 500) {
+                    completion(nil, [self requestErrorHandle:401 message:@"credentials incorrect" error:nil endpoint:endpoint]);
+                    
+                }
                 
             }
-            else if (status.statusCode == 500) {
-                completion(nil, [self requestErrorHandle:401 message:@"credentials incorrect" error:nil endpoint:endpoint]);
-                
-            }
-            
-        }
-        else completion(nil, [self requestErrorHandle:(int)error.code message:nil error:error endpoint:endpoint]);
+            else completion(nil, [self requestErrorHandle:(int)error.code message:nil error:error endpoint:endpoint]);
 
-    }];
-    
-    [task resume];
-    
+        }];
+        
+        [task resume];
+        
+    }
+    else completion(nil, [self requestErrorHandle:400 message:@"Username cannot be nil" error:nil endpoint:endpoint]);
+
 }
 
 -(void)authenticationSignupWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion {
@@ -70,7 +79,6 @@
             if (status.statusCode == 200) {
                 NSString *endpoint = [NSString stringWithFormat:@"userApi/getUserData"];
                 NSString *endpointmethod = @"GET";
-
                 NSURLSessionTask *taskuserdata = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:@{@"username":[credentials objectForKey:@"username"]} method:endpointmethod] completionHandler:^(NSData *userdata, NSURLResponse *response, NSError *error) {
                     NSDictionary *user = [[NSJSONSerialization JSONObjectWithData:userdata options:0 error:nil] firstObject];
                     NSLog(@"useer %@" ,user);
@@ -80,7 +88,8 @@
                     [self.credentials setUserAvatar:[user objectForKey:@"photo"]];
                     [self.credentials setUserPublic:[[user objectForKey:@"publicuser"] boolValue]];
                     [self.credentials setDevicePush:[user objectForKey:@"pushId"]];
-                    
+                    [self.credentials setUserPassword:[user objectForKey:@"password"]];
+
                     [self.mixpanel.people set:@{@"$name":self.credentials.userHandle==nil?@"Unknown User":self.credentials.userHandle,
                                                 @"$email":self.credentials.userEmail==nil?@"":self.credentials.userEmail}];
                     [self.mixpanel identify:self.credentials.userKey];
@@ -215,10 +224,10 @@
     
 }
 
--(void)queryUserPosts:(int)page completion:(void (^)(NSArray *items, NSError *error))completion {
+-(void)queryUserPosts:(NSString *)username page:(int)page completion:(void (^)(NSArray *items, NSError *error))completion {
     NSString *endpoint = [NSString stringWithFormat:@"postsApi/getAllProfilePostsNext"];
     NSString *endpointmethod = @"GET";
-    NSDictionary *endpointparams = @{@"myusername":self.credentials.userHandle, @"skipnumber":@(page * 10)};
+    NSDictionary *endpointparams = @{@"myusername":username, @"skipnumber":@(page * 10)};
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
         if (data.length > 0 && !error) {
@@ -226,7 +235,10 @@
                 NSMutableArray *posts = [[NSMutableArray alloc] init];
                 [posts addObjectsFromArray:[[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] objectForKey:@"data"]];
                 
-                [self cacheSave:posts endpointname:endpoint append:page==0?false:true expiry:60*60*24*4];
+                if ([username isEqualToString:self.credentials.userHandle]) {
+                    [self cacheSave:posts endpointname:endpoint append:page==0?false:true expiry:60*60*24*4];
+                    
+                }
                 
                 completion(posts, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
                 
@@ -255,8 +267,6 @@
     NSString *endpointmethod = @"GET";
     NSDictionary *endpointparams = @{@"username":self.credentials.userHandle};
     
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"posted_datetime" ascending:false];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username != %@" ,self.credentials.userHandle];
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
         if (data.length > 0 && !error) {
@@ -269,9 +279,9 @@
                     
                 }
                 
-                [self cacheSave:[[notifications filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]] endpointname:endpoint append:false expiry:60*30];
+                [self cacheSave:notifications endpointname:endpoint append:false expiry:60*5];
                 
-                completion([[notifications filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]], [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
+                completion(notifications, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
                 
             }
             else if (status.statusCode == 500) {
@@ -359,6 +369,40 @@
     
 }
 
+-(void)queryFriends:(NSString *)type completion:(void (^)(NSArray *users, NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"friendsApi/getRequests"];
+    NSString *endpointmethod = @"GET";
+    NSDictionary *endpointparams = @{@"myusername":self.credentials.userHandle, @"gettype":type};
+    
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (data.length > 0 && !error) {
+            if (status.statusCode == 200) {
+                NSMutableArray *requests = [[NSMutableArray alloc] init];
+                [requests addObjectsFromArray:[NSJSONSerialization JSONObjectWithData:data options:0 error:nil]];
+                
+                [self cacheSave:requests endpointname:endpoint append:false expiry:60*30];
+                
+                completion(requests, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
+                
+            }
+            else if (status.statusCode == 500) {
+                completion(nil, [self requestErrorHandle:401 message:@"credentials incorrect" error:nil endpoint:endpoint]);
+                
+            }
+            
+        }
+        else {
+            completion(nil, [self requestErrorHandle:(int)status.statusCode message:error.domain error:nil endpoint:endpoint]);
+            
+        }
+        
+    }];
+    
+    [task resume];
+    
+}
+
 -(void)queryUserStats:(void (^)(NSError *error))completion {
     NSString *endpoint = [NSString stringWithFormat:@"postsApi/getProfileStats"];
     NSString *endpointmethod = @"GET";
@@ -369,9 +413,13 @@
         if (data.length > 0 && !error) {
             if (status.statusCode == 200) {
                 NSDictionary *stats = [[[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] objectForKey:@"data"] firstObject];
+                
+                [self cacheSave:stats endpointname:endpoint append:false expiry:60*10];
+                
                 [self.credentials setUserTotalTime:[[stats objectForKey:@"totaltime"] intValue] append:false];
                 [self.credentials setUserEmail:[stats objectForKey:@"email"]];
                 [self.credentials setUserAvatar:[stats objectForKey:@"photo"]];
+                [self.credentials setUserTotalPosts:[[stats objectForKey:@"totalpost"] intValue]];
 
             }
             
@@ -405,11 +453,158 @@
 
     }];
     
+    [self cacheUpdatePostWithData:endpointparams endpoint:@"postsApi/getAllFriendsPostsNext"];
     [task resume];
     
 }
 
 -(void)postRequest:(NSString *)user request:(NSString *)request completion:(void (^)(NSError *error))completion {
+    //NSString *uniqueid = [NSString stringWithFormat:@"%d" ,(int)[[NSDate date] timeIntervalSince1970]];
+    NSString *endpoint = [NSString stringWithFormat:@"friendsApi/postAction"];
+    NSString *endpointmethod = @"POST";
+    NSDictionary *endpointparams = @{@"actiontype":request};
+    NSLog(@"endpotint %@" ,endpoint);
+    
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        completion([self requestErrorHandle:(int)status.statusCode message:error.domain error:error endpoint:endpoint]);
+        
+    }];
+
+    [task resume];
+    
+}
+
+-(void)postUserUpdate:(void (^)(NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"userApi/updateUser"];
+    NSString *endpointmethod = @"POST";
+    NSDictionary *endpointparams = @{@"username":self.credentials.userHandle,
+                                     @"name":@"",
+                                     @"phone":@"",
+                                     @"email":self.credentials.userEmail,
+                                     @"password":self.credentials.userPassword,
+                                     @"hasPhoto":@(false),
+                                     @"photo":[NSString stringWithFormat:@"%@" ,self.credentials.userAvatar],
+                                     @"pushId":self.credentials.devicePush,
+                                     @"status":@(true),
+                                     @"logged":@(true)};
+    NSLog(@"push updated %@" ,self.credentials.devicePush);
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        completion([self requestErrorHandle:(int)status.statusCode message:error.domain error:error endpoint:endpoint]);
+        
+    }];
+    
+    [task resume];
+    
+}
+
+-(NSArray *)notificationsMergeByType:(BNotificationMergeType)type {
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"posted_datetime" ascending:false];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username != %@" ,self.credentials.userHandle];
+    NSMutableArray *notifications = [[NSMutableArray alloc] initWithArray:[self cacheRetrive:@"postsApi/getViewTimesNewApi"]];
+    NSMutableArray *merge = [[NSMutableArray alloc] init];
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    for (NSDictionary *item in notifications) {
+        NSMutableDictionary *format = [[NSMutableDictionary alloc] init];
+        if (type == BNotificationMergeTypePosts) {
+            [format setObject:[item objectForKey:@"postId"] forKey:@"postId"];
+            
+        }
+        else if (type == BNotificationMergeTypeUniqueUsers) {
+            [format setObject:[item objectForKey:@"username"] forKey:@"username"];
+            
+        }
+        else {
+            [format setObject:[item objectForKey:@"postId"] forKey:@"postId"];
+            [format setObject:[item objectForKey:@"username"] forKey:@"username"];
+
+        }
+        
+        [merge addObject:format];
+        
+    }
+    
+    NSCountedSet *counted = [[NSCountedSet alloc] initWithArray:merge];
+    for (NSDictionary *merged in counted) {
+        NSPredicate *predicate;
+        if (type == BNotificationMergeTypePosts) {
+            predicate = [NSPredicate predicateWithFormat:@"postId == %@" ,[merged objectForKey:@"postId"]];
+            
+        }
+        else if (type == BNotificationMergeTypeUniqueUsers) {
+            predicate = [NSPredicate predicateWithFormat:@"username == %@" ,[merged objectForKey:@"username"]];
+            
+        }
+        else if (type == BNotificationMergeTypeUniqueUsersAndPosts) {
+            predicate = [NSPredicate predicateWithFormat:@"postId == %@ && username == %@" ,[merged objectForKey:@"postId"], [merged objectForKey:@"username"]];
+
+        }
+        
+        NSArray *filtered = [notifications filteredArrayUsingPredicate:predicate];
+        NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:filtered.firstObject];
+        int totaltime = 0;
+        for (NSDictionary *item in [notifications filteredArrayUsingPredicate:predicate]) {
+            totaltime += [[item objectForKey:@"seconds"] intValue];
+            
+        }
+        
+        [append setObject:@(totaltime) forKey:@"totalsecs"];
+        [append setObject:@([counted countForObject:merged]) forKey:@"sessions"];
+        
+        [output addObject:append];
+        
+    }
+    
+    return [[output filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
+    
+}
+
+-(NSArray *)notificationsForSpecificImage:(NSString *)identifyer {
+    NSArray *notifications = [[NSArray alloc] initWithArray:[self notificationsMergeByType:BNotificationMergeTypeUniqueUsersAndPosts]];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"posted_datetime" ascending:false];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"postId == %@" ,identifyer];
+    
+    return [[notifications filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
+    
+}
+
+-(BOOL)friendCheck:(NSString *)username {
+    NSArray *users = [[NSArray alloc] initWithArray:[self cacheRetrive:@"friendsApi/getRequests"]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username == %@" ,username];
+    
+    if ([[users filteredArrayUsingPredicate:predicate] count] > 0) return false;
+    else return true;
+    
+}
+
+-(NSArray *)friendsList {
+    return nil;
+    
+}
+
+-(void)cacheUpdatePostWithData:(NSDictionary *)data endpoint:(NSString *)endpoint {
+    NSMutableArray *timelinedata = [[NSMutableArray alloc] initWithArray:[self cacheRetrive:endpoint]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", [data objectForKey:@"postId"]];
+    NSUInteger index = [timelinedata indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop) {
+        return [predicate evaluateWithObject:obj];
+        
+    }];
+    
+    if (index < timelinedata.count) {
+        NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:[timelinedata objectAtIndex:index]];
+        [append setObject:[data objectForKey:@"seconds"] forKey:@"last_sectotal"];
+        [append setObject:@([[append objectForKey:@"sectotal"] integerValue] + [[data objectForKey:@"seconds"] intValue]) forKey:@"sectotal"];
+        [append setObject:@([[append objectForKey:@"seen"] intValue] + 1) forKey:@"seen"];
+        
+        [timelinedata replaceObjectAtIndex:index withObject:append];
+        [self cacheSave:timelinedata endpointname:endpoint append:false expiry:60*60];
+
+    }
+    else {
+        [self cacheUpdatePostWithData:data endpoint:@"channelsApi/getChannelsHotPostsNext"];
+
+    }
     
 }
 
@@ -473,7 +668,7 @@
 
 -(NSError *)requestErrorHandle:(int)code message:(NSString *)message error:(NSError *)error endpoint:(NSString *)endpoint {
     if (code == 401) {
-        [self.credentials destoryAllCredentials];
+        //[self.credentials destoryAllCredentials];
         if ([self.delegate respondsToSelector:@selector(viewCheckAuthenticaion)]) {
             [self.delegate viewCheckAuthenticaion];
             

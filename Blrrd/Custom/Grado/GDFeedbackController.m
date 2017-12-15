@@ -73,7 +73,7 @@
     self.feedbackPlaceholder.hidden = true;
     [self.view addSubview:self.feedbackPlaceholder];
     
-    self.feedbackEntry = [[UITextView alloc] initWithFrame:CGRectMake(0.0, self.feedbackNavigation.bounds.size.height + 10.0, self.view.bounds.size.width, 100.0)];
+    self.feedbackEntry = [[UITextView alloc] initWithFrame:CGRectMake(0.0, self.feedbackNavigation.bounds.size.height + APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, 100.0)];
     self.feedbackEntry.text = self.message;
     self.feedbackEntry.backgroundColor = [UIColor clearColor];
     self.feedbackEntry.placeholder = self.placeholder;
@@ -99,7 +99,7 @@
 -(void)textFieldDidShow:(NSNotification*)notification {
     feedbackKeyboard = [[[notification userInfo] valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     feedbackFrame = self.feedbackEntry.frame;
-    feedbackFrame.size.height = self.view.bounds.size.height - (feedbackKeyboard.size.height + (self.feedbackNavigation.bounds.size.height + 20.0));
+    feedbackFrame.size.height = self.view.bounds.size.height - (feedbackKeyboard.size.height + (self.feedbackNavigation.bounds.size.height + APP_STATUSBAR_HEIGHT + 20.0));
     [UIView animateWithDuration:0.3 animations:^{
         self.feedbackEntry.frame = feedbackFrame;
 
@@ -135,6 +135,9 @@
     else {
         [self.feedbackEntry resignFirstResponder];
         [self.feedbackEntry setFrame:feedbackFrame];
+        [self.feedbackNavigation navigationTitle:NSLocalizedString(@"Settings_FeedbackNavigationSending_Title", nil)];
+        [self.feedbackNavigation navigationRightButton:nil];
+        
         [self viewShouldPostMessage:self.type];
         
     }
@@ -147,6 +150,7 @@
                              @"text":self.feedbackEntry.text,
                              @"color":@"#"}];
     [attachement addObject:@{@"title":@"User Information",
+                             @"thumb_url":[NSString stringWithFormat:@"%@" ,self.credentials.userAvatar],
                              @"text":[NSString stringWithFormat:@"Name: %@\nEmail: %@\nKey: %@\n\nLanguage: %@\nApp Version: %@\niOS Build: %@\niOS Version: %@\nDevice: %@\nMixpanel: %@" ,
                                       self.credentials.userHandle,
                                       self.credentials.userEmail,
@@ -159,8 +163,26 @@
                                       self.mixpanel.distinctId],
                              @"color":@"#"}];
     
+    if (self.imagedata != nil) {
+        [attachement addObject:@{@"title":@"Image Information",
+                                 @"image_url":[self.imagedata objectForKey:@"publicpath"],
+                                 @"text":[NSString stringWithFormat:@"Key: %@\nCaption: %@\nUploaded By:%@" ,
+                                          [self.imagedata objectForKey:@"id"],
+                                          [self.imagedata objectForKey:@"name"],
+                                          [self.imagedata objectForKey:@"username"]],
+                                 @"color":@"#"}];
+    }
+    
     NSString *channel = @"C88CT9DC7";
-    NSString *title = [NSString stringWithFormat:@"A *%@* %@ message received from *%@*" ,APP_BUNDLE_NAME ,type.capitalizedString, self.credentials.userHandle];
+    NSString *title;
+    if ([self.type isEqualToString:@"report"]) {
+        title = [NSString stringWithFormat:@"*%@* reported an image in %@" ,self.credentials.userHandle ,APP_BUNDLE_NAME];
+
+    }
+    else {
+        title = [NSString stringWithFormat:@"A *%@* %@ message received from *%@*" ,APP_BUNDLE_NAME ,type.capitalizedString, self.credentials.userHandle];
+
+    }
     NSURL *sessionURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://hooks.slack.com/services/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"]];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSMutableURLRequest *sessionRequest = [NSMutableURLRequest requestWithURL:sessionURL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:10];
@@ -178,6 +200,7 @@
         else {
             [self.feedbackEntry becomeFirstResponder];
             [self.feedbackNavigation navigationTitle:error.domain];
+            [self.feedbackNavigation navigationRightButton:NSLocalizedString(@"Settings_FeedbackRetry_Action", nil)];
 
         }
         

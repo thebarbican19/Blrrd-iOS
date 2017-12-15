@@ -104,16 +104,22 @@
     [self.data setInteger:active forKey:@"app_timer"];
     [self.data synchronize];
     
-    if (active >= (60 * 20) && self.credentials.appRated == false) {
+    
+    
+}
+
+-(void)applicationRatePrompt {
+    self.credentials = [[BCredentialsObject alloc] init];
+    self.mixpanel = [Mixpanel sharedInstance];
+    if (self.credentials.userTotalTime > 60 * 7 && self.credentials.appRated == false) {
         if (APP_DEVICE_FLOAT >= 10.3) {
             [SKStoreReviewController requestReview];
             [self.credentials setAppRated:true];
             [self.mixpanel track:@"App Rated"];
-
+            
         }
         
     }
-    
 }
 
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -168,7 +174,7 @@
         }];
         
     }
-    else completionHandler(UIBackgroundFetchResultNewData);
+    else completionHandler(UIBackgroundFetchResultNoData);
     
 }
 
@@ -212,18 +218,36 @@
 
 }
 
--(void)applicationRegisterPushNotifications {
-    [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionSound|UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error){
-        if (APP_DEVICE_FLOAT < 11.0) {
-            [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound|UIUserNotificationTypeAlert|UIUserNotificationTypeBadge) categories:nil]];
+-(void)applicationNotificationsAuthorized:(void (^)(UNAuthorizationStatus authorized))completion {
+    if (APP_DEVICE >= 10){
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                NSLog(@"Settings Push: %@" ,settings);
+                completion(settings.authorizationStatus);
+                
+            }];
             
-        }
+        }];
         
+    }
+    else {
+        completion([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]?UNAuthorizationStatusAuthorized:UNAuthorizationStatusNotDetermined);
+        
+    }
+    
+}
+
+-(void)applicationAuthorizeRemoteNotifications:(void (^)(NSError *error, BOOL granted))completion {
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    center.delegate = self;
+    
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound|UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error){
         [[UIApplication sharedApplication] registerForRemoteNotifications];
         
+        completion(error, granted);
+            
     }];
-    
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
 }
 
@@ -235,6 +259,19 @@
     
     [self.credentials setDevicePush:token];
     [self.mixpanel.people addPushDeviceToken:deviceToken];
+    
+}
+
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  {
+    self.query = [[BQueryObject alloc] init];
+    if (application.applicationState == UIApplicationStateActive) {
+        [self.query cacheDestroy:@"postsApi/getViewTimesNewApi"];
+        [self.query queryNotifications:^(NSArray *notifications, NSError *error) {
+            NSLog(@"did recive notification");
+            
+        }];
+        
+    }
     
 }
 

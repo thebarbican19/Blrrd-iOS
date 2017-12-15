@@ -15,7 +15,7 @@
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UIGestureRecognizerDelegate, SRWebSocketDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UIGestureRecognizerDelegate, SRWebSocketDelegate, UNUserNotificationCenterDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) NSUserDefaults *data;
@@ -27,8 +27,10 @@
 
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundtask;
 
--(void)applicationRegisterPushNotifications;
+-(void)applicationNotificationsAuthorized:(void (^)(UNAuthorizationStatus authorized))completion;
+-(void)applicationAuthorizeRemoteNotifications:(void (^)(NSError *error, BOOL granted))completion;
 -(void)applicationHandleSockets:(BOOL)terminate;
+-(void)applicationRatePrompt;
 
 @end
 

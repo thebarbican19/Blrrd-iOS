@@ -16,6 +16,7 @@ typedef enum {
 
 @protocol BTabbarDelegate;
 @interface BTabbarView : UIView {
+    UIView *frame;
     UIView *container;
     UIView *hairline;
 

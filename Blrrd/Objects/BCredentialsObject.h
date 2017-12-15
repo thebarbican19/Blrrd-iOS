@@ -22,10 +22,12 @@
 -(NSString *)userKey;
 -(NSString *)userHandle;
 -(NSString *)userEmail;
+-(NSString *)userPassword;
 -(NSURL *)userAvatar;
 -(BOOL)userPublic;
 -(int)userTotalTime;
 -(NSString *)userTotalTimeFormatted;
+-(int)userPosts;
 
 -(BOOL)appRated;
 -(BOOL)appOnboarded;
@@ -43,11 +45,13 @@
 -(void)setAppRated:(BOOL)rated;
 -(void)setAppSaveImages:(BOOL)save;
 
+-(void)setUserPassword:(NSString *)password;
 -(void)setUserEmail:(NSString *)email;
 -(void)setUserIdentifyer:(NSString *)key;
 -(void)setUserHandle:(NSString *)handle;
 -(void)setUserAvatar:(NSString *)url;
 -(void)setUserPublic:(BOOL)yes;
 -(void)setUserTotalTime:(int)seconds append:(BOOL)append;
+-(void)setUserTotalPosts:(int)posts;
 
 @end

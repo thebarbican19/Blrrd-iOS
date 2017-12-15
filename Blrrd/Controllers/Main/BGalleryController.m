@@ -56,7 +56,9 @@
     
     [self.imageobj imagesFromAsset:[self.gallery objectAtIndex:indexPath.row] thumbnail:true completion:^(NSDictionary *data, UIImage *image) {
         [cell.container setImage:image];
-        
+
+    } withProgressHandler:^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
+    
     }];
     
     [cell.container setClipsToBounds:true];

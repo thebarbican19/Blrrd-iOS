@@ -38,7 +38,7 @@
         
     }
 
-    [self.images addObject:@{@"type":@"showall"}];
+    [self.images addObject:@{@"type":@"showall", @"publicpath":[[[self.query cacheRetrive:@"postsApi/getAllProfilePostsNext"] lastObject] objectForKey:@"publicpath"]}];
     [self.collectionView reloadData];
     
 }
@@ -61,20 +61,8 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     BProfileCell *cell = (BProfileCell *)[self.collectionView dequeueReusableCellWithReuseIdentifier:@"item" forIndexPath:indexPath];
     NSDictionary *item = [self.images objectAtIndex:indexPath.row];
-    NSString *type = [item objectForKey:@"type"];
-    
-    if ([type isEqualToString:@"image"]) {
-        [cell content:item];
-        [cell.contentView setBackgroundColor:[UIColor clearColor]];
-        [cell.seconds setHidden:false];
-        
-    }
-    else {
-        [cell.image setImage:[UIImage imageNamed:@"profile_expand_icon"]];
-        [cell.seconds setHidden:true];
-        [cell.contentView setBackgroundColor:UIColorFromRGB(0x69DCCB)];
-        
-    }
+
+    [cell content:item];
     
     [cell.contentView setBackgroundColor:[UIColor clearColor]];
     [cell.contentView setClipsToBounds:true];

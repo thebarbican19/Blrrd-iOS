@@ -64,6 +64,12 @@
     
 }
 
+-(NSString *)userPassword {
+    if ([self.data objectForKey:@"user_password"] != nil) return [self.data objectForKey:@"user_password"];
+    else return nil;
+    
+}
+
 -(NSString *)userEmail {
     if ([self.data objectForKey:@"user_email"] != nil) return [self.data objectForKey:@"user_email"];
     else return nil;
@@ -91,6 +97,12 @@
     else return [NSString stringWithFormat:@"%01dm %01ds" ,self.userTotalTime / 60 % 60, self.userTotalTime % 60];
     
 }
+
+-(int)userPosts {
+    return [[self.data objectForKey:@"user_total_posts"] intValue];
+
+}
+
 
 -(BOOL)appRated {
     return [[self.data objectForKey:@"app_rate"] boolValue];
@@ -149,6 +161,14 @@
     
 }
 
+-(void)setUserPassword:(NSString *)password {
+    if (password) [self.data setObject:password forKey:@"user_password"];
+    else [self.data removeObjectForKey:@"user_password"];
+    
+    [self.data synchronize];
+    
+}
+
 -(void)setUserEmail:(NSString *)email {
     if (email) [self.data setObject:[email stringByCorrectingEmailTypos] forKey:@"user_email"];
     else [self.data removeObjectForKey:@"user_email"];
@@ -194,6 +214,12 @@
     [self.data setObject:[NSNumber numberWithInt:secondsset] forKey:@"user_total_seconds"];
     [self.data synchronize];
 
+}
+
+-(void)setUserTotalPosts:(int)posts {
+    [self.data setObject:[NSNumber numberWithInt:posts] forKey:@"user_total_posts"];
+    [self.data synchronize];
+    
 }
 
 @end

@@ -59,13 +59,13 @@
 		<array>
 			<dict>
 				<key>key</key>
-				<string>cache</string>
+				<string>logout</string>
 				<key>switch</key>
 				<false/>
 			</dict>
 			<dict>
 				<key>key</key>
-				<string>logout</string>
+				<string>cache</string>
 				<key>switch</key>
 				<false/>
 			</dict>

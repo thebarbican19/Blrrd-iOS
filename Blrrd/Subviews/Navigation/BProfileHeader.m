@@ -30,7 +30,6 @@
         profile.layer.borderColor = UIColorFromRGB(0x140F26).CGColor;
         profile.layer.borderWidth = 1.4;
         [self addSubview:profile];
-        [profile sd_setImageWithURL:self.credentials.userAvatar];
         
         halo = [[UIView alloc] initWithFrame:CGRectMake(profile.frame.origin.x - 2.0, profile.frame.origin.y - 2.0, profile.bounds.size.width + 4.0, profile.bounds.size.height + 4.0)];
         halo.clipsToBounds = true;
@@ -71,15 +70,23 @@
         gesture.enabled = true;
         [self addGestureRecognizer:gesture];
         
-        settings = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 62.0, 22.0, 45.0, 45.0)];
+        settings = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 62.0, (self.bounds.size.height / 2) * 0, 45.0, self.bounds.size.height / 2)];
         settings.backgroundColor = [UIColor clearColor];
         settings.hidden = !self.owner;
         [settings setImage:[UIImage imageNamed:@"profile_settings_icon"] forState:UIControlStateNormal];
         [settings addTarget:self action:@selector(settings:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:settings];
+        
+        friends = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 62.0, (self.bounds.size.height / 2) * 1, 45.0, self.bounds.size.height / 2)];
+        friends.backgroundColor = [UIColor clearColor];
+        friends.hidden = !self.owner;
+        [friends setImage:[UIImage imageNamed:@"profile_friends_icon"] forState:UIControlStateNormal];
+        [friends addTarget:self action:@selector(profile:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:friends];
 
     }
     
+    [profile sd_setImageWithURL:self.credentials.userAvatar placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
     [email setText:self.credentials.userEmail];
     [username setText:self.credentials.userHandle];
     [timeviewed setAttributedText:self.format];
@@ -101,6 +108,15 @@
     }
     
 }
+
+-(void)profile:(UIButton *)button {
+    if ([self.delegate respondsToSelector:@selector(viewPresentProfile)]) {
+        [self.delegate viewPresentFriends];
+        
+    }
+    
+}
+
 
 -(NSMutableAttributedString *)format {
     NSString *text = [NSString stringWithFormat:NSLocalizedString(@"Profile_TimeViewed_Body", nil),  self.credentials.userTotalTimeFormatted];

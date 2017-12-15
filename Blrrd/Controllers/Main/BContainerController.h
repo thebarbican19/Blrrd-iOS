@@ -19,8 +19,9 @@
 #import "BCanvasController.h"
 #import "BTabbarView.h"
 #import "BDetailedTimelineController.h"
+#import "BDeailedImageController.h"
 
-@interface BContainerController : UIViewController <BSegmentDelegate, BQueryDelegate, BTimelineDelegate, BUsageDelegate, BDiscoverDelegate, BTabbarDelegate, BChannelDelegate, BDetailedTimelineDelegate>
+@interface BContainerController : UIViewController <UIScrollViewDelegate, BSegmentDelegate, BQueryDelegate, BTimelineDelegate, BUsageDelegate, BDiscoverDelegate, BTabbarDelegate, BChannelDelegate, BDetailedTimelineDelegate, BDetailedImageDelegate, BCanvasDelegate>
 
 @property (nonatomic, retain) AppDelegate *appdel;
 @property (nonatomic, strong) BQueryObject *query;
@@ -30,6 +31,7 @@
 @property (nonatomic) int viewindex;
 @property (nonatomic) float scrollpos;
 @property (nonatomic) NSOperationQueue *queue;
+@property (nonatomic) float safearea;
 
 @property (nonatomic, strong) BTabbarView *viewTabbar;
 @property (nonatomic, strong) UIScrollView *viewContainer;
@@ -40,6 +42,7 @@
 @property (nonatomic, strong) BCanvasController *viewCanvas;
 @property (nonatomic, strong) UICollectionViewFlowLayout *viewTimelineLayout;
 @property (nonatomic, strong) UICollectionViewFlowLayout *viewChannelsLayout;
+@property (nonatomic, strong) UISwipeGestureRecognizer *viewSwipeGesture;
 
 @property (nonatomic) UIStatusBarStyle statusbarstyle;
 @property (nonatomic) BOOL statusbarhidden;

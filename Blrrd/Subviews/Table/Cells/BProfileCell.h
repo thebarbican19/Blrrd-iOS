@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <UIImageView+WebCache.h>
+#import <UIImage+BlurEffects.h>
 
 @interface BProfileCell : UICollectionViewCell
 

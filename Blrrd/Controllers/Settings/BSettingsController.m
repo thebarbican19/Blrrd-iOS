@@ -82,7 +82,7 @@
     header.tag = section;
     header.backgroundColor = [UIColor clearColor];
     if ([[[self.viewContents objectAtIndex:section] objectForKey:@"items"] count] == 0) header.hidden = true;
-    else if (section == 0) header.hidden = true;
+    else if (section == 0 || section == self.viewContents.count - 1) header.hidden = true;
     else header.hidden = false;
     return header;
     
@@ -91,6 +91,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if ([[self.viewContents objectAtIndex:section] count] == 0) return 0.0;
     else if (section == 0) return 0.0;
+    else if (section == self.viewContents.count - 1) return 30.0;
     else return 60.0;
     
 }
@@ -169,7 +170,7 @@
     NSString *localized = [NSString stringWithFormat:@"Settings_Item%@_Title" ,key.capitalizedString];
 
     if ([key isEqualToString:@"permissions"]) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:0 completionHandler:^(BOOL success) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
             
         }];
 
@@ -203,13 +204,16 @@
         viewDocument.header = NSLocalizedString(localized, nil);
         viewDocument.file = [[NSBundle mainBundle] pathForResource:@"terms" ofType:@"pdf"];
         
+        [self.mixpanel track:@"App Terms & Conditions Viewed"];
         [self.navigationController pushViewController:viewDocument animated:true];
 
     }
     
     if ([key isEqualToString:@"instagram"]) {
         if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"instagram://"]]) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"instagram://user?username=blrrd_app"]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"instagram://user?username=blrrd_app"] options:@{} completionHandler:^(BOOL success) {
+                
+            }];
             
         }
         else {

@@ -10,41 +10,48 @@
 #import <QuartzCore/QuartzCore.h>
 #import <AVFoundation/AVFoundation.h>
 #import <UIImage+BlurEffects.h>
-
 #import "GDPlaceholderView.h"
 #import "GPUImage.h"
 #import "BCanvasNavigation.h"
 #import "BImageObject.h"
 #import "BGalleryController.h"
 #import "BCredentialsObject.h"
+#import "BCameraController.h"
 
-@interface BCanvasController : UIViewController <GDPlaceholderDelegate, BCanvasNavigationDelegate, BImageObjectDelegate, UITextViewDelegate>
+@protocol BCanvasDelegate;
+@interface BCanvasController : UIViewController <GDPlaceholderDelegate, BCanvasNavigationDelegate, BImageObjectDelegate, BCameraDelegate, UITextViewDelegate>
 
+@property (nonatomic, strong) id <BCanvasDelegate> delegate;
 @property (nonatomic, strong) GDPlaceholderView *viewPlaceholder;
 @property (nonatomic, strong) BCanvasNavigation *viewNavigation;
 @property (nonatomic, strong) UIImageView *viewContainer;
 @property (nonatomic, strong) UIImageView *viewOverlay;
 @property (nonatomic, strong) UITextView *viewCaption;
 @property (nonatomic, strong) BGalleryController *viewGallery;
+@property (nonatomic, strong) BCameraController *viewCapture;
 @property (nonatomic, strong) UICollectionViewFlowLayout *viewGalleryLayout;
-@property (nonatomic, strong) UIView *viewFrame;
 @property (nonatomic, strong) UCZProgressView *viewProgress;
 
+//@property (nonatomic, strong) GoogLeNetPlaces *imagerec;
 @property (nonatomic, strong) BImageObject *imageobj;
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic) UIImage *image;
-@property (nonatomic) AVCaptureStillImageOutput *output;
 @property (nonatomic, strong) NSDictionary *outputsettings;
-@property (nonatomic) AVCaptureSession *session;
-@property (nonatomic, assign) BOOL frontfacing;
-@property (nonatomic, assign) BOOL flash;
+
 @property (nonatomic, assign) BOOL gallerymode;
 @property (nonatomic, assign) BOOL uploading;
-@property (nonatomic) UIVisualEffectView *blur;
 
 -(void)viewAuthorizeCamera:(BOOL)authorize;
--(void)viewCameraInitiate;
 -(void)viewTermiateCamera;
 -(void)viewCaptureImage;
 
 @end
+
+@protocol BCanvasDelegate <NSObject>
+
+@optional
+
+-(void)viewRefreshContent;
+
+@end
+

@@ -64,7 +64,6 @@
 }
 
 -(void)placeholderUpdateTitle:(NSString *)title instructions:(NSString *)instructions {
-    NSLog(@"updating placeholder");
     self.text = title!=nil?title:@"";
     self.instructions = instructions!=nil?instructions:@"";
     

@@ -12,10 +12,14 @@
 @implementation BTabbarView
 
 -(void)drawRect:(CGRect)rect {
-    if (![self.subviews containsObject:container]) {
-        container = [[UIView alloc] initWithFrame:self.bounds];
-        container.backgroundColor = UIColorFromRGB(0x181426);
-        [self addSubview:container];
+    if (![self.subviews containsObject:frame]) {
+        frame = [[UIView alloc] initWithFrame:self.bounds];
+        frame.backgroundColor = UIColorFromRGB(0x181426);
+        [self addSubview:frame];
+        
+        container = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, frame.bounds.size.width, MAIN_TABBAR_HEIGHT)];
+        container.backgroundColor = [UIColor clearColor];
+        [frame addSubview:container];
         
         hairline = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, container.bounds.size.width, 0.5)];
         hairline.backgroundColor = UIColorFromRGB(0x23232B);
@@ -23,7 +27,7 @@
         [container sendSubviewToBack:hairline];
 
         for (int i = 0;i < self.buttons.count; i++) {
-            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(((self.bounds.size.width / self.buttons.count) * i), 0.0, self.bounds.size.width / self.buttons.count, self.bounds.size.height)];
+            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(((self.bounds.size.width / self.buttons.count) * i), 0.0, self.bounds.size.width / self.buttons.count, container.bounds.size.height)];
             button.backgroundColor = [UIColor clearColor];
             button.tag = i;
             button.clipsToBounds = false;
@@ -44,6 +48,13 @@
             label.textColor = [UIColor whiteColor];
             label.font = [UIFont fontWithName:@"Nunito-ExtraBold" size:8];
             [container addSubview:label];
+            
+            UIView *alert = [[UIView alloc] initWithFrame:CGRectMake(label.frame.origin.x + ((label.bounds.size.width / 2) - 2.5), -2.0, 5.0, 5.0)];
+            alert.layer.cornerRadius = alert.bounds.size.height / 2;
+            alert.backgroundColor = UIColorFromRGB(0x69DCCB);
+            alert.clipsToBounds = true;
+            alert.alpha = 0.0;
+            [image addSubview:alert];
 
         }
         
@@ -57,6 +68,10 @@
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
     animation.autoreverses = true;
     animation.repeatCount = 1;
+    
+    UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+    [generator notificationOccurred:UINotificationFeedbackTypeSuccess];
+    [generator prepare];
     
     for (UIView *subview in container.subviews) {
         if (subview.tag == 0 || subview.tag == 2) animation.toValue = [NSNumber numberWithFloat:0.92];
@@ -128,6 +143,8 @@
                     
                 }
                 
+
+                
             }
             
         } completion:nil];
@@ -135,12 +152,12 @@
     }
     
     if (theme == BTabbarViewThemeDefault) {
-        [container setBackgroundColor:UIColorFromRGB(0x181426)];
+        [frame setBackgroundColor:UIColorFromRGB(0x181426)];
         [hairline setHidden:false];
 
     }
     else {
-        [container setBackgroundColor:[UIColor clearColor]];
+        [frame setBackgroundColor:[UIColor clearColor]];
         [hairline setHidden:true];
         
     }

@@ -16,11 +16,23 @@
 @implementation BDetailedTimelineController
 
 -(void)viewDidAppear:(BOOL)animated {
-    [self.viewNavigation navigationTitle:[self.data objectForKey:@"name"]];
+    [self.viewNavigation navigationTitle:[self.data objectForKey:@"username"]];
+    [self.viewHeader setup:self.data];
 
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    if (self.type == BDetailedViewTypeUserProfile) {
+        [self.viewNavigation setHidden:true];
+        [self.viewHeader setHidden:false];
+        
+    }
+    else {
+        [self.viewNavigation setHidden:false];
+        [self.viewHeader setHidden:true];
+
+    }
+
     [self viewContentRefresh:nil];
     
 }
@@ -49,19 +61,32 @@
     
     self.view.clipsToBounds = true;
     
+    if (IS_IPHONE_X) {
+        self.safearea = [UIApplication sharedApplication].keyWindow.window.safeAreaInsets.bottom + APP_STATUSBAR_HEIGHT;
+        
+    }
+
     self.viewNavigation = [[BNavigationView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, 70.0)];
     self.viewNavigation.backgroundColor = [UIColor clearColor];
     self.viewNavigation.name = [self.data objectForKey:@"name"];
     self.viewNavigation.delegate = self;
+    self.viewNavigation.hidden = true;
     [self.view addSubview:self.viewNavigation];
     
+    self.viewHeader = [[BUserProfileHeader alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, 70.0)];
+    self.viewHeader.backgroundColor = [UIColor clearColor];
+    self.viewHeader.data = self.data;
+    self.viewHeader.delegate = self;
+    self.viewHeader.hidden = true;
+    [self.view addSubview:self.viewHeader];
+        
     self.viewTimelineLayout = [[UICollectionViewFlowLayout alloc] init];
     self.viewTimelineLayout.minimumLineSpacing = 75.0;
     self.viewTimelineLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     self.viewTimelineLayout.sectionInset = UIEdgeInsetsMake(85.0, 15.0, 100.0, 15.0);
     
     self.viewTimeline = [[BTimelineSubview alloc] initWithCollectionViewLayout:self.viewTimelineLayout];
-    self.viewTimeline.collectionView.frame = CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + MAIN_TABBAR_HEIGHT));
+    self.viewTimeline.collectionView.frame = CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height - (MAIN_TABBAR_HEIGHT + APP_STATUSBAR_HEIGHT + self.safearea));
     self.viewTimeline.collectionView.backgroundColor = [UIColor clearColor];
     self.viewTimeline.delegate = self;
     self.viewTimeline.timeline = BQueryTimelineChannel;
@@ -69,7 +94,7 @@
     [self.view addSubview:self.viewTimeline.view];
     [self.view sendSubviewToBack:self.viewTimeline.view];
     
-    self.viewTabbar = [[BTabbarView alloc] initWithFrame:CGRectMake(0.0, self.view.bounds.size.height - MAIN_TABBAR_HEIGHT, self.view.bounds.size.width, MAIN_TABBAR_HEIGHT)];
+    self.viewTabbar = [[BTabbarView alloc] initWithFrame:CGRectMake(0.0, self.view.bounds.size.height - (self.safearea + MAIN_TABBAR_HEIGHT), self.view.bounds.size.width, self.safearea + MAIN_TABBAR_HEIGHT)];
     self.viewTabbar.buttons = @[@{@"image":@"tabbar_home", @"text":NSLocalizedString(@"Main_TabbarHome_Text", nil)} ,
                                 @{@"image":@"tabbar_camera"},
                                 @{@"image":@"tabbar_profile", @"text":NSLocalizedString(@"Main_TabbarProfile_Text", nil)}];
@@ -94,14 +119,14 @@
         
     }
     else {
-        [self.query queryUserPosts:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
+        [self.query queryUserPosts:[self.data objectForKey:@"username"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [self.viewTimeline collectionViewLoadContent:items append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
                 
             }];
             
         }];
-        
+
     }
     
 }
@@ -136,7 +161,7 @@
         
     }
     else {
-        [self.query queryUserPosts:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
+        [self.query queryUserPosts:[self.data objectForKey:@"username"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
@@ -166,10 +191,12 @@
 }
 
 -(void)deviceInRestingState {
+    /*
     for (BBlurredCell *view in self.viewTimeline.collectionView.visibleCells) {
         [view reveal:nil];
         
     }
+    */
     
 }
 

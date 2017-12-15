@@ -10,24 +10,28 @@
 #import "BTimelineSubview.h"
 #import "BSectionHeader.h"
 #import "BNavigationView.h"
+#import "BUserProfileHeader.h"
 #import "BTabbarView.h"
+#import "GDActionSheet.h"
 
 #import "BUsageObject.h"
 #import "BCredentialsObject.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, BDetailedViewType) {
     BDetailedViewTypeChannel,
-    BDetailedViewTypeProfile
+    BDetailedViewTypeMyPosts,
+    BDetailedViewTypeUserProfile
     
-} BDetailedViewType;
+};
 
 @protocol BDetailedTimelineDelegate;
-@interface BDetailedTimelineController : UIViewController <BTimelineDelegate, BNavigationDelegate, BUsageDelegate, BTabbarDelegate>
+@interface BDetailedTimelineController : UIViewController <BTimelineDelegate, BNavigationDelegate, BUsageDelegate, BTabbarDelegate, GDActionSheetDelegate, BUserProfileHeaderDelegate>
 
 @property (nonatomic, strong) id <BDetailedTimelineDelegate> delegate;
 @property (nonatomic, strong) BQueryObject *query;
 @property (nonatomic, strong) BUsageObject *usage;
 @property (nonatomic, strong) BCredentialsObject *credentials;
+@property (nonatomic) float safearea;
 
 @property (nonatomic, strong) NSDictionary *data;
 @property (nonatomic, assign) BDetailedViewType type;
@@ -36,6 +40,7 @@ typedef enum {
 @property (nonatomic, strong) BTimelineSubview *viewTimeline;
 @property (nonatomic, strong) BNavigationView *viewNavigation;
 @property (nonatomic, strong) BTabbarView *viewTabbar;
+@property (nonatomic, strong) BUserProfileHeader *viewHeader;
 
 @end
 

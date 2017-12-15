@@ -14,21 +14,21 @@
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.status = [[UILabel alloc] initWithFrame:CGRectMake(19.0, 0.0, self.bounds.size.width - 16.0 , self.bounds.size.height - 14.0)];
+        self.status = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.height, 0.0, self.bounds.size.width - self.bounds.size.height, self.bounds.size.height - 14.0)];
         self.status.clipsToBounds = true;
         self.status.textAlignment = NSTextAlignmentLeft;
         self.status.textColor = [UIColor colorWithWhite:1.0 alpha:0.9];
         self.status.font = [UIFont fontWithName:@"Nunito-Regular" size:14];
         [self.contentView addSubview:self.status];
         
-        self.timestamp = [[UILabel alloc] initWithFrame:CGRectMake(19.0, self.bounds.size.height - 14.0, self.bounds.size.width - 16.0 ,8.0)];
+        self.timestamp = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.height, self.bounds.size.height - 14.0, self.bounds.size.width - self.bounds.size.height ,8.0)];
         self.timestamp.clipsToBounds = true;
         self.timestamp.textAlignment = NSTextAlignmentLeft;
         self.timestamp.textColor = [UIColor colorWithWhite:1.0 alpha:0.6];
         self.timestamp.font = [UIFont fontWithName:@"Nunito-ExtraBold" size:8];
         [self.contentView addSubview:self.timestamp];
         
-        self.image = [[UIImageView alloc] initWithFrame:CGRectMake(self.bounds.size.width - (self.bounds.size.height + 10.0), 2.0, self.bounds.size.height - 4.0, self.bounds.size.height - 4.0)];
+        self.image = [[UIImageView alloc] initWithFrame:CGRectMake(2.0, 2.0, self.bounds.size.height - 4.0, self.bounds.size.height - 4.0)];
         self.image.contentMode = UIViewContentModeScaleAspectFill;
         self.image.image = nil;
         self.image.clipsToBounds = true;
@@ -41,9 +41,17 @@
     
 }
 
--(void)content:(NSDictionary *)item {
-    [self.timestamp setText:[self time:[item objectForKey:@"posted_datetime"]]];
-    [self.status setAttributedText:[self format:item]];
+-(void)content:(NSDictionary *)item type:(BNotificationCellType)type {
+    if ([[item objectForKey:@"posted_datetime"] isKindOfClass:[NSDate class]]) {
+        [self.timestamp setText:[self time:[item objectForKey:@"posted_datetime"]]];
+
+    }
+    else {
+        [self.timestamp setText:@"Unknown Date"];
+
+    }
+    
+    [self.status setAttributedText:[self format:item type:type]];
     [self.image sd_setImageWithURL:[item objectForKey:@"publicpath"]];
     
 }
@@ -77,8 +85,25 @@
     
 }
 
--(NSMutableAttributedString *)format:(NSDictionary *)content {
-    NSString *text = [NSString stringWithFormat:NSLocalizedString(@"Profile_NotificationViewed_Body", nil) ,[content objectForKey:@"username"] ,[self seconds:[[content objectForKey:@"seconds"] intValue]]];
+-(NSMutableAttributedString *)format:(NSDictionary *)content type:(BNotificationCellType)type {
+    NSString *body;
+    NSString *text;
+    if (type == BNotificationCellTypeAllTime) {
+        NSString *totalsecs = [self seconds:[[content objectForKey:@"totalsecs"] intValue]];
+        NSString *newsecs = [NSString stringWithFormat:@"+%d" ,[[content objectForKey:@"seconds"] intValue]];
+        body = NSLocalizedString(@"Profile_NotificationBasic_Body", nil);
+        text = [NSString stringWithFormat:body, totalsecs ,newsecs];
+        
+    }
+    else {
+        NSString *username ;
+        if ([[content objectForKey:@"username"] length] > 1) username = [content objectForKey:@"username"];
+        else username = NSLocalizedString(@"Profile_UnknownUserPlaceholder_Text", nil);
+        body = NSLocalizedString(@"Profile_NotificationDetailed_Body", nil);
+        text = [NSString stringWithFormat:body, username];
+        
+    }
+    
     NSMutableAttributedString *formatted = [[NSMutableAttributedString alloc] initWithString:text];
     if (text) {
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\*[^\\*]+\\*" options:0 error:nil];
@@ -94,6 +119,15 @@
             
             matchint ++;
 
+        }
+        
+        NSRegularExpression *plusregex = [NSRegularExpression regularExpressionWithPattern:@"[+](\\d{0,3})*" options:0 error:nil];
+        NSArray *formatplus = [plusregex matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+        for (NSTextCheckingResult *match in formatplus) {
+            [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Nunito-Black" size:self.status.font.pointSize - 2] range:NSMakeRange(match.range.location, match.range.length)];
+            [formatted addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x69DCCB) range:NSMakeRange(match.range.location, match.range.length)];
+
+            
         }
         
         [formatted.mutableString replaceOccurrencesOfString:@"*" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, formatted.string.length)];

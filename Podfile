@@ -18,6 +18,7 @@ target 'Blrrd' do
   pod 'SocketRocket'
   pod 'GPUImage'
   pod 'UCZProgressView'
+  pod 'SAMKeychain'
   
   target 'BlrrdTests' do
     inherit! :search_paths

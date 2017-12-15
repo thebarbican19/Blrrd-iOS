@@ -8,12 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "BBlurredCell.h"
+#import "BCredentialsObject.h"
 #import "BQueryObject.h"
+#import "BImageObject.h"
 #import "BFooterView.h"
 #import "GDPlaceholderView.h"
+#import "GDActionSheet.h"
+#import "AppDelegate.h"
 
 @protocol BTimelineDelegate;
-@interface BTimelineSubview : UICollectionViewController <BBlurredCellDelegate, GDPlaceholderDelegate>
+@interface BTimelineSubview : UICollectionViewController <BBlurredCellDelegate, GDPlaceholderDelegate, GDActionSheetDelegate>
 
 @property (nonatomic, strong) id <BTimelineDelegate> delegate;
 @property (nonatomic, strong) NSMutableArray *content;
@@ -26,9 +30,13 @@
 @property (nonatomic, assign) float scrollposition;
 @property (nonatomic, assign) float pagenation;
 @property (nonatomic, assign) float pages;
+@property (nonatomic, strong) BCredentialsObject *credentials;
+@property (nonatomic, strong) BImageObject *imageobj;
 
 @property (nonatomic, strong) GDPlaceholderView *placeholder;
 @property (nonatomic, strong) BFooterView *footer;
+@property (nonatomic, strong) GDActionSheet *actionsheet;
+@property (nonatomic, strong) AppDelegate *appdel;
 
 -(void)collectionViewLoadContent:(NSArray *)content append:(BOOL)append loading:(BOOL)loading error:(NSError *)error;
 
@@ -41,5 +49,7 @@
 -(void)viewContentRefresh:(UIRefreshControl *)refresh;
 -(void)viewUpdateTimeline:(BQueryTimeline)timeline;
 -(void)viewScrolled:(float)position;
+-(void)viewReportImage:(NSDictionary *)image;
+-(void)viewPresentFriendProfile:(NSMutableDictionary *)data;
 
 @end

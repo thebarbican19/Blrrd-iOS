@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger, BSegmentType) {
 };
 
 @protocol BSegmentDelegate;
-@interface BSegmentControl : UIView <UICollectionViewDelegate, UICollectionViewDataSource> {
+@interface BSegmentControl : UIView {
     UIView *underline;
     UIView *rectangle;
     UIView *container;
