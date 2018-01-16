@@ -9,6 +9,7 @@
 #import "BFriendFinderController.h"
 #import "BConstants.h"
 #import "BFriendCell.h"
+#import "BCompleteController.h"
 
 @interface BFriendFinderController ()
 
@@ -17,6 +18,9 @@
 @implementation BFriendFinderController
 
 -(void)viewDidAppear:(BOOL)animated {
+    if (self.signup) [self.viewNavigation navigationRightButton:NSLocalizedString(@"Onboarding_ActionSkip_Text", nil)];
+    
+    [self.viewNavigation navigationBackButtonDisabled:self.signup];
     [self.viewNavigation navigationTitle:self.header];
     [self.viewTable reloadData];
 
@@ -28,12 +32,21 @@
 }
 
 -(void)viewNavigationButtonTapped:(UIButton *)button {
-    [self.navigationController popViewControllerAnimated:true];
+    if (button.tag == 0) [self.navigationController popViewControllerAnimated:true];
+    else {
+        BCompleteController *viewComplete = [[BCompleteController alloc] init];
+        viewComplete.login = false;
+        
+        [self.navigationController pushViewController:viewComplete animated:true];
+        
+    }
     
 }
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+
+    self.view.backgroundColor = UIColorFromRGB(0x140F26);
 
     self.query = [[BQueryObject alloc] init];
     self.query.debug = true;
@@ -41,8 +54,9 @@
     self.viewNavigation = [[BNavigationView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, 70.0)];
     self.viewNavigation.backgroundColor = [UIColor clearColor];
     self.viewNavigation.name = self.header;
+    self.viewNavigation.backdisabled = self.signup;
     self.viewNavigation.delegate = self;
-    self.viewNavigation.rightbutton = self.signup?@"Next":nil;
+    self.viewNavigation.rightbutton = self.signup?NSLocalizedString(@"Onboarding_ActionSkip_Text", nil):nil;
     [self.view addSubview:self.viewNavigation];
     
     self.viewSearch  = [[BSearchView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height, self.view.bounds.size.width, 60.0)];
@@ -87,12 +101,12 @@
 }
 
 -(void)viewDownloadContent:(BOOL)refresh {
-    self.users = [[NSMutableArray alloc] initWithArray:[self.query cacheRetrive:@"userApi/getAllUsers"]];
-    if ([self.query cacheExpired:@"userApi/getAllUsers"] || refresh) {
-        [self.query querySuggestedUsers:^(NSArray *users, NSError *error) {
+    self.users = [[NSMutableArray alloc] init];
+    if ([self.query cacheExpired:@"user/suggested.php"]) {
+        [self.query querySuggestedUsers:nil completion:^(NSArray *users, NSError *error) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 if (error.code == 200) {
-                    [self.users addObjectsFromArray:[self.query cacheRetrive:@"userApi/getAllUsers"]];
+                    [self.users addObjectsFromArray:[self.query cacheRetrive:@"user/suggested.php"]];
                     [self.viewTable reloadData];
                     [self.viewTable setHidden:false];
                     [self.viewPlaceholder setHidden:true];
@@ -111,11 +125,13 @@
         
     }
     else {
-        [self.users addObjectsFromArray:[self.query cacheRetrive:@"userApi/getAllUsers"]];
+        [self.users addObjectsFromArray:[self.query cacheRetrive:@"user/suggested.php"]];
         [self.viewTable reloadData];
         
     }
     
+    NSLog(@"asdasdsad %@" ,[self.query cacheRetrive:@"user/suggested.php"]);
+
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -145,10 +161,12 @@
     NSDictionary *item = [self.users objectAtIndex:indexPath.row];
     BFriendCell *cell = (BFriendCell *)[tableView dequeueReusableCellWithIdentifier:@"user" forIndexPath:indexPath];
     
-    if ([self.query friendCheck:[item objectForKey:@"username"]]) cell.follow.type = BFollowActionTypeFollowed;
+    if ([[item objectForKey:@"following"] boolValue]) cell.follow.type = BFollowActionTypeFollowed;
     else cell.follow.type = BFollowActionTypeUnfollowed;
     
     [cell.follow followSetType:cell.follow.type animate:false];
+    [cell.follow setDelegate:self];
+    [cell.follow setIndexPath:indexPath];
     [cell content:item];
     
     [cell setBackgroundColor:[UIColor clearColor]];
@@ -160,18 +178,40 @@
 
 -(void)searchFieldWasUpdated:(NSString *)query {
     NSMutableArray *output = [[NSMutableArray alloc] init];
-    NSPredicate *search = [NSPredicate predicateWithFormat:@"username CONTAINS[c] %@" ,query];
     if (query.length > 1) {
-        NSLog(@"searching '%@'" ,query);
-        [output addObjectsFromArray:[[self.query cacheRetrive:@"userApi/getAllUsers"] filteredArrayUsingPredicate:search]];
+        [self.query querySuggestedUsers:query completion:^(NSArray *users, NSError *error) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [output addObjectsFromArray:users];
+                [self searchSetContent:output error:error];
+
+            }];
+            
+        }];
 
     }
     else {
-        [output addObjectsFromArray:[self.query cacheRetrive:@"userApi/getAllUsers"]];
+        if ([self.query cacheExpired:@"user/suggested.php"]) {
+            [self.query querySuggestedUsers:query completion:^(NSArray *users, NSError *error) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    [output addObjectsFromArray:[self.query cacheRetrive:@"user/suggested.php"]];
+                    [self searchSetContent:output error:nil];
+                    
+                }];
+                
+            }];
+            
+        }
+        else {
+            [self searchSetContent:[self.query cacheRetrive:@"user/suggested.php"] error:nil];
+
+        }
 
     }
     
-    self.users = [[NSMutableArray alloc] initWithArray:output];
+}
+
+-(void)searchSetContent:(NSArray *)users error:(NSError *)error {
+    self.users = [[NSMutableArray alloc] initWithArray:users];
     if (self.users.count > 0) {
         [self.viewTable setHidden:false];
         [self.viewPlaceholder setHidden:true];
@@ -180,8 +220,15 @@
     else {
         [self.viewTable setHidden:true];
         [self.viewPlaceholder setHidden:false];
-        [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Friend_EmptyPlaceholder_Title", nil) instructions:NSLocalizedString(@"Friend_EmptyPlaceholder_Body", nil)];
+        if (error == nil || error.code == 200) {
+            [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Friend_EmptyPlaceholder_Title", nil) instructions:NSLocalizedString(@"Friend_EmptyPlaceholder_Body", nil)];
 
+        }
+        else {
+            [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Timeline_PlaceholderError_Title", nil) instructions:error.domain];
+
+        }
+        
     }
     
     [self.viewTable reloadData];
@@ -203,6 +250,54 @@
 -(void)searchFieldReturnKeyPressed {
     [self.viewSearch dismiss];
     
+}
+
+-(void)followActionWasTapped:(BFollowAction *)action {
+    NSMutableDictionary *item = [[NSMutableDictionary alloc] initWithDictionary:[self.users objectAtIndex:action.indexPath.row]];
+    BFriendCell *cell = (BFriendCell *)[self.viewTable cellForRowAtIndexPath:action.indexPath];
+
+    NSLog(@"button tapped %@ following %@" ,action ,[item objectForKey:@"following"]?@"yes":@"no");
+
+    if ([[item objectForKey:@"following"] boolValue]) {
+        [cell.follow followSetType:BFollowActionTypeUnfollowed animate:true];
+        [self.query postRequest:[item objectForKey:@"userid"] request:@"delete" completion:^(NSError *error) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                if (error.code != 200) {
+                    [cell.follow followSetType:BFollowActionTypeFollowed animate:true];
+                    [cell.follow setFrame:CGRectMake(cell.contentView.bounds.size.width - (cell.follow.followSizeUpdate + 60.0), 10.0, cell.follow.followSizeUpdate, cell.contentView.bounds.size.height - 20.0)];
+
+                }
+            
+            }];
+            
+        }];
+        
+    }
+    else {
+        [cell.follow followSetType:BFollowActionTypeFollowed animate:true];
+        [self.query postRequest:[item objectForKey:@"userid"] request:@"add" completion:^(NSError *error) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                if (error.code != 200) {
+                    [cell.follow followSetType:BFollowActionTypeUnfollowed animate:true];
+                    [cell.follow setFrame:CGRectMake(cell.contentView.bounds.size.width - (cell.follow.followSizeUpdate + 60.0), 10.0, cell.follow.followSizeUpdate, cell.contentView.bounds.size.height - 20.0)];
+                    
+                }
+
+            }];
+            
+        }];
+            
+    }
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [cell.follow setFrame:CGRectMake(cell.contentView.bounds.size.width - (cell.follow.followSizeUpdate + 60.0), 10.0, cell.follow.followSizeUpdate, cell.contentView.bounds.size.height - 20.0)];
+    
+    } completion:nil];
+    
+    [item setObject:[NSNumber numberWithBool:![[item objectForKey:@"following"] boolValue]] forKey:@"following"];
+    [self.users replaceObjectAtIndex:action.indexPath.row withObject:item];
+    [self.query cacheDestroy:@"following"];
+
 }
 
 -(UIStatusBarAnimation)preferredStatusBarUpdateAnimation {

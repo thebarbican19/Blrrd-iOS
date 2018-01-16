@@ -18,7 +18,7 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
 
-    self.imagedata = [[BImageObject alloc] init];
+    self.imagedata = [BImageObject sharedInstance];
     
     self.viewFrame = [[UIView alloc] initWithFrame:[UIApplication sharedApplication].delegate.window.bounds];
     self.viewFrame.backgroundColor = [MAIN_BACKGROUND_COLOR colorWithAlphaComponent:0.6];
@@ -71,7 +71,7 @@
             if (!error) {
                 self.output = [AVCapturePhotoOutput new];
                 
-                [self.session setSessionPreset:AVCaptureSessionPresetMedium];
+                [self.session setSessionPreset:AVCaptureSessionPresetHigh];
                 [self.session addInput:input];
                 [self.session startRunning];
                 [self.session addOutput:self.output];

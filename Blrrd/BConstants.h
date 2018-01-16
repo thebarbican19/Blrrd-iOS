@@ -24,7 +24,7 @@
 #define MAIN_BACKGROUND_COLOR UIColorFromRGB(0x140F26)
 #define MAIN_TABBAR_HEIGHT 60
 
-#define APP_HOST_URL @"http://62.75.213.212:8000/"
+#define APP_HOST_URL @"http://52.59.224.79/api/"
 #define APP_BUNDLE_NAME [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]
 #define APP_STORE_ID @"1177562048"
 #define APP_STORE_URL @"https://itunes.apple.com/us/app/blrrd/id1177562048?ls=1&mt=8"

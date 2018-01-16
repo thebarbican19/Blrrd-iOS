@@ -79,15 +79,15 @@
 			<key>orderHint</key>
 			<integer>15</integer>
 		</dict>
-		<key>UIImage+ImageWithColor.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>11</integer>
-		</dict>
 		<key>UIImage-Helpers.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>16</integer>
+		</dict>
+		<key>UIImage-ResizeMagick.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>17</integer>
 		</dict>
 	</dict>
 </dict>

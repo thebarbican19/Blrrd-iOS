@@ -45,34 +45,40 @@
 }
 
 -(void)followAction:(UITapGestureRecognizer *)gesture {
-    if ([self.delegate respondsToSelector:@selector(followActionWasTapped:)]) {
-        [self.delegate followActionWasTapped:self];
-        NSLog(@"followAction");
-    }
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        if ([self.delegate respondsToSelector:@selector(followActionWasTapped:)]) {
+            [self.delegate followActionWasTapped:self];
+            NSLog(@"followAction");
+        }
+        
+    }];
 
 }
 
 -(void)followSetType:(BFollowActionType)type animate:(BOOL)animate {
     self.type = type;
-    if (type == BFollowActionTypeFollowed) {
-        [label setText:NSLocalizedString(@"Friend_ActionFollowing_Text", nil).uppercaseString];
-        [label setTextColor:UIColorFromRGB(0x140F26)];
-        [container setBackgroundColor:UIColorFromRGB(0x69DCCB)];
-        [container.layer setBorderColor:UIColorFromRGB(0x69DCCB).CGColor];
-        [icon setImage:[UIImage imageNamed:@"friends_following_icon"]];
-
-    }
-    else {
-        [label setText:NSLocalizedString(@"Friend_ActionFollow_Text", nil).uppercaseString];
-        [label setTextColor:UIColorFromRGB(0x69DCCB)];
-        [container setBackgroundColor:UIColorFromRGB(0x140F26)];
-        [container.layer setBorderColor:UIColorFromRGB(0x69DCCB).CGColor];
-        [icon setImage:[UIImage imageNamed:@"friends_follow_icon"]];
-
-    }
-    
-    [container setAlpha:1.0];
-    [self followSizeUpdate];
+    [UIView animateWithDuration:animate?0.3:0.0 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        if (type == BFollowActionTypeFollowed) {
+            [label setText:NSLocalizedString(@"Friend_ActionFollowing_Text", nil).uppercaseString];
+            [label setTextColor:UIColorFromRGB(0x140F26)];
+            [container setBackgroundColor:UIColorFromRGB(0x69DCCB)];
+            [container.layer setBorderColor:UIColorFromRGB(0x69DCCB).CGColor];
+            [icon setImage:[UIImage imageNamed:@"friends_following_icon"]];
+            
+        }
+        else {
+            [label setText:NSLocalizedString(@"Friend_ActionFollow_Text", nil).uppercaseString];
+            [label setTextColor:UIColorFromRGB(0x69DCCB)];
+            [container setBackgroundColor:UIColorFromRGB(0x140F26)];
+            [container.layer setBorderColor:UIColorFromRGB(0x69DCCB).CGColor];
+            [icon setImage:[UIImage imageNamed:@"friends_follow_icon"]];
+            
+        }
+        
+        [container setAlpha:1.0];
+        [self followSizeUpdate];
+        
+    } completion:nil];
 
 }
 

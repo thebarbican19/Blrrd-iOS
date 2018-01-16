@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 
 #import "BQueryObject.h"
+#import "BImageObject.h"
 #import "BCredentialsObject.h"
 #import "BTimelineSubview.h"
 #import "BSegmentControl.h"
@@ -26,6 +27,7 @@
 @property (nonatomic, retain) AppDelegate *appdel;
 @property (nonatomic, strong) BQueryObject *query;
 @property (nonatomic, strong) BUsageObject *usage;
+@property (nonatomic, strong) BImageObject *imageobj;
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic) int timelineindex;
 @property (nonatomic) int viewindex;

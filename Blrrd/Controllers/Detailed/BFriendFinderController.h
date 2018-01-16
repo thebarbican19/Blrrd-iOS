@@ -15,7 +15,7 @@
 #import "BCredentialsObject.h"
 #import "BFollowAction.h"
 
-@interface BFriendFinderController : UIViewController <UITableViewDelegate, UITableViewDataSource, BNavigationDelegate, BSearchViewDelegate, GDPlaceholderDelegate>
+@interface BFriendFinderController : UIViewController <UITableViewDelegate, UITableViewDataSource, BNavigationDelegate, BSearchViewDelegate, BFollowActionDelegate, GDPlaceholderDelegate>
 
 @property (nonatomic, strong) BQueryObject *query;
 @property (nonatomic, strong) BCredentialsObject *credentials;

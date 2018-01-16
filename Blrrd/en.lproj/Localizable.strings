@@ -8,11 +8,13 @@
 
 "Onboarding_Tagling_Text" = "the social appreciation network";
 "Onboarding_ActionSignup_Text" = "SIGNUP";
+"Onboarding_ActionLoginShort_Text" = "LOGIN";
 "Onboarding_ActionLogin_Text" = "Already have a Blrrd Account, Login?";
 "Onboarding_ActionTerms_Text" = "Terms";
 "Onboarding_ActionAuthorizeNotifications_Text" = "AUTHORIZE NOTIFICATIONS";
 "Onboarding_ActionComplete_Text" = "Go!";
 "Onboarding_ActionUpdating_Text" = "Updating...";
+"Onboarding_ActionSkip_Text" = "Next";
 "Onboarding_Authorization_Text" = "Please allow Push Potifications so we can update you with stuff!";
 "Onboarding_SetupLoading_Text" = "Almost done, we are just loading your timeline...";
 "Onboarding_SetupComplete_Text" = "Everything is ready for you, welcome to Blrrd!";
@@ -72,10 +74,13 @@
 "Timestamp_Hour" = "hour";
 "Timestamp_Minutes" = "minutes";//plural
 "Timestamp_Minute" = "minute";
+"Timestamp_Seconds" = "seconds";//plural
+"Timestamp_Second" = "second";
 
 "Canvas_CameraUnauthorized_Title" = "Nope!";
 "Canvas_CameraUnauthorized_Body" = "It looks like camera access has been disabled. Tap to allow it.";
 "Canvas_CameraApproveImage_Title" = "Select this image?";
+"Canvas_Caption_Text" = "Add a caption";
 "Canvas_UploadCaptionError_Title" = "Add a caption";
 "Canvas_UploadProcessing_Title" = "Uploading...";
 "Canvas_UploadErrorPlaceholder_Title" = "Whoops!";
@@ -92,8 +97,9 @@
 "Profile_MyPosts_Header" = "My Posts";
 "Profile_TimeViewed_Body" = "Total Time Viewed *%@*";
 
-"Profile_NotificationBasic_Body" = "viewed for *%@* %@"; //Joe viewed your post for 1 second
+"Profile_NotificationBasic_Body" = "viewed for *%@* %@seconds"; //Joe viewed your post for 1 second
 "Profile_NotificationDetailed_Body" = "*%@* viewed your post"; //Joe viewed your post again
+"Profile_NotificationEmpty_Body" = "Nobody has viewed your post yet";
 "Profile_UnknownUserPlaceholder_Text" = "Unknown User";
 
 "Settings_Title" = "Settings";
@@ -122,6 +128,7 @@
 "Friend_EmptyPlaceholder_Body" = "Try refining your search";
 "Friend_SearchPlaceholder_Text" = "Search Blrrd Users";
 "Friend_Header_Text" = "Add Friends!";
+"Friend_SuggestedHeader_Text" = "Suggested Users";
 "Friend_ActionFollow_Text" = "Follow";
 "Friend_ActionFollowing_Text" = "Following";
 

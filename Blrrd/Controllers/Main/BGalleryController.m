@@ -19,7 +19,7 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
 
-    self.imageobj = [[BImageObject alloc] init];
+    self.imageobj = [BImageObject sharedInstance];
     
     self.gallery = [[NSMutableArray alloc] init];
 

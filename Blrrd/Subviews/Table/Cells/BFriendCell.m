@@ -66,6 +66,10 @@
                 [self.avatar setImage:image];
                 
             }
+            else {
+                [self.avatar setImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
+
+            }
             
         } completion:nil];
         
@@ -74,29 +78,15 @@
 }
 
 -(void)followActionWasTapped:(BFollowAction *)action {
-    if ([self.query friendCheck:[self.data objectForKey:@"username"]]) {
-        [self.query postRequest:[self.data objectForKey:@"username"] request:@"remove" completion:^(NSError *error) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [self.follow followSetType:BFollowActionTypeUnfollowed animate:true];
-                [self.follow setFrame:CGRectMake(self.contentView.bounds.size.width - (self.follow.followSizeUpdate + 60.0), 10.0, self.follow.followSizeUpdate, self.contentView.bounds.size.height - 20.0)];
+    [self.query postRequest:[self.data objectForKey:@"username"] request:@"add" completion:^(NSError *error) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.follow followSetType:BFollowActionTypeFollowed animate:true];
+            [self.follow setFrame:CGRectMake(self.contentView.bounds.size.width - (self.follow.followSizeUpdate + 60.0), 10.0, self.follow.followSizeUpdate, self.contentView.bounds.size.height - 20.0)];
 
-            }];
-            
         }];
         
-    }
-    else {
-        [self.query postRequest:[self.data objectForKey:@"username"] request:@"add" completion:^(NSError *error) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [self.follow followSetType:BFollowActionTypeFollowed animate:true];
-                [self.follow setFrame:CGRectMake(self.contentView.bounds.size.width - (self.follow.followSizeUpdate + 60.0), 10.0, self.follow.followSizeUpdate, self.contentView.bounds.size.height - 20.0)];
+    }];
 
-            }];
-            
-        }];
-        
-    }
-    
 }
 
 @end

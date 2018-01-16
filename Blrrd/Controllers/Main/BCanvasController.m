@@ -20,7 +20,7 @@
     
     //self.imagerec = [[GoogLeNetPlaces alloc] init];
     
-    self.imageobj = [[BImageObject alloc] init];
+    self.imageobj = [BImageObject sharedInstance];
     self.imageobj.delegate = self;
     
     self.credentials = [[BCredentialsObject alloc] init];
@@ -40,34 +40,12 @@
     [self.view addSubview:self.viewCapture.view];
     [self.viewCapture cameraInitiate];
     
-    self.viewContainer = [[UIImageView alloc] initWithFrame:CGRectMake(5.0, (self.view.bounds.size.height / 2) - (self.view.bounds.size.width / 2), self.view.bounds.size.width - 10.0, self.view.bounds.size.width - 10.0)];
-    self.viewContainer.image = nil;
-    self.viewContainer.alpha = 0.0;
-    self.viewContainer.contentMode = UIViewContentModeScaleAspectFill;
-    self.viewContainer.clipsToBounds = true;
-    self.viewContainer.layer.cornerRadius = 9.0;
-    [self.view addSubview:self.viewContainer];
-
-    self.viewOverlay = [[UIImageView alloc] initWithFrame:self.viewContainer.bounds];
-    self.viewOverlay.image = nil;
-    self.viewOverlay.alpha = 0.0;
-    self.viewOverlay.contentMode = self.viewContainer.contentMode;
-    [self.viewContainer addSubview:self.viewOverlay];
-    
-    self.viewCaption = [[UITextView alloc] initWithFrame:CGRectMake(8.0, 8.0, self.viewContainer.bounds.size.width - 16.0, self.viewContainer.bounds.size.height - 16.0)];
-    self.viewCaption.backgroundColor = [UIColor clearColor];
-    self.viewCaption.text = nil;
-    self.viewCaption.alpha = 0.0;
-    self.viewCaption.keyboardAppearance = UIKeyboardAppearanceDark;
-    self.viewCaption.delegate = self;
-    self.viewCaption.textAlignment = NSTextAlignmentCenter;
-    self.viewCaption.textColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-    self.viewCaption.font = [UIFont fontWithName:@"Nunito-SemiBold" size:22];
-    self.viewCaption.returnKeyType = UIReturnKeyDone;
-    self.viewCaption.layer.shadowOffset = CGSizeMake(0.0, 1.0);
-    self.viewCaption.layer.shadowColor = [UIColorFromRGB(0x000000) colorWithAlphaComponent:0.2].CGColor;
-    [self.viewCaption addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:NULL];
-    [self.viewContainer addSubview:self.viewCaption];
+    self.viewCanvas = [[BCanvasView alloc] initWithFrame:CGRectMake(5.0, (self.view.bounds.size.height / 2) - (self.view.bounds.size.width / 2), self.view.bounds.size.width - 10.0, self.view.bounds.size.width - 10.0)];
+    self.viewCanvas.alpha = 0.0;
+    self.viewCanvas.layer.cornerRadius = 9.0;
+    self.viewCanvas.clipsToBounds = true;
+    self.viewCanvas.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.viewCanvas];
 
     self.viewNavigation = [[BCanvasNavigation alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, 60.0)];
     self.viewNavigation.backgroundColor = [UIColor clearColor];
@@ -84,7 +62,7 @@
 -(void)textViewKeyboardWasShow:(NSNotification *)notification {
     CGRect keyboardrect = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        [self.viewContainer setFrame:CGRectMake(5.0, 25.0 + ((self.view.bounds.size.height - (keyboardrect.size.height)) / 2) - (self.view.bounds.size.width / 2), self.view.bounds.size.width - 10.0, self.view.bounds.size.width - 10.0)];
+        [self.viewCanvas setFrame:CGRectMake(5.0, 25.0 + ((self.view.bounds.size.height - (keyboardrect.size.height)) / 2) - (self.view.bounds.size.width / 2), self.view.bounds.size.width - 10.0, self.view.bounds.size.width - 10.0)];
         
     } completion:nil];
     
@@ -92,21 +70,10 @@
 
 -(void)textViewFieldKeyboardWasHidden:(NSNotification *)notification {
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        [self.viewContainer setFrame:CGRectMake(5.0, (self.view.bounds.size.height / 2) - (self.view.bounds.size.width / 2), self.view.bounds.size.width - 10.0, self.view.bounds.size.width - 10.0)];
+        [self.viewCanvas setFrame:CGRectMake(5.0, (self.view.bounds.size.height / 2) - (self.view.bounds.size.width / 2), self.view.bounds.size.width - 10.0, self.view.bounds.size.width - 10.0)];
         
     } completion:nil];
 
-}
-
--(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    if ([text isEqualToString:@"\n"]) {
-        [textView resignFirstResponder];
-        return false;
-        
-    }
-    
-    return true;
-    
 }
 
 -(void)viewContentRefresh:(UIRefreshControl *)refresh {
@@ -200,7 +167,6 @@
         
     }
    
-    
 }
 
 -(void)viewHandleImage:(UIImage *)image preview:(BOOL)preview loading:(BOOL)loading {
@@ -222,22 +188,15 @@
         */
         
         self.image = [self.imageobj processImageRemoveOrentation:image];
-        self.image = [self.imageobj processImageScaleToScreen:self.image];
-        self.image = [self.imageobj processImageCropWithFrame:self.image rect:self.viewContainer.bounds];
+        self.image = [self.image resizedImageByMagick:@"500"];
 
         [self.viewCapture.viewFrame.layer setMask:nil];
-        [self.viewContainer setImage:self.image];
+        [self.viewCanvas canvasImage:self.image];
         [UIView animateWithDuration:0.2 animations:^{
-            [self.viewContainer setAlpha:1.0];
-            [self.viewContainer setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
+            [self.viewCanvas setAlpha:1.0];
+            [self.viewCanvas setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
             [self.viewCapture.viewFrame setBackgroundColor:[MAIN_BACKGROUND_COLOR colorWithAlphaComponent:1.0]];
-            if (preview == false) {
-                [self.viewCaption setAlpha:1.0];
-                [self.viewOverlay setAlpha:1.0];
-                [self.viewOverlay setImage:[UIImage ty_imageByApplyingBlurToImage:self.image withRadius:60.0 tintColor:[UIColor colorWithWhite:0.0 alpha:0.15] saturationDeltaFactor:1.0 maskImage:nil]];
-                
-            }
-            else [self.viewOverlay setAlpha:0.0];
+            [self.viewCanvas canvasBlurOverlay:!preview];
             
         } completion:nil];
         
@@ -248,16 +207,16 @@
 }
 
 -(void)viewTermiateCamera {
-    [self.viewContainer setAlpha:0.0];
+    [self.viewCanvas setAlpha:0.0];
+    [self.viewCanvas canvasReset];
     [self.viewGallery.view removeFromSuperview];
     [self.viewCapture cameraTermiate];
     [self.viewCapture.viewFrame setBackgroundColor:[MAIN_BACKGROUND_COLOR colorWithAlphaComponent:0.6]];
+    [self.viewCapture.viewFrame.layer setMask:nil];
     [self.viewPlaceholder setKey:nil];
     [self.viewPlaceholder setHidden:true];
     [self.viewNavigation setAlpha:1.0];
-    [self.viewOverlay setAlpha:0.0];
-    [self.viewCaption setAlpha:0.0];
-    [self.viewCaption setText:nil];
+    [self.viewNavigation type:BCanvasNavigationTypeCamera];
 
 }
 
@@ -367,9 +326,7 @@
 
 -(void)cameraDiscard {
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        [self.viewOverlay setAlpha:0.0];
-        [self.viewCaption setAlpha:0.0];
-        [self.viewContainer setAlpha:0.0];
+        [self.viewCanvas canvasBlurOverlay:false];
         [self.viewCapture.viewFrame setBackgroundColor:[MAIN_BACKGROUND_COLOR colorWithAlphaComponent:0.6]];
         
         if (self.gallerymode) {
@@ -383,7 +340,7 @@
     }];
     
     [self setGallerymode:false];
-    [self.viewCaption resignFirstResponder];
+    [self.viewCanvas canvasReset];
     [self.viewNavigation type:BCanvasNavigationTypeCamera];
     [self.viewCapture cameraInitiate];
     
@@ -392,22 +349,28 @@
 -(void)cameraUpload {
     if (self.gallerymode) {
         if (self.viewGallery.selected != nil) {
-            [self.viewGallery.imageobj imagesFromAsset:self.viewGallery.selected thumbnail:false completion:^(NSDictionary *data, UIImage *image) {
-                [self.viewNavigation title:NSLocalizedString(@"Canvas_CameraApproveImage_Title", nil)];
-                [self viewHandleImage:image preview:true loading:false];
-                
-                [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                    [self.viewGallery.collectionView setFrame:CGRectMake(0.0, 0.0 - self.viewGallery.collectionView.bounds.size.height, self.view.bounds.size.width, self.viewGallery.collectionView.bounds.size.height)];
+            [self.viewGallery.imageobj imagesFromAsset:self.viewGallery.selected thumbnail:false completion:^(NSDictionary *data, UIImage *image) { 
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    [self.viewNavigation title:NSLocalizedString(@"Canvas_CameraApproveImage_Title", nil)];
+                    [self viewHandleImage:image preview:true loading:false];
                     
-                } completion:^(BOOL finished) {
-                    [self setGallerymode:false];
-                    [self.viewGallery.view removeFromSuperview];
+                    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                        [self.viewGallery.collectionView setFrame:CGRectMake(0.0, 0.0 - self.viewGallery.collectionView.bounds.size.height, self.view.bounds.size.width, self.viewGallery.collectionView.bounds.size.height)];
+                        
+                    } completion:^(BOOL finished) {
+                        [self setGallerymode:false];
+                        [self.viewGallery.view removeFromSuperview];
+                        
+                    }];
                     
                 }];
                 
             } withProgressHandler:^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
-                NSLog(@"progress: %f" ,progress);
-                [self viewHandleImage:nil preview:true loading:true];
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    [self viewHandleImage:nil preview:true loading:true];
+                    [self.viewCanvas canvasDownloadingImageWithProgress:progress];
+                    
+                }];
 
             }];
             
@@ -415,33 +378,34 @@
         else [self.viewNavigation title:NSLocalizedString(@"Canvas_GalleryNothingSelectedError_Title", nil)];
         
     }
-    else if (self.viewOverlay.alpha == 0.0 && !self.gallerymode) {
+    else if ([self.viewCanvas canvasBlurred] == false && self.gallerymode == false) {
         [self.viewNavigation title:NSLocalizedString(@"Canvas_UploadCaptionError_Title", nil)];
         [self viewHandleImage:self.image preview:false loading:false];
-        [self.viewCaption setText:nil];
-        [self.viewCaption becomeFirstResponder];
-        
+        [self.viewCanvas canvasPresentKeyboard];
+
     }
     else if (self.image) {
-        if (self.viewCaption.text.length > 2) {
-            [self.imageobj uploadImageWithCaption:self.image caption:self.viewCaption.text];
-            [self.viewCaption resignFirstResponder];
+        if ([self.viewCanvas canvasContainsCaption]) {
+            [self.imageobj uploadImageWithCaption:self.image caption:self.viewCanvas.caption.text];
             [self setUploading:true];
             [self.viewPlaceholder setHidden:false];
-            [self.viewPlaceholder placeholderLoading:0.01];
+            [self.viewPlaceholder placeholderLoading:0.05];
             [self.view bringSubviewToFront:self.viewPlaceholder];
 
             [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                [self.viewContainer setAlpha:0.0];
-                [self.viewContainer setTransform:CGAffineTransformMakeScale(0.9, 0.9)];
+                [self.viewCanvas setAlpha:0.0];
+                [self.viewCanvas setTransform:CGAffineTransformMakeScale(0.9, 0.9)];
                 [self.viewNavigation setAlpha:0.0];
                 
-            } completion:nil];
+            } completion:^(BOOL finished) {
+                [self.viewCanvas canvasReset];;
+
+            }];
             
         }
         else {
             [self.viewNavigation title:NSLocalizedString(@"Canvas_UploadCaptionError_Title", nil)];
-            [self.viewCaption becomeFirstResponder];
+            [self.viewCanvas canvasDismissKeyboard];
 
         }
         
@@ -471,14 +435,6 @@
         
     });
 
-}
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    UITextView *tv = object;
-    CGFloat topCorrect = (tv.bounds.size.height - tv.contentSize.height * tv.zoomScale)/2.0;
-    topCorrect = (topCorrect < 0.0?0.0:topCorrect);
-    tv.contentInset = UIEdgeInsetsMake(topCorrect, 0.0, 0.0 ,0.0);
-    
 }
 
 @end

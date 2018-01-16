@@ -240,6 +240,9 @@
     }
     
     if ([key isEqualToString:@"cache"]) {
+        [[SDImageCache sharedImageCache] clearMemory];
+        [[SDImageCache sharedImageCache] clearDisk];
+        
         [self.query cacheDestroy:nil];
         [self.mixpanel track:@"App Cache Manually Destroyed"];
         [UIView animateWithDuration:0.2 animations:^{
@@ -251,9 +254,13 @@
     }
     
     if ([key isEqualToString:@"logout"]) {
-        [self.query cacheDestroy:nil];
-        [self.credentials destoryAllCredentials];
-        [self.navigationController popViewControllerAnimated:true];
+        [self.query authenticationDestroy:^(NSError *error) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.navigationController popViewControllerAnimated:true];
+                
+            }];
+
+        }];
 
     }
     

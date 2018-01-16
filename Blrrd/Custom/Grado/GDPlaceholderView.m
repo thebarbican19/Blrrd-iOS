@@ -39,15 +39,24 @@
         placeholderGesture.enabled = self.gesture;
         [self addGestureRecognizer:placeholderGesture];
         
-        placeholderProgress = [[UCZProgressView alloc] initWithFrame:CGRectMake((self.bounds.size.width / 2) - 25.0, (self.bounds.size.height / 2) - 25.0, 50.0, 50.0)];
+        placeholderProgressBackdrop = [[UCZProgressView alloc] initWithFrame:CGRectMake((self.bounds.size.width / 2) - 25.0, (self.bounds.size.height / 2) - 25.0, 50.0, 50.0)];
+        placeholderProgressBackdrop.radius = 40.0;
+        placeholderProgressBackdrop.alpha = 0.0;
+        placeholderProgressBackdrop.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        placeholderProgressBackdrop.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        placeholderProgressBackdrop.tintColor = [UIColor colorWithWhite:1.0 alpha:0.2];
+        placeholderProgressBackdrop.progress = 1.0;
+        [self addSubview:placeholderProgressBackdrop];
+
+        placeholderProgress = [[UCZProgressView alloc] initWithFrame:placeholderProgressBackdrop.frame];
         placeholderProgress.showsText = false;
         placeholderProgress.backgroundColor = [UIColor clearColor];
         placeholderProgress.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         placeholderProgress.indeterminate = self.spinner;
-        placeholderProgress.radius = 40.0;
+        placeholderProgress.radius = placeholderProgressBackdrop.radius;
         placeholderProgress.alpha = 0.0;
         placeholderProgress.tintColor = [UIColor colorWithWhite:1.0 alpha:0.9];
-        placeholderProgress.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        placeholderProgress.transform = placeholderProgressBackdrop.transform;
         [self addSubview:placeholderProgress];
         
     }
@@ -113,7 +122,9 @@
         else {
             [placeholderProgress setAlpha:0.0];
             [placeholderProgress setTransform:CGAffineTransformMakeScale(0.9, 0.9)];
-            
+            [placeholderProgressBackdrop setAlpha:0.0];
+            [placeholderProgressBackdrop setTransform:CGAffineTransformMakeScale(0.9, 0.9)];
+
         }
     
     } completion:^(BOOL finished) {
@@ -121,7 +132,9 @@
             if (progress > 0) {
                 [placeholderProgress setAlpha:1.0];
                 [placeholderProgress setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
-
+                [placeholderProgressBackdrop setAlpha:1.0];
+                [placeholderProgressBackdrop setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
+                
             }
             else {
                 [placeholderTitle setFrame:titleframe];

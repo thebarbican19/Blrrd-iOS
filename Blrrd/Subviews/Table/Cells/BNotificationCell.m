@@ -42,8 +42,8 @@
 }
 
 -(void)content:(NSDictionary *)item type:(BNotificationCellType)type {
-    if ([[item objectForKey:@"posted_datetime"] isKindOfClass:[NSDate class]]) {
-        [self.timestamp setText:[self time:[item objectForKey:@"posted_datetime"]]];
+    if ([[item objectForKey:@"timestamp"] isKindOfClass:[NSDate class]]) {
+        [self.timestamp setText:[self time:[item objectForKey:@"timestamp"]]];
 
     }
     else {
@@ -52,7 +52,7 @@
     }
     
     [self.status setAttributedText:[self format:item type:type]];
-    [self.image sd_setImageWithURL:[item objectForKey:@"publicpath"]];
+    [self.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@content/image.php?id=%@" ,APP_HOST_URL ,[item objectForKey:@"imageurl"]]]];
     
 }
 
@@ -90,14 +90,14 @@
     NSString *text;
     if (type == BNotificationCellTypeAllTime) {
         NSString *totalsecs = [self seconds:[[content objectForKey:@"totalsecs"] intValue]];
-        NSString *newsecs = [NSString stringWithFormat:@"+%d" ,[[content objectForKey:@"seconds"] intValue]];
+        NSString *newsecs = [NSString stringWithFormat:@"+%d " ,[[content objectForKey:@"seconds"] intValue]];
         body = NSLocalizedString(@"Profile_NotificationBasic_Body", nil);
         text = [NSString stringWithFormat:body, totalsecs ,newsecs];
         
     }
     else {
         NSString *username ;
-        if ([[content objectForKey:@"username"] length] > 1) username = [content objectForKey:@"username"];
+        if ([[[content objectForKey:@"user"] objectForKey:@"username"] length] > 1) username = [content objectForKey:@"username"];
         else username = NSLocalizedString(@"Profile_UnknownUserPlaceholder_Text", nil);
         body = NSLocalizedString(@"Profile_NotificationDetailed_Body", nil);
         text = [NSString stringWithFormat:body, username];
@@ -121,7 +121,7 @@
 
         }
         
-        NSRegularExpression *plusregex = [NSRegularExpression regularExpressionWithPattern:@"[+](\\d{0,3})*" options:0 error:nil];
+        NSRegularExpression *plusregex = [NSRegularExpression regularExpressionWithPattern:@"[+](\\d{0,2})\\s(\\w{0,8})*" options:0 error:nil];
         NSArray *formatplus = [plusregex matchesInString:text options:0 range:NSMakeRange(0, text.length)];
         for (NSTextCheckingResult *match in formatplus) {
             [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Nunito-Black" size:self.status.font.pointSize - 2] range:NSMakeRange(match.range.location, match.range.length)];

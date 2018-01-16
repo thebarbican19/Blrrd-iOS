@@ -18,8 +18,10 @@ target 'Blrrd' do
   pod 'SocketRocket'
   pod 'GPUImage'
   pod 'UCZProgressView'
-  pod 'SAMKeychain'
-  
+  pod 'AppAnalytics'
+  pod 'UIImage-ResizeMagick'
+  pod 'Pushbots', '~> 2.0.4'
+
   target 'BlrrdTests' do
     inherit! :search_paths
     # Pods for testing

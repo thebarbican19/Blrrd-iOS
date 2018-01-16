@@ -38,6 +38,7 @@
         
         back =  [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, self.bounds.size.height, self.bounds.size.height)];
         back.tag = 0;
+        back.hidden = self.backdisabled;
         back.backgroundColor = [UIColor clearColor];
         [back setImage:[UIImage imageNamed:@"navigation_back"] forState:UIControlStateNormal];
         [back addTarget:self.delegate action:@selector(viewNavigationButtonTapped:)forControlEvents:UIControlEventTouchUpInside];
@@ -119,6 +120,12 @@
         
     }
     
+}
+
+-(void)navigationBackButtonDisabled:(BOOL)disabled {
+    [back setHidden:disabled];
+    [back setEnabled:!disabled];
+
 }
 
 @end

@@ -19,10 +19,13 @@
 
 -(void)destoryAllCredentials;
 
+-(NSString *)authToken;
+-(NSDate *)authExpiry;
+
 -(NSString *)userKey;
 -(NSString *)userHandle;
 -(NSString *)userEmail;
--(NSString *)userPassword;
+-(NSString *)userType;
 -(NSURL *)userAvatar;
 -(BOOL)userPublic;
 -(int)userTotalTime;
@@ -41,11 +44,14 @@
 -(void)setDevicePush:(NSString *)push;
 -(void)setDeviceUploaded:(BOOL)uploaded;
 
+-(void)setAuthToken:(NSString *)token;
+-(void)setAuthExpiry:(NSString *)expiry;
+
 -(void)setAppOnboarded:(BOOL)onboarded;
 -(void)setAppRated:(BOOL)rated;
 -(void)setAppSaveImages:(BOOL)save;
 
--(void)setUserPassword:(NSString *)password;
+-(void)setUserType:(NSString *)type;
 -(void)setUserEmail:(NSString *)email;
 -(void)setUserIdentifyer:(NSString *)key;
 -(void)setUserHandle:(NSString *)handle;

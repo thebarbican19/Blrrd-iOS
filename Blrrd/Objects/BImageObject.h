@@ -26,6 +26,9 @@
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic, strong) BQueryObject *query;
 @property (nonatomic, strong) Mixpanel *mixpanel;
+@property (nonatomic, strong) NSMutableArray *output;
+
++(BImageObject *)sharedInstance;
 
 -(UIImage *)processImageScaleToScreen:(UIImage *)image;
 -(UIImage *)processImageRemoveOrentation:(UIImage*)image;

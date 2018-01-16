@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <AVFoundation/AVFoundation.h>
 #import <UIImage+BlurEffects.h>
+#import <UIImage+ResizeMagick.h>
 #import "GDPlaceholderView.h"
 #import "GPUImage.h"
 #import "BCanvasNavigation.h"
@@ -17,6 +18,7 @@
 #import "BGalleryController.h"
 #import "BCredentialsObject.h"
 #import "BCameraController.h"
+#import "BCanvasView.h"
 
 @protocol BCanvasDelegate;
 @interface BCanvasController : UIViewController <GDPlaceholderDelegate, BCanvasNavigationDelegate, BImageObjectDelegate, BCameraDelegate, UITextViewDelegate>
@@ -24,9 +26,7 @@
 @property (nonatomic, strong) id <BCanvasDelegate> delegate;
 @property (nonatomic, strong) GDPlaceholderView *viewPlaceholder;
 @property (nonatomic, strong) BCanvasNavigation *viewNavigation;
-@property (nonatomic, strong) UIImageView *viewContainer;
-@property (nonatomic, strong) UIImageView *viewOverlay;
-@property (nonatomic, strong) UITextView *viewCaption;
+@property (nonatomic, strong) BCanvasView *viewCanvas;
 @property (nonatomic, strong) BGalleryController *viewGallery;
 @property (nonatomic, strong) BCameraController *viewCapture;
 @property (nonatomic, strong) UICollectionViewFlowLayout *viewGalleryLayout;

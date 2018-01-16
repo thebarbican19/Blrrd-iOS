@@ -21,7 +21,7 @@
         self.label.alpha = 0.0;
         self.label.verticalTextAlignment = SAMLabelVerticalTextAlignmentMiddle;
         [self addSubview:self.label];
-
+        
         self.loader = [[BLMultiColorLoader alloc] initWithFrame:CGRectMake(0.0, 5.0, self.bounds.size.width, self.bounds.size.height - 10.0)];
         self.loader.backgroundColor = [UIColor clearColor];
         self.loader.lineWidth = 2.8;

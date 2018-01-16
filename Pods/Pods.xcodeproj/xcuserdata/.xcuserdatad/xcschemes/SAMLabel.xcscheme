@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'C679191EA1F7D7CF0EEE3493EBE1908D'
+               BlueprintIdentifier = '720E3392B0391A8736C4322D3C64DDE6'
                BlueprintName = 'SAMLabel'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libSAMLabel.a'>

@@ -11,6 +11,7 @@
 #import "BDocumentController.h"
 #import "BNotificationsController.h"
 #import "BCompleteController.h"
+#import "BFriendFinderController.h"
 
 @interface BAuthenticateController ()
 
@@ -35,42 +36,55 @@
 }
  
 -(void)viewNavigationButtonTapped:(UIButton *)button {
-    if (button.tag == 0) {
-        if (self.page == 0) {
-            [self.view endEditing:true];
-            [self.navigationController popViewControllerAnimated:true];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        if (button.tag == 0) {
+            if (self.page == 0) {
+                [self.view endEditing:true];
+                [self.navigationController popViewControllerAnimated:true];
+                
+            }
+            else {
+                self.page --;
+                
+                [UIView animateWithDuration:0.7 delay:0 usingSpringWithDamping:0.75 initialSpringVelocity:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    if (self.page < self.forms.count) {
+                        [self.formScroll setContentOffset:CGPointMake(self.view.bounds.size.width * self.page, 0.0)];
+                        [[self formWithTag:self.page] textFeildBecomeFirstResponder:self.credentials];
+                        
+                    }
+                    
+                } completion:nil];
+                
+            }
             
         }
         else {
-            self.page --;
-            
-            [UIView animateWithDuration:0.7 delay:0 usingSpringWithDamping:0.75 initialSpringVelocity:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                if (self.page < self.forms.count) {
-                    [self.formScroll setContentOffset:CGPointMake(self.view.bounds.size.width * self.page, 0.0)];
-                    [[self formWithTag:self.page] textFeildBecomeFirstResponder:self.credentials];
+            if (self.login) {
+                
+            }
+            else {
+                if ([self.formNavigation.rightbutton isEqualToString:NSLocalizedString(@"Onboarding_ActionTerms_Text", nil)]) {
+                    BDocumentController *viewDocument = [[BDocumentController alloc] init];
+                    viewDocument.header = NSLocalizedString(@"Settings_ItemTerms_Title", nil);
+                    viewDocument.file = [[NSBundle mainBundle] pathForResource:@"terms" ofType:@"pdf"];
+                    
+                    [self.navigationController pushViewController:viewDocument animated:true];
+                    [self.mixpanel track:@"App Terms & Conditions Viewed"];
                     
                 }
-                
-            } completion:nil];
-            
-        }
-        
-    }
-    else {
-        if (self.login) {
-            
-        }
-        else {
-            BDocumentController *viewDocument = [[BDocumentController alloc] init];
-            viewDocument.header = NSLocalizedString(@"Settings_ItemTerms_Title", nil);
-            viewDocument.file = [[NSBundle mainBundle] pathForResource:@"terms" ofType:@"pdf"];
-            
-            [self.navigationController pushViewController:viewDocument animated:true];
-            [self.mixpanel track:@"App Terms & Conditions Viewed"];
+                else if ([self.formNavigation.rightbutton isEqualToString:NSLocalizedString(@"Onboarding_ActionLoginShort_Text", nil)]) {
+                    BAuthenticateController *viewAuthentication = [[BAuthenticateController alloc] init];
+                    viewAuthentication.login = true;
+                    
+                    [self.navigationController pushViewController:viewAuthentication animated:true];
+                    
+                }
 
+            }
+            
         }
         
-    }
+    }];
     
 }
  
@@ -147,9 +161,9 @@
         
     }
     else {
-        [self.forms addObject:@{@"title":NSLocalizedString(@"Authentication_FormUsername_Title", nil),
-                                @"key":@"username",
-                                @"placeholder":NSLocalizedString(@"AuthenticateLoginUsernamePlaceholder", nil),
+        [self.forms addObject:@{@"title":NSLocalizedString(@"Authentication_FormEmail_Title", nil),
+                                @"key":@"email",
+                                @"placeholder":NSLocalizedString(@"AuthenticateSignupEmailPlaceholder", nil),
                                 @"value":@""}];
         
         [self.forms addObject:@{@"title":NSLocalizedString(@"Authentication_FormPassword_Title", nil),
@@ -260,6 +274,8 @@
             
             if (type.length > 0 && selected.entry != nil) [self.credentials setObject:selected.entry forKey:type];
             
+            NSLog(@"credentials %@" ,self.credentials);
+            
         }
         else {
             [selected textFeildBecomeFirstResponder:self.credentials];
@@ -312,6 +328,7 @@
 -(void)formHandleContent:(NSError *)error {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         GDFormInput *last = [self formWithTag:(int)self.forms.count - 1];
+
         if (error.code == 200) {
             [self.appdel applicationNotificationsAuthorized:^(UNAuthorizationStatus authorized) {
                 if (authorized == UNAuthorizationStatusNotDetermined) {
@@ -322,20 +339,37 @@
                     
                 }
                 else {
-                    BCompleteController *viewComplete = [[BCompleteController alloc] init];
-                    viewComplete.login = self.login;
-                    
-                    [self.navigationController pushViewController:viewComplete animated:true];
+                    if (self.login) {
+                        BCompleteController *viewComplete = [[BCompleteController alloc] init];
+                        viewComplete.login = self.login;
+                        
+                        [self.navigationController pushViewController:viewComplete animated:true];
+                       
+                        
+                    }
+                    else {
+                        BFriendFinderController *viewFriends = [[BFriendFinderController alloc] init];
+                        viewFriends.signup = true;
+                        
+                        [self.navigationController pushViewController:viewFriends animated:true];
+                        
+                    }
                     
                 }
                 
             }];
             
         }
-        else if (self.login) {
+        else {
+            NSLog(@"Error: %@" ,error);
+            if (error.code == 409 && !self.login) {
+                [self.formNavigation navigationRightButton:NSLocalizedString(@"Onboarding_ActionLoginShort_Text", nil)];
+                
+            }
+
             self.page --;
             
-            [last textFeildSetTitle:NSLocalizedString(@"Authenticate_PasswordIncorrect_Error", nil)];
+            [last textFeildSetTitle:error.domain];
             [last.formInput setText:nil];
             
         }

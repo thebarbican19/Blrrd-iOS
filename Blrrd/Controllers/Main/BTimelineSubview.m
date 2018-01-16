@@ -18,10 +18,10 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
+        
     self.appdel = (AppDelegate*) [[UIApplication sharedApplication] delegate];
 
-    self.imageobj = [[BImageObject alloc] init];
+    self.imageobj = [BImageObject sharedInstance];
     
     self.credentials = [[BCredentialsObject alloc] init];
     
@@ -53,7 +53,10 @@
     if (append) [self.content addObjectsFromArray:content];
     else self.content = [[NSMutableArray alloc] initWithArray:content];
     
-    if (loading) [self.placeholder placeholderUpdateTitle:NSLocalizedString(@"Timeline_PlaceholderLoading_Title", nil   ) instructions:NSLocalizedString(@"Timeline_PlaceholderLoading_Body", nil)];
+    if (loading) {
+        [self.placeholder placeholderUpdateTitle:NSLocalizedString(@"Timeline_PlaceholderLoading_Title", nil   ) instructions:NSLocalizedString(@"Timeline_PlaceholderLoading_Body", nil)];
+        
+    }
     else {
         if (self.content.count > 0) {
             [self.placeholder setHidden:true];
@@ -110,8 +113,9 @@
 
     [cell setIndexpath:indexPath];
     [cell setDelegate:self];
+    [cell setTimeline:self.timeline];
     [cell content:[self.content objectAtIndex:indexPath.row] index:indexPath];
-    
+
     [cell.contentView.layer setShadowColor:UIColorFromRGB(0x000000).CGColor];
     [cell.contentView.layer setShadowOffset:CGSizeMake(0.0, 2.0)];
     [cell.contentView.layer setShadowRadius:9.0];
@@ -134,13 +138,21 @@
 -(void)collectionViewPresentOptions:(BBlurredCell *)item {
     NSDictionary *data = [self.content objectAtIndex:item.indexpath.row];
     NSMutableArray *buttons = [[NSMutableArray alloc] init];
-    if ([[data objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
+    if ([self.credentials.userType isEqualToString:@"admin"]) {
         [buttons addObject:@{@"key":@"delete", @"title":NSLocalizedString(@"Timeline_ActionSheetDelete_Text", nil)}];
-        
-    }
-    else {
         [buttons addObject:@{@"key":@"report", @"title":NSLocalizedString(@"Timeline_ActionSheetReport_Text", nil)}];
 
+    }
+    else {
+        if ([[[data objectForKey:@"user"] objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
+            [buttons addObject:@{@"key":@"delete", @"title":NSLocalizedString(@"Timeline_ActionSheetDelete_Text", nil)}];
+            
+        }
+        else {
+            [buttons addObject:@{@"key":@"report", @"title":NSLocalizedString(@"Timeline_ActionSheetReport_Text", nil)}];
+
+        }
+        
     }
     
     [self.actionsheet setIndexPath:item.indexpath];
@@ -220,7 +232,6 @@
             [self.imageobj uploadRemove:data completion:^(NSError *error) {
                 if (error.code != 200) {
                    
-                    
                 }
                 
             }];

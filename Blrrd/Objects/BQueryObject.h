@@ -38,22 +38,19 @@ typedef NS_ENUM(NSInteger, BNotificationMergeType) {
 
 -(void)authenticationLoginWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion;
 -(void)authenticationSignupWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion;
+-(void)authenticationDestroy:(void (^)(NSError *error))completion;
 
 -(void)queryTimeline:(BQueryTimeline)type page:(int)page completion:(void (^)(NSArray *posts, NSError *error))completion;
--(void)queryChannels:(void (^)(NSArray *channels, NSError *error))completion;
--(void)queryChannelByIdentifyer:(NSString *)identifyer page:(int)page completion:(void (^)(NSArray *channel, NSError *error))completion;
 -(void)queryUserPosts:(NSString *)username page:(int)page completion:(void (^)(NSArray *items, NSError *error))completion;
 -(void)queryNotifications:(void (^)(NSArray *notifications, NSError *error))completion;
 -(void)queryRequests:(void (^)(NSArray *requests, NSError *error))completion;
--(void)querySuggestedUsers:(void (^)(NSArray *users, NSError *error))completion;
+-(void)querySuggestedUsers:(NSString *)search completion:(void (^)(NSArray *users, NSError *error))completion;
 -(void)queryFriends:(NSString *)type completion:(void (^)(NSArray *users, NSError *error))completion;
 -(void)queryUserStats:(void (^)(NSError *error))completion;
 
--(void)postTime:(NSDictionary *)image secondsadded:(int)seconds completion:(void (^)(NSError *error))completion;
+-(void)postTime:(NSDictionary *)image secondsadded:(int)seconds timeline:(BQueryTimeline)timeline completion:(void (^)(NSError *error))completion;
 -(void)postRequest:(NSString *)user request:(NSString *)request completion:(void (^)(NSError *error))completion;
--(void)postUserUpdate:(void (^)(NSError *error))completion;
 
--(BOOL)friendCheck:(NSString *)username;
 -(NSArray *)friendsList;
 
 -(NSArray *)notificationsMergeByType:(BNotificationMergeType)type;
@@ -62,6 +59,7 @@ typedef NS_ENUM(NSInteger, BNotificationMergeType) {
 -(id)cacheRetrive:(NSString *)endpoint;
 -(BOOL)cacheExpired:(NSString *)endpoint;
 -(void)cacheDestroy:(NSString *)endpoint;
+-(void)cacheUpdatePostWithData:(NSDictionary *)data endpoint:(NSString *)endpoint;
 
 @end
 

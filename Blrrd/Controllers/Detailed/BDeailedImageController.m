@@ -19,18 +19,17 @@
 @implementation BDeailedImageController
 
 -(void)viewWillAppear:(BOOL)animated {
-    NSLog(@"selected: %@" ,self.selected);
-    self.notifications = [[NSMutableArray alloc] initWithArray:[self.query notificationsForSpecificImage:[self.selected objectForKey:@"id"]]];
+    self.notifications = [[NSMutableArray alloc] initWithArray:[self.query notificationsForSpecificImage:[self.selected objectForKey:@"postid"]]];
     self.page = [self.posts indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop) {
-        return [[NSPredicate predicateWithFormat:@"id == %@", [self.selected objectForKey:@"id"]] evaluateWithObject:obj];
+        return [[NSPredicate predicateWithFormat:@"postid == %@", [self.selected objectForKey:@"postid"]] evaluateWithObject:obj];
         
     }];
-
-    if (self.page <= self.notifications.count) {
+    
+    if (self.page <= self.posts.count) {
         [self setIndex:[NSIndexPath indexPathForRow:self.page inSection:0]];
         [self.viewTimeline reloadData];
         [self.viewTimeline scrollToItemAtIndexPath:self.index atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:false];
-        
+
     }
     else if (self.selected != nil) {
         [self.notifications addObject:self.selected];
@@ -49,12 +48,11 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [self.viewNavigation navigationTitle:[self.selected objectForKey:@"name"]];
+    [self.viewNavigation navigationTitle:[self.selected objectForKey:@"caption"]];
 
 }
 
 -(void)viewNavigationButtonTapped:(UIButton *)button {
-    NSLog(@"button %@" ,button.titleLabel.text)
     if (button.tag == 0) {
         [self.navigationController popViewControllerAnimated:true];
         
@@ -91,7 +89,7 @@
         
     }
     
-    self.imageobj = [[BImageObject alloc] init];
+    self.imageobj = [BImageObject sharedInstance];
 
     self.credentials = [[BCredentialsObject alloc] init];
     
@@ -207,9 +205,9 @@
     self.page = self.viewTimeline.contentOffset.x / self.viewTimeline.frame.size.width;
     self.index = [NSIndexPath indexPathForRow:self.page inSection:0];
     self.selected = [self.posts objectAtIndex:self.page];
-    self.notifications = [[NSMutableArray alloc] initWithArray:[self.query notificationsForSpecificImage:[self.selected objectForKey:@"id"]]];
-
-    [self.viewNavigation navigationTitle:[self.selected objectForKey:@"name"]];
+    self.notifications = [[NSMutableArray alloc] initWithArray:[self.query notificationsForSpecificImage:[self.selected objectForKey:@"postid"]]];
+    NSLog(@"self.notifications: %@" ,self.notifications);
+    [self.viewNavigation navigationTitle:[self.selected objectForKey:@"caption"]];
     [self.viewNotifications reloadData];
     
     CGRect tableframe = self.viewNotifications.frame;
@@ -245,11 +243,12 @@
 -(void)collectionViewPresentOptions:(BBlurredCell *)item {
     NSDictionary *data = [self.posts objectAtIndex:item.indexpath.row];
     NSMutableArray *buttons = [[NSMutableArray alloc] init];
-    if ([[data objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
+    if ([[data objectForKey:@"username"] isEqualToString:self.credentials.userHandle] || [self.credentials.userType isEqualToString:@"admin"]) {
         [buttons addObject:@{@"key":@"delete", @"title":NSLocalizedString(@"Timeline_ActionSheetDelete_Text", nil)}];
         
     }
-    else {
+    
+    if (![[data objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
         [buttons addObject:@{@"key":@"report", @"title":NSLocalizedString(@"Timeline_ActionSheetReport_Text", nil)}];
         
     }
@@ -300,7 +299,8 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.notifications.count;
+    if (self.notifications.count == 0) return 1;
+    else return self.notifications.count;
     
 }
 
@@ -313,10 +313,18 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *item = [self.notifications objectAtIndex:indexPath.row];
     BNotificationCell *cell = (BNotificationCell *)[tableView dequeueReusableCellWithIdentifier:@"notification" forIndexPath:indexPath];
     
-    [cell content:item type:BNotificationCellTypeUser];
+    if (self.notifications.count == 0) {
+        [cell.status setText:NSLocalizedString(@"Profile_NotificationEmpty_Body", nil)];
+        [cell.timestamp setHidden:true];
+        
+    }
+    else {
+        [cell content:[self.notifications objectAtIndex:indexPath.row] type:BNotificationCellTypeUser];
+        [cell.timestamp setHidden:false];
+
+    }
     [cell.image setHidden:true];
     [cell setBackgroundColor:[UIColor clearColor]];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];

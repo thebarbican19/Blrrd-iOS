@@ -29,6 +29,7 @@
 
 -(void)viewSetupNotification:(NSArray *)notification limit:(int)limit;
 -(void)viewSetupRequests:(NSArray *)requests limit:(int)limit;
+-(void)viewRefreshImages;
 
 @end
 

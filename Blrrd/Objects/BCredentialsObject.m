@@ -52,6 +52,18 @@
     
 }
 
+-(NSString *)authToken {
+    if ([self.data objectForKey:@"auth_token"] != nil) return [self.data objectForKey:@"auth_token"];
+    else return nil;
+    
+}
+
+-(NSDate *)authExpiry {
+    if ([self.data objectForKey:@"auth_expiry"] != nil) return [self.data objectForKey:@"auth_expiry"];
+    else return nil;
+    
+}
+
 -(NSString *)userKey {
     if ([self.data objectForKey:@"user_key"] != nil) return [self.data objectForKey:@"user_key"];
     else return nil;
@@ -64,8 +76,8 @@
     
 }
 
--(NSString *)userPassword {
-    if ([self.data objectForKey:@"user_password"] != nil) return [self.data objectForKey:@"user_password"];
+-(NSString *)userType {
+    if ([self.data objectForKey:@"user_type"] != nil) return [self.data objectForKey:@"user_type"];
     else return nil;
     
 }
@@ -161,9 +173,9 @@
     
 }
 
--(void)setUserPassword:(NSString *)password {
-    if (password) [self.data setObject:password forKey:@"user_password"];
-    else [self.data removeObjectForKey:@"user_password"];
+-(void)setUserType:(NSString *)type {
+    if (type) [self.data setObject:type forKey:@"user_type"];
+    else [self.data removeObjectForKey:@"user_type"];
     
     [self.data synchronize];
     
@@ -220,6 +232,25 @@
     [self.data setObject:[NSNumber numberWithInt:posts] forKey:@"user_total_posts"];
     [self.data synchronize];
     
+}
+
+-(void)setAuthToken:(NSString *)token {
+    if (token) [self.data setObject:token forKey:@"auth_token"];
+    else [self.data removeObjectForKey:@"auth_token"];
+    
+    [self.data synchronize];
+    
+}
+
+-(void)setAuthExpiry:(NSString *)expiry {
+    NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+    formatter.timeZone = [NSTimeZone defaultTimeZone];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    
+    if (expiry) [self.data setObject:[formatter dateFromString:expiry] forKey:@"auth_expiry"];
+    else [self.data removeObjectForKey:@"auth_expiry"];
+    
+    [self.data synchronize];
 }
 
 @end

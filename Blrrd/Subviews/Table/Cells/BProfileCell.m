@@ -7,6 +7,7 @@
 //
 
 #import "BProfileCell.h"
+#import "BConstants.h"
 
 @implementation BProfileCell
 
@@ -34,14 +35,15 @@
 }
 
 -(void)content:(NSDictionary *)content {
+    NSString *image = [NSString stringWithFormat:@"%@content/image.php?id=%@" ,APP_HOST_URL ,[content objectForKey:@"imageurl"]];
     if ([[content objectForKey:@"type"] containsString:@"showall"]) {
-        [self image:[NSURL URLWithString:[content objectForKey:@"publicpath"]] blur:true];
+        [self image:[NSURL URLWithString:image] blur:true];
         [self.seconds setText:@"+"];
         
     }
     else {
-        [self image:[NSURL URLWithString:[content objectForKey:@"publicpath"]] blur:false];
-        [self timeformatted:[[content objectForKey:@"sectotal"] intValue]];
+        [self image:[NSURL URLWithString:image] blur:false];
+        [self timeformatted:[[content objectForKey:@"seconds"] intValue]];
 
     }
     

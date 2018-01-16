@@ -24,11 +24,13 @@
 @property (nonatomic ,strong) BCredentialsObject *credentials;
 @property (nonatomic ,strong) NSMutableDictionary *content;
 @property (nonatomic ,strong) NSMutableDictionary *userdata;
+@property (nonatomic ,strong) NSString *imageurl;
 @property (nonatomic ,assign) int timeviewed;
 @property (nonatomic ,assign) int existingtimeviewed;
 @property (nonatomic ,assign) BOOL imagerevealed;
 @property (nonatomic ,strong) NSTimer *timer;
 @property (nonatomic ,strong) NSIndexPath *indexpath;
+@property (nonatomic ,assign) BQueryTimeline timeline;
 
 @property (nonatomic ,strong) UIView *container;
 @property (nonatomic ,strong) UIImageView *image;

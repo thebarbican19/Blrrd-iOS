@@ -21,6 +21,8 @@
     self.mixpanel = [Mixpanel sharedInstance];
 
     [Mixpanel sharedInstanceWithToken:@"e25f29857e2e509f1f1e6befde7b7688"];
+    [AppAnalytics initWithAppKey:@"4Xuz4xbSahIJ8VbfFkamJSve8fEQ5RwC" options:@{DebugLog:@(NO)}];
+    
     [self.credentials setDeviceIdentifyer];
     
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
@@ -134,38 +136,8 @@
     
     [self.mixpanel timeEvent:@"App Updated Content in Background"];
     
-    if ([self.query cacheExpired:@"postsApi/getAllFriendsPostsNext"]) {
+    if ([self.query cacheExpired:@"following"]) {
         [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
-            [self.mixpanel track:@"App Updated Content in Background"];
-            
-            if (error.code == 200 || error == nil) completionHandler(UIBackgroundFetchResultNewData);
-            else completionHandler(UIBackgroundFetchResultNewData);
-            
-        }];
-        
-    }
-    else if ([self.query cacheExpired:@"channelsApi/getChannelsHotPostsNext"]) {
-        [self.query queryTimeline:BQueryTimelineTrending page:0 completion:^(NSArray *posts, NSError *error) {
-            [self.mixpanel track:@"App Updated Content in Background"];
-
-            if (error.code == 200 || error == nil) completionHandler(UIBackgroundFetchResultNewData);
-            else completionHandler(UIBackgroundFetchResultNewData);
-            
-        }];
-
-    }
-    else if ([self.query cacheExpired:@"channelsApi/getChannels"]) {
-        [self.query queryChannels:^(NSArray *channels, NSError *error) {
-            [self.mixpanel track:@"App Updated Content in Background"];
-            
-            if (error.code == 200 || error == nil) completionHandler(UIBackgroundFetchResultNewData);
-            else completionHandler(UIBackgroundFetchResultNewData);
-            
-        }];
-        
-    }
-    else if ([self.query cacheExpired:@"friendsApi/getRequests"]) {
-        [self.query queryRequests:^(NSArray *requests, NSError *error) {
             [self.mixpanel track:@"App Updated Content in Background"];
             
             if (error.code == 200 || error == nil) completionHandler(UIBackgroundFetchResultNewData);
@@ -243,9 +215,13 @@
     center.delegate = self;
     
     [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound|UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error){
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-        
-        completion(error, granted);
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+            self.pushbots = [[Pushbots alloc] initWithAppId:@"5a5a6091a5d10304d650b176" prompt:true];
+
+            completion(error, granted);
+            
+        }];
             
     }];
     
@@ -253,10 +229,21 @@
 
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     self.mixpanel = [Mixpanel sharedInstance];
-    
+    self.credentials = [[BCredentialsObject alloc] init];
+
     NSString *token = [deviceToken.description stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
     
+    if (self.credentials.userHandle != nil) {
+        [self.pushbots registerOnPushbots:deviceToken];
+        [self.pushbots setAlias:self.credentials.userHandle];
+        
+    }
+    else {
+        [self.pushbots removeAlias];
+
+    }
+
     [self.credentials setDevicePush:token];
     [self.mixpanel.people addPushDeviceToken:deviceToken];
     
@@ -265,7 +252,7 @@
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  {
     self.query = [[BQueryObject alloc] init];
     if (application.applicationState == UIApplicationStateActive) {
-        [self.query cacheDestroy:@"postsApi/getViewTimesNewApi"];
+        [self.query cacheDestroy:@"content/time.php"];
         [self.query queryNotifications:^(NSArray *notifications, NSError *error) {
             NSLog(@"did recive notification");
             

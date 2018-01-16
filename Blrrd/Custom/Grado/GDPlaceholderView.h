@@ -18,6 +18,7 @@
     UIView *placeholderContainer;
     UITapGestureRecognizer *placeholderGesture;
     UCZProgressView *placeholderProgress;
+    UCZProgressView *placeholderProgressBackdrop;
 
 }
 

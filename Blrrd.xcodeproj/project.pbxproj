@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		10D81ABF3A18D93B28414C21 /* libPods-Blrrd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */; };
 		2BE2E861C4D7BD74507C4F52 /* libPods-BlrrdTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */; };
 		3C1837B2FB585C787DA1836D /* libPods-BlrrdUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */; };
+		5E70A3B067C44E695E9763A8 /* libPods-Blrrd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */; };
 		7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7737127E1FCFBD4B00E507AE /* SafariServices.framework */; };
 		773712821FD0654000E507AE /* BDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 773712811FD0654000E507AE /* BDocumentController.m */; };
 		773712891FD06B5300E507AE /* terms.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 773712881FD06B5300E507AE /* terms.pdf */; };
@@ -45,6 +45,8 @@
 		77656A981FB26478006F0854 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77656A971FB26477006F0854 /* UserNotifications.framework */; };
 		77656A9B1FB286E0006F0854 /* BSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656A9A1FB286DF006F0854 /* BSegmentControl.m */; };
 		77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656AA01FB29623006F0854 /* GDStatusLabel.m */; };
+		7765B49B200AA96F00374EDE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7765B49A200AA96F00374EDE /* SystemConfiguration.framework */; };
+		7765B49D200AA97700374EDE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7765B49C200AA97700374EDE /* CoreTelephony.framework */; };
 		7778B1CA1FCC77FE00E5B83D /* BProfileHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1C91FCC77FE00E5B83D /* BProfileHeader.m */; };
 		7778B1CC1FCCC42500E5B83D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7778B1CB1FCCC42500E5B83D /* QuartzCore.framework */; };
 		7778B1CE1FCCC42C00E5B83D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7778B1CD1FCCC42C00E5B83D /* AVFoundation.framework */; };
@@ -89,6 +91,7 @@
 		77BDA3E81FBDF95E00249572 /* BFriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDA3E71FBDF95E00249572 /* BFriendCell.m */; };
 		77BDA3EB1FBDFE1E00249572 /* BDetailedTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDA3EA1FBDFE1E00249572 /* BDetailedTimelineController.m */; };
 		77BDA3EE1FBE15D100249572 /* BTabbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDA3ED1FBE15D100249572 /* BTabbarView.m */; };
+		77CB9B7C1FE96DEC00A9F7BE /* BCanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77CB9B7B1FE96DEB00A9F7BE /* BCanvasView.m */; };
 		77D2BA8C1FD6302400595A21 /* BOnboardingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D2BA8B1FD6302400595A21 /* BOnboardingController.m */; };
 		77D5AE681FDB5E2B00765EAE /* BSearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D5AE661FDB5E2A00765EAE /* BSearchView.m */; };
 		77D5AE6D1FDDBA8B00765EAE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D5AE691FDDBA8900765EAE /* Reachability.m */; };
@@ -113,12 +116,27 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		7765B4992008D29100374EDE /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0676E4263BE463808AD0C968 /* Pods-BlrrdUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdUITests/Pods-BlrrdUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		0C4664F8AB1018209E43075B /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B6DF46065B4934E1855AD8D /* Pods-Blrrd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blrrd.release.xcconfig"; path = "Pods/Target Support Files/Pods-Blrrd/Pods-Blrrd.release.xcconfig"; sourceTree = "<group>"; };
 		35E422484A04BE2FA5B4236E /* Pods-BlrrdTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdTests/Pods-BlrrdTests.release.xcconfig"; sourceTree = "<group>"; };
 		4D03DFD143260305F4E5E860 /* Pods-Blrrd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blrrd.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Blrrd/Pods-Blrrd.debug.xcconfig"; sourceTree = "<group>"; };
 		525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A0DAE56A3D11D0960ED7839 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		6EC6E94C2F62261082206C6F /* Pods-BlrrdUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdUITests/Pods-BlrrdUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7737127E1FCFBD4B00E507AE /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		773712801FD0654000E507AE /* BDocumentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDocumentController.h; sourceTree = "<group>"; };
@@ -171,6 +189,8 @@
 		77656A9A1FB286DF006F0854 /* BSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSegmentControl.m; sourceTree = "<group>"; };
 		77656AA01FB29623006F0854 /* GDStatusLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDStatusLabel.m; sourceTree = "<group>"; };
 		77656AA11FB29624006F0854 /* GDStatusLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDStatusLabel.h; sourceTree = "<group>"; };
+		7765B49A200AA96F00374EDE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7765B49C200AA97700374EDE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		7778B1C81FCC77FE00E5B83D /* BProfileHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BProfileHeader.h; sourceTree = "<group>"; };
 		7778B1C91FCC77FE00E5B83D /* BProfileHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BProfileHeader.m; sourceTree = "<group>"; };
 		7778B1CB1FCCC42500E5B83D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -253,6 +273,8 @@
 		77BDA3EA1FBDFE1E00249572 /* BDetailedTimelineController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BDetailedTimelineController.m; sourceTree = "<group>"; };
 		77BDA3EC1FBE15D100249572 /* BTabbarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BTabbarView.h; sourceTree = "<group>"; };
 		77BDA3ED1FBE15D100249572 /* BTabbarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BTabbarView.m; sourceTree = "<group>"; };
+		77CB9B7A1FE96DEB00A9F7BE /* BCanvasView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCanvasView.h; sourceTree = "<group>"; };
+		77CB9B7B1FE96DEB00A9F7BE /* BCanvasView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCanvasView.m; sourceTree = "<group>"; };
 		77D2BA8A1FD6302400595A21 /* BOnboardingController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BOnboardingController.h; sourceTree = "<group>"; };
 		77D2BA8B1FD6302400595A21 /* BOnboardingController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BOnboardingController.m; sourceTree = "<group>"; };
 		77D5AE661FDB5E2A00765EAE /* BSearchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSearchView.m; sourceTree = "<group>"; };
@@ -265,6 +287,7 @@
 		77D5AE701FDDE59200765EAE /* BFollowAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFollowAction.m; sourceTree = "<group>"; };
 		846352F4B811913EF775AD40 /* Pods-BlrrdTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdTests/Pods-BlrrdTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B4AE68EAC7B2BE0471E44D80 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Blrrd.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -273,6 +296,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7765B49D200AA97700374EDE /* CoreTelephony.framework in Frameworks */,
+				7765B49B200AA96F00374EDE /* SystemConfiguration.framework in Frameworks */,
 				7737129F1FD1FD1600E507AE /* CoreML.framework in Frameworks */,
 				7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */,
 				7778B1DE1FCD229C00E5B83D /* CoreImage.framework in Frameworks */,
@@ -283,7 +308,7 @@
 				779994AB1FB9EB130002531B /* Accelerate.framework in Frameworks */,
 				77656A981FB26478006F0854 /* UserNotifications.framework in Frameworks */,
 				778D9B5C1FABD60F00878A6A /* StoreKit.framework in Frameworks */,
-				10D81ABF3A18D93B28414C21 /* libPods-Blrrd.a in Frameworks */,
+				5E70A3B067C44E695E9763A8 /* libPods-Blrrd.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +340,8 @@
 				35E422484A04BE2FA5B4236E /* Pods-BlrrdTests.release.xcconfig */,
 				0676E4263BE463808AD0C968 /* Pods-BlrrdUITests.debug.xcconfig */,
 				6EC6E94C2F62261082206C6F /* Pods-BlrrdUITests.release.xcconfig */,
+				5A0DAE56A3D11D0960ED7839 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				B4AE68EAC7B2BE0471E44D80 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -619,6 +646,8 @@
 				773712811FD0654000E507AE /* BDocumentController.m */,
 				77D5AE6F1FDDE59200765EAE /* BFollowAction.h */,
 				77D5AE701FDDE59200765EAE /* BFollowAction.m */,
+				77CB9B7A1FE96DEB00A9F7BE /* BCanvasView.h */,
+				77CB9B7B1FE96DEB00A9F7BE /* BCanvasView.m */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -655,6 +684,8 @@
 		DC2B262B6F1B871B7C26DD9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7765B49C200AA97700374EDE /* CoreTelephony.framework */,
+				7765B49A200AA96F00374EDE /* SystemConfiguration.framework */,
 				7737129E1FD1FD1500E507AE /* CoreML.framework */,
 				7737127E1FCFBD4B00E507AE /* SafariServices.framework */,
 				7778B1DD1FCD229C00E5B83D /* CoreImage.framework */,
@@ -668,6 +699,7 @@
 				B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */,
 				525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */,
 				8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */,
+				0C4664F8AB1018209E43075B /* libPods-OneSignalNotificationServiceExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -685,6 +717,7 @@
 				778D9B101FABB53600878A6A /* Resources */,
 				05A51A5E8E1C60E57AC628C9 /* [CP] Embed Pods Frameworks */,
 				069FFC4E4EDFD4154AD04100 /* [CP] Copy Pods Resources */,
+				7765B4992008D29100374EDE /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -1017,6 +1050,7 @@
 				77BDA3EB1FBDFE1E00249572 /* BDetailedTimelineController.m in Sources */,
 				778D9B4A1FABCC1400878A6A /* BCredentialsObject.m in Sources */,
 				77BDA3E81FBDF95E00249572 /* BFriendCell.m in Sources */,
+				77CB9B7C1FE96DEC00A9F7BE /* BCanvasView.m in Sources */,
 				778D9B251FABB53600878A6A /* main.m in Sources */,
 				77D5AE681FDB5E2B00765EAE /* BSearchView.m in Sources */,
 				77BDA3E51FBD4C4A00249572 /* BNotificationCell.m in Sources */,
@@ -1210,9 +1244,30 @@
 				CODE_SIGN_ENTITLEMENTS = Blrrd/Blrrd.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2TG3C5JT66;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AppAnalytics\"",
+					"\"${PODS_ROOT}/Headers/Public/DBImageColorPicker\"",
+					"\"${PODS_ROOT}/Headers/Public/GBDeviceInfo\"",
+					"\"${PODS_ROOT}/Headers/Public/GPUImage\"",
+					"\"${PODS_ROOT}/Headers/Public/KVNBoundedImageView\"",
+					"\"${PODS_ROOT}/Headers/Public/Mixpanel\"",
+					"\"${PODS_ROOT}/Headers/Public/Pushbots\"",
+					"\"${PODS_ROOT}/Headers/Public/SAMLabel\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/SocketRocket\"",
+					"\"${PODS_ROOT}/Headers/Public/TYBlurImage\"",
+					"\"${PODS_ROOT}/Headers/Public/UCZProgressView\"",
+					"\"${PODS_ROOT}/Headers/Public/UIImage-Helpers\"",
+					"\"${PODS_ROOT}/Headers/Public/UIImage-ResizeMagick\"",
+				);
 				INFOPLIST_FILE = Blrrd/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
@@ -1228,9 +1283,30 @@
 				CODE_SIGN_ENTITLEMENTS = Blrrd/Blrrd.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2TG3C5JT66;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AppAnalytics\"",
+					"\"${PODS_ROOT}/Headers/Public/DBImageColorPicker\"",
+					"\"${PODS_ROOT}/Headers/Public/GBDeviceInfo\"",
+					"\"${PODS_ROOT}/Headers/Public/GPUImage\"",
+					"\"${PODS_ROOT}/Headers/Public/KVNBoundedImageView\"",
+					"\"${PODS_ROOT}/Headers/Public/Mixpanel\"",
+					"\"${PODS_ROOT}/Headers/Public/Pushbots\"",
+					"\"${PODS_ROOT}/Headers/Public/SAMLabel\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/SocketRocket\"",
+					"\"${PODS_ROOT}/Headers/Public/TYBlurImage\"",
+					"\"${PODS_ROOT}/Headers/Public/UCZProgressView\"",
+					"\"${PODS_ROOT}/Headers/Public/UIImage-Helpers\"",
+					"\"${PODS_ROOT}/Headers/Public/UIImage-ResizeMagick\"",
+				);
 				INFOPLIST_FILE = Blrrd/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;

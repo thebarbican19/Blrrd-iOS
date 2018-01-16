@@ -23,17 +23,19 @@
         BOnboardingController *viewOnboarding = [[BOnboardingController alloc] init];
         viewOnboarding.view.backgroundColor = MAIN_BACKGROUND_COLOR;
     
-        UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:viewOnboarding];
-        navigation.navigationBarHidden = true;
-        [self.navigationController presentViewController:navigation animated:false completion:^{
-            [self viewPresentSubviewWithIndex:0 animated:false];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:viewOnboarding];
+            navigation.navigationBarHidden = true;
+            [self.navigationController presentViewController:navigation animated:false completion:^{
+                [self viewPresentSubviewWithIndex:0 animated:false];
+                
+            }];
             
         }];
         
     }
     else {
         [self viewSetup];
-        [self.appdel applicationHandleSockets:false];
         
     }
     
@@ -55,6 +57,8 @@
         self.safearea = [UIApplication sharedApplication].keyWindow.window.safeAreaInsets.bottom + APP_STATUSBAR_HEIGHT;
         
     }
+    
+    self.imageobj = [BImageObject sharedInstance];
     
     self.queue = [[NSOperationQueue alloc] init];
     self.queue.qualityOfService = NSQualityOfServiceUtility;
@@ -116,7 +120,7 @@
         self.viewChannels.collectionView.alpha = 0.0;
         self.viewChannels.collectionView.hidden = false;
         self.viewChannels.delegate = self;
-        [self addChildViewController:self.viewChannels];
+        //[self addChildViewController:self.viewChannels];
 
         self.viewSegment = [[BSegmentControl alloc] initWithFrame:CGRectMake(self.view.center.x - 75.0, 22.0, 150.0, 50.0)];
         self.viewSegment.background = [UIColorFromRGB(0x18132B) colorWithAlphaComponent:0.85];
@@ -155,9 +159,9 @@
         
     }
 
-    [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:true error:nil];
+    [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"following"] append:false loading:true error:nil];
 
-    if ([self.query cacheExpired:@"postsApi/getAllFriendsPostsNext"]) {
+    if ([self.query cacheExpired:@"following"]) {
         [self.queue addOperationWithBlock:^{
             [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -174,7 +178,7 @@
             
     }
 
-    if ([self.query cacheExpired:@"channelsApi/getChannelsHotPostsNext"]) {
+    if ([self.query cacheExpired:@"trending"]) {
         [self.queue addOperationWithBlock:^{
             [self.query queryTimeline:BQueryTimelineTrending page:0 completion:^(NSArray *posts, NSError *error) {
                 if (self.timelineindex == 1) {
@@ -189,28 +193,8 @@
         }];
         
     }
-    
-    /*
-    if ([self.query cacheExpired:@"channelsApi/getChannels"]) {
-        [self.queue addOperationWithBlock:^{
-            [self.query queryChannels:^(NSArray *channels, NSError *error) {
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    if (self.timelineindex == 1) {
-                        [self.viewChannels viewSetupContent:channels];
-
-                    }
-                    
-                }];
-                
-            }];
-            
-        }];
-        
-    }
-    else [self.viewChannels viewSetupContent:[self.query cacheRetrive:@"channelsApi/getChannels"]];
-    */
-    
-    if ([self.query cacheExpired:@"postsApi/getViewTimesNewApi"]) {
+     
+    if ([self.query cacheExpired:@"content/time.php"]) {
         [self.queue addOperationWithBlock:^{
             [self.query queryNotifications:^(NSArray *notifications, NSError *error) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -225,7 +209,7 @@
     }
     else [self.viewDiscover viewSetupNotification:[self.query notificationsMergeByType:BNotificationMergeTypePosts] limit:0];
     
-    if ([self.query cacheExpired:@"postsApi/getAllProfilePostsNext"]) {
+    if ([self.query cacheExpired:@"user/posts.php"]) {
         [self.queue addOperationWithBlock:^{
             [self.query queryUserPosts:self.credentials.userHandle page:0 completion:^(NSArray *items, NSError *error) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -238,9 +222,9 @@
         }];
         
     }
-    //else [self.viewDiscover viewSetupRecentPosts:[self.query cacheRetrive:@"postsApi/getAllProfilePostsNext"]];
+    //else [self.viewDiscover viewSetupRecentPosts:[self.query cacheRetrive:@"user/posts.php"]];
     
-    if ([self.query cacheExpired:@"friendsApi/getRequests"]) {
+    if ([self.query cacheExpired:@"user/friendship.php"]) {
         [self.queue addOperationWithBlock:^{
             [self.query queryRequests:^(NSArray *requests, NSError *error) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -251,39 +235,13 @@
             }];
             
         }];
-        
+
     }
-    else [self.viewDiscover viewSetupRequests:[self.query cacheRetrive:@"friendsApi/getRequests"] limit:3];
+    else [self.viewDiscover viewSetupRequests:[self.query cacheRetrive:@"user/friendship.php"] limit:3];
     
-    if ([self.query cacheExpired:@"userApi/getAllUsers"]) {
+    if ([self.query cacheExpired:@"user/suggested.php"]) {
         [self.queue addOperationWithBlock:^{
-            [self.query querySuggestedUsers:^(NSArray *users, NSError *error) {
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    
-                }];
-                
-            }];
-            
-        }];
-        
-    }
-    
-    if ([self.query cacheExpired:@"userApi/getAllUsers"]) {
-        [self.queue addOperationWithBlock:^{
-            [self.query querySuggestedUsers:^(NSArray *users, NSError *error) {
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    
-                }];
-                
-            }];
-            
-        }];
-        
-    }
-    
-    if ([self.query cacheExpired:@"friendsApi/getRequests"]) {
-        [self.queue addOperationWithBlock:^{
-            [self.query queryFriends:@"notfriends" completion:^(NSArray *users, NSError *error) {
+            [self.query querySuggestedUsers:nil completion:^(NSArray *users, NSError *error) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     
                 }];
@@ -315,20 +273,13 @@
         if (index == 0) {
             [self.viewChannels.view removeFromSuperview];
             [self.viewContainer addSubview:self.viewTimeline.view];
-            [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:false error:nil];
+            [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"following"] append:false loading:false error:nil];
             
         }
-        /*
-        else if (index == 1) {
-            [self.viewTimeline.view removeFromSuperview];
-            [self.viewContainer addSubview:self.viewChannels.view];
-            [self.viewChannels viewSetupContent:[self.query cacheRetrive:@"channelsApi/getChannels"]];
-        }
-        */
         else {
             [self.viewChannels.view removeFromSuperview];
             [self.viewContainer addSubview:self.viewTimeline.view];
-            [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"channelsApi/getChannelsHotPostsNext"] append:false loading:nil error:nil];
+            [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"trending"] append:false loading:nil error:nil];
             
         }
         
@@ -347,7 +298,7 @@
             if (index == 0) {
                 [self.viewChannels.view removeFromSuperview];
                 [self.viewContainer addSubview:self.viewTimeline.view];
-                [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:false error:nil];
+                [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"following"] append:false loading:false error:nil];
                 
             }
             /*
@@ -361,7 +312,7 @@
             else {
                 [self.viewChannels.view removeFromSuperview];
                 [self.viewContainer addSubview:self.viewTimeline.view];
-                [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"channelsApi/getChannelsHotPostsNext"] append:false loading:false error:nil];
+                [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"trending"] append:false loading:false error:nil];
                 
             }
             
@@ -428,6 +379,7 @@
 -(void)viewPresentSubviewWithIndex:(int)index animated:(BOOL)animated {
     if (self.viewindex == 1 && index == 1) {
         if (!self.viewCanvas.uploading) [self.viewCanvas viewCaptureImage];
+        else [self.viewCanvas viewTermiateCamera];
         
     }
     else {
@@ -450,8 +402,10 @@
         } completion:nil];
         
     }
+    if (index == 0)
+        [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"following"] append:false loading:false error:nil];
+        [self.viewTimeline.collectionView reloadData];
     
-    if (index == 0) [self.viewTimeline.collectionView reloadData];
     if (index == 2) {
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
         [self.viewDiscover.header setNeedsDisplay];
@@ -525,7 +479,7 @@
 -(void)viewPresentImageWithData:(NSDictionary *)data {
     BDeailedImageController *viewImage = [[BDeailedImageController alloc] init];
     viewImage.view.backgroundColor = self.view.backgroundColor;
-    viewImage.posts = [self.query cacheRetrive:@"postsApi/getAllProfilePostsNext"];
+    viewImage.posts = [self.query cacheRetrive:@"user/posts.php"];
     viewImage.selected = data;
     viewImage.delegate = self;
     
@@ -550,9 +504,7 @@
 
 -(void)viewRefreshContent {
     [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"postsApi/getAllFriendsPostsNext"] append:false loading:true error:nil];
-    [self.viewTimeline.collectionView reloadData];
-    [self.viewDiscover.header setNeedsDisplay];
-    [self.viewDiscover.tableView reloadData];
+    [self.viewDiscover viewRefreshImages];
     
 }
 

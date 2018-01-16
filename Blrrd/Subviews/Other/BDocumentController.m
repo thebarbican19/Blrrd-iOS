@@ -22,7 +22,8 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [self.viewNavigation navigationTitle:self.header];
-    
+    [self.viewWeb loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:self.file isDirectory:false]]];
+
 }
 
 -(void)viewDidLoad {
@@ -42,7 +43,6 @@
     self.viewWeb.delegate = self;
     self.viewWeb.scalesPageToFit = true;
     self.viewWeb.backgroundColor = [UIColor clearColor];
-    [self.viewWeb loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:self.file isDirectory:false]]];
     [self.view addSubview:self.viewWeb];
 
 }

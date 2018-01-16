@@ -11,6 +11,8 @@
 #import <UserNotifications/UserNotifications.h>
 #import <Mixpanel.h>
 #import <SRWebSocket.h>
+#import <AppAnalytics/Appanalytics.h>
+#import <Pushbots/Pushbots.h>
 
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
@@ -24,6 +26,7 @@
 @property (nonatomic, strong) SRWebSocket *sockets;
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (nonatomic, strong) NSTimer *timer;
+@property (strong, nonatomic) Pushbots *pushbots;
 
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundtask;
 

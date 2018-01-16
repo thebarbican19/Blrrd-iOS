@@ -11,6 +11,19 @@
 
 @implementation BImageObject
 
++(BImageObject *)sharedInstance {
+    static BImageObject *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[BImageObject alloc] init];
+        
+        
+    });
+    
+    return sharedInstance;
+    
+}
+
 -(instancetype)init {
     self = [super init];
     if (self) {
@@ -103,6 +116,8 @@
     
 }
 
+
+
 -(CVPixelBufferRef)processImageCreatePixelBuffer:(UIImage *)original {
     CGImageRef image = original.CGImage;
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -171,7 +186,10 @@
     PHFetchResult *fetch = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:options];
 
     [self imagesFromAsset:fetch.firstObject thumbnail:true completion:^(NSDictionary *data, UIImage *image) {
-        completion(image);
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            completion(image);
+            
+        }];
 
     } withProgressHandler:^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
         
@@ -220,13 +238,12 @@
                     
                 }
                 
-                
             }];
             
         }
         else {
             completion(info, image);
-            
+    
         }
         
     }];
@@ -234,105 +251,113 @@
 }
 
 -(void)imagesRetriveAlbums:(void (^)(NSArray *albums))completion {
-    NSMutableArray *output = [[NSMutableArray alloc] init];
     PHFetchOptions *options = [PHFetchOptions new];
     options.predicate = [NSPredicate predicateWithFormat:@"estimatedAssetCount > 0"];
     
-    PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:options];
-    [albums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
-        [output addObject:collection.localizedTitle];
+    if (self.output == nil) {
+        self.output = [[NSMutableArray alloc] init];
         
-    }];
+        PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:options];
+        [albums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.output addObject:collection.localizedTitle];
+                
+            }];
+            
+        }];
+        
+    }
     
-    completion(output);
+    completion(self.output);
     
 }
 
 -(void)uploadImageWithCaption:(UIImage *)image caption:(NSString *)caption {
-    NSDateFormatter *formatdate = [[NSDateFormatter alloc] init];
-    [formatdate setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZ"];
     NSMutableString *formatdata = [[NSMutableString alloc] init];
-    [formatdata appendString:@"data:image/jpeg;base64,"];
     [formatdata appendString:[UIImageJPEGRepresentation(image, 1.0) base64EncodedStringWithOptions:0]];
-    NSString *formatid = [NSString stringWithFormat:@"%d" ,(int)[[NSDate date] timeIntervalSince1970]];
-    NSString *endpoint = [NSString stringWithFormat:@"%@postsApi/addPost/" ,APP_HOST_URL];
+    NSString *endpoint = [NSString stringWithFormat:@"%@content/upload.php" ,APP_HOST_URL];
     NSString *endpointmethod = @"POST";
-    NSDictionary *endpointparams = @{@"username":self.credentials.userHandle,
-                                     @"name":caption,
-                                     @"last_sectotal":@(0),
-                                     @"sectotal":@(0),
-                                     @"channel":@"",
-                                     @"foto":formatdata,
-                                     @"fontSize":@"12",
-                                     @"posted_datetime":[formatdate stringFromDate:[NSDate date]],
-                                     @"id":formatid,
-                                     @"comments":@[]};
+    NSDictionary *endpointparams = @{@"caption":caption, @"file":formatdata};
     
-    NSLog(@"json: %@" ,endpointparams);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:endpoint] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:40];
+    [request addValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"blappversion"];
+    [request addValue:APP_LANGUAGE forHTTPHeaderField:@"bllanguage"];
+    if (self.credentials.authToken) [request addValue:self.credentials.authToken forHTTPHeaderField:@"blbearer"];
     [request setHTTPMethod:endpointmethod];
     [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:endpointparams options:NSJSONWritingPrettyPrinted error:nil]];
 
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionTask *task = [session dataTaskWithRequest:request];
+    
+    NSURLSessionUploadTask *task = [session uploadTaskWithStreamedRequest:request];
     
     [task resume];
     
 }
 
 -(void)uploadRemove:(NSDictionary *)post completion:(void (^)(NSError *error))completion {
-    if ([[post objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
-        NSString *endpoint = [NSString stringWithFormat:@"%@postsApi/deletePost/" ,APP_HOST_URL];
-        NSString *endpointmethod = @"POST";
-        NSDictionary *endpointparams = @{@"postId":[post objectForKey:@"id"], @"postUsername:":self.credentials.userHandle};
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:endpoint] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:40];
-        [request setHTTPMethod:endpointmethod];
-        [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:endpointparams options:NSJSONWritingPrettyPrinted error:nil]];
-        
-        NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-        NSURLSessionTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
-            if (status.statusCode == 200) {
-                completion([NSError errorWithDomain:@"all okay" code:200 userInfo:nil]);
-
-            }
-            else {
-                if (error) completion(error);
-                else completion([NSError errorWithDomain:@"unknown error" code:status.statusCode userInfo:nil]);
+    NSString *endpoint = [NSString stringWithFormat:@"%@content/upload.php" ,APP_HOST_URL];
+    NSString *endpointmethod = @"DELETE";
+    NSLog(@"post delete %@" ,post)
+    NSDictionary *endpointparams = @{@"postid":[post objectForKey:@"postid"]};
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:endpoint] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:40];
+    [request addValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"blappversion"];
+    [request addValue:APP_LANGUAGE forHTTPHeaderField:@"bllanguage"];
+    if (self.credentials.authToken) [request addValue:self.credentials.authToken forHTTPHeaderField:@"blbearer"];
+    [request setHTTPMethod:endpointmethod];
+    [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:endpointparams options:NSJSONWritingPrettyPrinted error:nil]];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    NSURLSessionTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (status.statusCode == 200) {
+            if (data.length > 0 && !error) {
+                NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
+                NSLog(@"removed %@" ,output);
+                completion([NSError errorWithDomain:[output objectForKey:@"status"] code:[[output objectForKey:@"error_code"] intValue] userInfo:nil]);
                 
             }
 
-        }];
-        
-        [task resume];
-                                  
-    }
-    else {
-        completion([NSError errorWithDomain:@"post cannot be develted by you" code:401 userInfo:nil]);
-        
-    }
+        }
+        else {
+            if (error) completion(error);
+            else completion([NSError errorWithDomain:@"unknown error" code:status.statusCode userInfo:nil]);
+            
+        }
+
+    }];
+    
+    [task resume];
     
 }
 
--(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)currentTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent
+    totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
+    CGFloat progress = (float)totalBytesSent/totalBytesExpectedToSend;
+    NSLog(@"downloaded %d%%", (int)(100.0 * progress));
     
     if ([self.delegate respondsToSelector:@selector(imageUploadedBytesWithPercentage:)]) {
-        [self.delegate imageUploadedBytesWithPercentage:((double)totalBytesWritten / (double)totalBytesExpectedToWrite)];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.delegate imageUploadedBytesWithPercentage:progress];
+        
+        }];
         
     }
-
+    
 }
 
--(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error {
-    if (error == nil) {
+-(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+    NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
+    if ([[output objectForKey:@"error_code"] intValue] == 200) {
         if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
-            [self.delegate imageUploadedBytesWithPercentage:0.9];
-            [self.query cacheDestroy:@"postsApi/getAllFriendsPostsNext"];
-            [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
-                [self.delegate imageUploadedBytesWithPercentage:1.0];
-                [self.delegate imageUploadedWithErrors:[NSError errorWithDomain:@"no errors" code:200 userInfo:nil]];
-
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.query cacheDestroy:@"following"];
+                [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
+                    [self.delegate imageUploadedBytesWithPercentage:1.0];
+                    [self.delegate imageUploadedWithErrors:[NSError errorWithDomain:@"no errors" code:200 userInfo:nil]];
+                    
+                }];
+                
             }];
             
         }
@@ -340,31 +365,18 @@
     }
     else {
         if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
-            [self.delegate imageUploadedWithErrors:error];
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                NSError *error = [NSError errorWithDomain:[output objectForKey:@"status"] code:[[output objectForKey:@"error_code"] intValue] userInfo:nil];
+                [self.delegate imageUploadedWithErrors:error];
+                
+            }];
             
         }
         
     }
-    NSLog(@"Error: %@" ,error);
         
 }
 
--(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)download didFinishDownloadingToURL:(NSURL *)location {
-    NSLog(@"Completed!");
-    if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
-        [self.delegate imageUploadedBytesWithPercentage:0.85];
-        [self.query cacheDestroy:@"postsApi/getAllFriendsPostsNext"];
-        [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [self.delegate imageUploadedBytesWithPercentage:1.0];
-                [self.delegate imageUploadedWithErrors:[NSError errorWithDomain:@"no errors" code:200 userInfo:nil]];
-                
-            }];
-            
-        }];
-        
-    }
-    
-}
+
 
 @end

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <SafariServices/SafariServices.h>
+#import <UIImageView+WebCache.h>
 #import <Mixpanel.h>
 #import "BNavigationView.h"
 #import "GDActionSheet.h"

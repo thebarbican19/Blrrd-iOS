@@ -21,9 +21,11 @@
 @property (nonatomic, strong) id <BNavigationDelegate> delegate;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) id rightbutton;
+@property (nonatomic, assign) BOOL backdisabled;
 
 -(void)navigationTitle:(NSString *)title;
 -(void)navigationRightButton:(id)buton;
+-(void)navigationBackButtonDisabled:(BOOL)disabled;
 
 @end
 

@@ -108,85 +108,42 @@
 }
 
 -(void)viewContentRefresh:(UIRefreshControl *)refresh {
-    if (self.type == BDetailedViewTypeChannel) {
-        [self.query queryChannelByIdentifyer:[self.data objectForKey:@"name"] page:self.viewTimeline.pagenation completion:^(NSArray *channel, NSError *error) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [self.viewTimeline collectionViewLoadContent:channel append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
-                
-            }];
+    [self.query queryUserPosts:[self.data objectForKey:@"username"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.viewTimeline collectionViewLoadContent:items append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
             
         }];
         
-    }
-    else {
-        [self.query queryUserPosts:[self.data objectForKey:@"username"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [self.viewTimeline collectionViewLoadContent:items append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
-                
-            }];
-            
-        }];
-
-    }
+    }];
     
 }
 
 -(void)viewUpdateTimeline:(BQueryTimeline)timeline {
     [self.viewTimeline.footer present:true status:nil];
-    if (self.type == BDetailedViewTypeChannel) {
-        [self.query queryChannelByIdentifyer:[self.data objectForKey:@"name"] page:self.viewTimeline.pagenation completion:^(NSArray *channel, NSError *error) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    [self.viewTimeline collectionViewLoadContent:channel append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
-                    if ((error == nil || error.code == 200) && channel.count == 0) {
-                        [self.viewTimeline setScrollend:true];
-                        [self.viewTimeline.footer present:false status:NSLocalizedString(@"Timeline_ScrollEnd_Title", nil)];
-
-                    }
-                    else {
-                        [self.viewTimeline collectionViewLoadContent:channel append:self.viewTimeline.pagenation==0?false:true loading:false error:nil];
-                        if (error.code != 200 && error != nil) {
-                            [self.viewTimeline.footer present:false status:error.domain];
-                            
-                        }
+    [self.query queryUserPosts:[self.data objectForKey:@"username"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                [self.viewTimeline collectionViewLoadContent:items append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
+                if ((error == nil || error.code == 200) && items.count == 0) {
+                    [self.viewTimeline setScrollend:true];
+                    [self.viewTimeline.footer present:false status:NSLocalizedString(@"Timeline_ScrollEnd_Title", nil)];
+                    
+                }
+                else {
+                    [self.viewTimeline collectionViewLoadContent:items append:self.viewTimeline.pagenation==0?false:true loading:false error:nil];
+                    if (error.code != 200 && error != nil) {
+                        [self.viewTimeline.footer present:false status:error.domain];
                         
                     }
                     
-                });
+                }
                 
-            }];
-            
-        }];
-        
-    }
-    else {
-        [self.query queryUserPosts:[self.data objectForKey:@"username"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                    [self.viewTimeline collectionViewLoadContent:items append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
-                    if ((error == nil || error.code == 200) && items.count == 0) {
-                        [self.viewTimeline setScrollend:true];
-                        [self.viewTimeline.footer present:false status:NSLocalizedString(@"Timeline_ScrollEnd_Title", nil)];
-                        
-                    }
-                    else {
-                        [self.viewTimeline collectionViewLoadContent:items append:self.viewTimeline.pagenation==0?false:true loading:false error:nil];
-                        if (error.code != 200 && error != nil) {
-                            [self.viewTimeline.footer present:false status:error.domain];
-                            
-                        }
-                        
-                    }
-                    
-                });
-                
-            }];
+            });
             
         }];
 
-    }
+    }];
     
 }
 

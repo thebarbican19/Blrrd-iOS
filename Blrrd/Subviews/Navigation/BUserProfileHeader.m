@@ -69,7 +69,9 @@
     
     [profile sd_setImageWithURL:[self.data objectForKey:@"photo"] placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
     [username setText:[self.data objectForKey:@"username"]];
-    
+    [follow followSetType:BFollowActionTypeFollowed animate:false];
+
+    /*
     if ([self.query friendCheck:[self.data objectForKey:@"username"]]) {
         [follow followSetType:BFollowActionTypeFollowed animate:false];
         
@@ -78,6 +80,7 @@
         [follow followSetType:BFollowActionTypeUnfollowed animate:false];
 
     }
+    */
     
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         [follow setAlpha:1.0];

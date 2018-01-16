@@ -60,12 +60,8 @@
 
 -(void)textFieldDidChange:(UITextField *)textField {
     if (self.shouldUpdate) {
-        if (self.loaderRequired) {
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(textFieldDidStopEditing:) object:nil];
-            [self performSelector:@selector(textFieldDidStopEditing:) withObject:nil afterDelay:0.5];
-
-        }
-        else [self.loader setHidden:true];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(textFieldDidStopEditing:) object:nil];
+        [self performSelector:@selector(textFieldDidStopEditing:) withObject:nil afterDelay:0.5];
         
         if ([self.search.text length] == 0) [self.loader stopAnimation];
         

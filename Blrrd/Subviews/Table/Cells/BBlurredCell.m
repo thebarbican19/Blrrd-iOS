@@ -116,17 +116,18 @@
 
 -(void)content:(NSDictionary *)content index:(NSIndexPath *)index {
     self.content = [[NSMutableDictionary alloc] initWithDictionary:content];
-    self.userdata = [[content objectForKey:@"userdata"] firstObject];
-    self.existingtimeviewed = [[self.content objectForKey:@"sectotal"] intValue];
+    self.userdata = [content objectForKey:@"user"];
+    self.existingtimeviewed = [[self.content objectForKey:@"seconds"] intValue];
+    self.imageurl = [NSString stringWithFormat:@"%@content/image.php?id=%@" ,APP_HOST_URL ,[content objectForKey:@"imageurl"]];
 
-    [self.subtitle setText:[content objectForKey:@"name"]];
+    [self.subtitle setText:[content objectForKey:@"caption"]];
     [self.user setText:[[self.userdata objectForKey:@"username"] lowercaseString]];
-    [self.avatar sd_setImageWithURL:[self.userdata objectForKey:@"photo"] placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
+    [self.avatar sd_setImageWithURL:[self.userdata objectForKey:@"avatar"] placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
     [self.time setText:self.timeformatted animate:false];
-    [self.timestamp setText:[self time:[content objectForKey:@"posted_datetime"]]];
+    [self.timestamp setText:[self time:[content objectForKey:@"timestamp"]]];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self blur:[NSURL URLWithString:[content objectForKey:@"publicpath"]]];
+        [self blur:[NSURL URLWithString:self.imageurl]];
         
     });
     
@@ -136,7 +137,7 @@
     [self.image sd_setImageWithURL:url completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         [UIView transitionWithView:self duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             if (image.CGImage != NULL && image.CGImage != nil) {
-                [self.overlay setImage:[UIImage ty_imageByApplyingBlurToImage:image withRadius:60.0 tintColor:[UIColor colorWithWhite:0.0 alpha:0.15] saturationDeltaFactor:1.0 maskImage:nil]];
+                [self.overlay setImage:[UIImage ty_imageByApplyingBlurToImage:image withRadius:40.0 tintColor:[UIColor colorWithWhite:0.0 alpha:0.15] saturationDeltaFactor:1.0 maskImage:nil]];
                 [self.image setImage:image];
                 
             }
@@ -152,7 +153,7 @@
         [self setExistingtimeviewed:self.existingtimeviewed+1];
         [self setTimeviewed:self.timeviewed+1];
         [self.time setText:self.timeformatted animate:true];
-        [self.content setObject:[NSNumber numberWithInt:self.existingtimeviewed] forKey:@"sectotal"];
+        [self.content setObject:[NSNumber numberWithInt:self.existingtimeviewed] forKey:@"seconds"];
 
     }
     
@@ -169,16 +170,14 @@
     if ((gesture.state == UIGestureRecognizerStateEnded || gesture == nil) && self.imagerevealed) {
         if (self.timer.isValid) {
             [self.timer invalidate];
-            if (![[self.content objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
+            if (![[[self.content objectForKey:@"user"] objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
                 [self.credentials setUserTotalTime:self.timeviewed append:true];
-                [self.query postTime:self.content secondsadded:self.timeviewed completion:^(NSError *error) {
-                    if (error.code == 200) {
-                        [self setTimeviewed:0];
-                        [self.mixpanel track:@"Image Revealed" properties:@{@"Image":[self.content objectForKey:@"publicpath"],
-                                                                            @"ID":[self.content objectForKey:@"id"],
-                                                                            @"User":[self.content objectForKey:@"username"]}];
-                        
-                    }
+                [self.query postTime:self.content secondsadded:self.timeviewed timeline:self.timeline completion:^(NSError *error) {
+                    [self setTimeviewed:0];
+                    [self.mixpanel track:@"App Image Revealed" properties:@{@"Image":[self.content objectForKey:@"imageurl"],
+                                                                        @"ID":[self.content objectForKey:@"postid"],
+                                                                        @"User":[[self.content objectForKey:@"user"] objectForKey:@"username"]}];
+    
                     
                 }];
                 
@@ -190,7 +189,7 @@
     }
     else if (gesture.state == UIGestureRecognizerStateEnded && self.imagerevealed == false) {
         [self setTimeviewed:0];
-        [self.mixpanel timeEvent:@"Image Revealed"];
+        [self.mixpanel timeEvent:@"App Image Revealed"];
         if ([self.delegate respondsToSelector:@selector(collectionViewRevealed:)]) {
             [self.delegate collectionViewRevealed:self];
             
@@ -227,7 +226,7 @@
 
 -(NSString *)time:(NSString *)timestamp {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZZZ";
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss ZZZ";
     
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[formatter dateFromString:timestamp] toDate:[NSDate date] options:0];
     
@@ -250,8 +249,11 @@
         return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Minute", nil):NSLocalizedString(@"Timestamp_Minutes", nil)];
         
     }
+    else if (components.second > 0) {
+        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Second", nil):NSLocalizedString(@"Timestamp_Seconds", nil)];
+    }
     else {
-        return nil;
+        return [formatted stringFromDate:[formatter dateFromString:timestamp]];
         
     }
     

@@ -9,6 +9,7 @@
 #import "BNotificationsController.h"
 #import "BConstants.h"
 #import "BCompleteController.h"
+#import "BFriendFinderController.h"
 
 @interface BNotificationsController ()
 
@@ -111,14 +112,23 @@
         [self.viewAction setTitle:NSLocalizedString(@"Onboarding_ActionUpdating_Text", nil).uppercaseString forState:UIControlStateNormal];
         [self.viewAction setEnabled:false];
 
-        [self.query postUserUpdate:^(NSError *error) {
+        if (self.login) {
             BCompleteController *viewComplete = [[BCompleteController alloc] init];
             viewComplete.login = self.login;
             
             [self.navigationController pushViewController:viewComplete animated:true];
-            [self.viewAction setEnabled:true];
+            
+        }
+        else {
+            BFriendFinderController *viewFriends = [[BFriendFinderController alloc] init];
+            viewFriends.signup = true;
+            viewFriends.header = NSLocalizedString(@"Friend_SuggestedHeader_Text", nil);
+            
+            [self.navigationController pushViewController:viewFriends animated:true];
 
-        }];
+        }
+            
+        [self.viewAction setEnabled:true];
         
     }];
 
