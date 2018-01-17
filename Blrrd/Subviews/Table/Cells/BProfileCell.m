@@ -13,6 +13,7 @@
 
 -(id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
+    self.credentials = [[BCredentialsObject alloc] init];
     if (self) {
         self.image = [[UIImageView alloc] initWithFrame:self.bounds];
         self.image.contentMode = UIViewContentModeScaleAspectFill;
@@ -35,7 +36,7 @@
 }
 
 -(void)content:(NSDictionary *)content {
-    NSString *image = [NSString stringWithFormat:@"%@content/image.php?id=%@" ,APP_HOST_URL ,[content objectForKey:@"imageurl"]];
+    NSString *image = [NSString stringWithFormat:@"%@content/image.php?id=%@&tok=%@" ,APP_HOST_URL ,[content objectForKey:@"imageurl"] ,self.credentials.authToken];
     if ([[content objectForKey:@"type"] containsString:@"showall"]) {
         [self image:[NSURL URLWithString:image] blur:true];
         [self.seconds setText:@"+"];

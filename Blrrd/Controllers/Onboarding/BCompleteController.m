@@ -52,6 +52,17 @@
         }];
         
     }];
+    
+    [self.appdel applicationNotificationsAuthorized:^(UNAuthorizationStatus authorized) {
+        if (authorized == UNAuthorizationStatusAuthorized) {
+            [self.appdel applicationAuthorizeRemoteNotifications:^(NSError *error, BOOL granted) {
+                
+            }];
+            
+        }
+        
+    }];
+    
 }
 
 -(void)viewDidLoad {
@@ -60,6 +71,8 @@
     self.view.backgroundColor = UIColorFromRGB(0x140F26);
     self.view.clipsToBounds = true;
     
+    self.appdel = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
     self.mixpanel = [Mixpanel sharedInstance];
     
     self.query = [[BQueryObject alloc] init];

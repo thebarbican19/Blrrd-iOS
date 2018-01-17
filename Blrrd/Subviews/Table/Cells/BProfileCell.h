@@ -10,10 +10,14 @@
 #import <UIImageView+WebCache.h>
 #import <UIImage+BlurEffects.h>
 
+#import "BCredentialsObject.h"
+
 @interface BProfileCell : UICollectionViewCell
 
 @property (nonatomic, strong) UILabel *seconds;
 @property (nonatomic, strong) UIImageView *image;
+
+@property (nonatomic, strong) BCredentialsObject *credentials;
 
 -(void)content:(NSDictionary *)content;
 

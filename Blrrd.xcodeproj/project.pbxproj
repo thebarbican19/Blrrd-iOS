@@ -62,6 +62,8 @@
 		7778B1ED1FCFB03E00E5B83D /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7778B1EC1FCFB03E00E5B83D /* Settings.plist */; };
 		7778B1F01FCFB0C600E5B83D /* BSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1EF1FCFB0C600E5B83D /* BSettingsController.m */; };
 		7778B1F31FCFB3D800E5B83D /* BSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1F21FCFB3D800E5B83D /* BSettingsCell.m */; };
+		77845262200F7DB3003A4841 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 77845261200F7DB3003A4841 /* NotificationService.m */; };
+		77845266200F7DB3003A4841 /* BlrrdNotifications.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7784525E200F7DB3003A4841 /* BlrrdNotifications.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		778D9B171FABB53600878A6A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B161FABB53600878A6A /* AppDelegate.m */; };
 		778D9B1D1FABB53600878A6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1B1FABB53600878A6A /* Main.storyboard */; };
 		778D9B1F1FABB53600878A6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1E1FABB53600878A6A /* Assets.xcassets */; };
@@ -100,6 +102,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		77845264200F7DB3003A4841 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 778D9B0A1FABB53600878A6A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7784525D200F7DB3003A4841;
+			remoteInfo = BlrrdNotifications;
+		};
 		778D9B2B1FABB53600878A6A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 778D9B0A1FABB53600878A6A /* Project object */;
@@ -123,6 +132,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				77845266200F7DB3003A4841 /* BlrrdNotifications.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -216,6 +226,10 @@
 		7778B1EF1FCFB0C600E5B83D /* BSettingsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSettingsController.m; sourceTree = "<group>"; };
 		7778B1F11FCFB3D800E5B83D /* BSettingsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSettingsCell.h; sourceTree = "<group>"; };
 		7778B1F21FCFB3D800E5B83D /* BSettingsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSettingsCell.m; sourceTree = "<group>"; };
+		7784525E200F7DB3003A4841 /* BlrrdNotifications.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BlrrdNotifications.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		77845260200F7DB3003A4841 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
+		77845261200F7DB3003A4841 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
+		77845263200F7DB3003A4841 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		778D9B121FABB53600878A6A /* Blrrd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blrrd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		778D9B151FABB53600878A6A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		778D9B161FABB53600878A6A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -292,6 +306,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7784525B200F7DB3003A4841 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		778D9B0F1FABB53600878A6A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -436,12 +457,23 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		7784525F200F7DB3003A4841 /* BlrrdNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				77845260200F7DB3003A4841 /* NotificationService.h */,
+				77845261200F7DB3003A4841 /* NotificationService.m */,
+				77845263200F7DB3003A4841 /* Info.plist */,
+			);
+			path = BlrrdNotifications;
+			sourceTree = "<group>";
+		};
 		778D9B091FABB53600878A6A = {
 			isa = PBXGroup;
 			children = (
 				778D9B141FABB53600878A6A /* Blrrd */,
 				778D9B2D1FABB53600878A6A /* BlrrdTests */,
 				778D9B381FABB53600878A6A /* BlrrdUITests */,
+				7784525F200F7DB3003A4841 /* BlrrdNotifications */,
 				778D9B131FABB53600878A6A /* Products */,
 				471E73CD90FFCB621EE64D94 /* Pods */,
 				DC2B262B6F1B871B7C26DD9C /* Frameworks */,
@@ -454,6 +486,7 @@
 				778D9B121FABB53600878A6A /* Blrrd.app */,
 				778D9B2A1FABB53600878A6A /* BlrrdTests.xctest */,
 				778D9B351FABB53600878A6A /* BlrrdUITests.xctest */,
+				7784525E200F7DB3003A4841 /* BlrrdNotifications.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -707,6 +740,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7784525D200F7DB3003A4841 /* BlrrdNotifications */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77845267200F7DB3003A4841 /* Build configuration list for PBXNativeTarget "BlrrdNotifications" */;
+			buildPhases = (
+				7784525A200F7DB3003A4841 /* Sources */,
+				7784525B200F7DB3003A4841 /* Frameworks */,
+				7784525C200F7DB3003A4841 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BlrrdNotifications;
+			productName = BlrrdNotifications;
+			productReference = 7784525E200F7DB3003A4841 /* BlrrdNotifications.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		778D9B111FABB53600878A6A /* Blrrd */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 778D9B3E1FABB53600878A6A /* Build configuration list for PBXNativeTarget "Blrrd" */;
@@ -722,6 +772,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				77845265200F7DB3003A4841 /* PBXTargetDependency */,
 			);
 			name = Blrrd;
 			productName = Blrrd;
@@ -780,6 +831,10 @@
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = "Blrrd Ltd";
 				TargetAttributes = {
+					7784525D200F7DB3003A4841 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
 					778D9B111FABB53600878A6A = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
@@ -826,11 +881,19 @@
 				778D9B111FABB53600878A6A /* Blrrd */,
 				778D9B291FABB53600878A6A /* BlrrdTests */,
 				778D9B341FABB53600878A6A /* BlrrdUITests */,
+				7784525D200F7DB3003A4841 /* BlrrdNotifications */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7784525C200F7DB3003A4841 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		778D9B101FABB53600878A6A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1013,6 +1076,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7784525A200F7DB3003A4841 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				77845262200F7DB3003A4841 /* NotificationService.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		778D9B0E1FABB53600878A6A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1092,6 +1163,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		77845265200F7DB3003A4841 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7784525D200F7DB3003A4841 /* BlrrdNotifications */;
+			targetProxy = 77845264200F7DB3003A4841 /* PBXContainerItemProxy */;
+		};
 		778D9B2C1FABB53600878A6A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 778D9B111FABB53600878A6A /* Blrrd */;
@@ -1132,6 +1208,36 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		77845268200F7DB3003A4841 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2TG3C5JT66;
+				INFOPLIST_FILE = BlrrdNotifications/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd.BlrrdNotifications;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		77845269200F7DB3003A4841 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2TG3C5JT66;
+				INFOPLIST_FILE = BlrrdNotifications/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd.BlrrdNotifications;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		778D9B3C1FABB53600878A6A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1379,6 +1485,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		77845267200F7DB3003A4841 /* Build configuration list for PBXNativeTarget "BlrrdNotifications" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77845268200F7DB3003A4841 /* Debug */,
+				77845269200F7DB3003A4841 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		778D9B0D1FABB53600878A6A /* Build configuration list for PBXProject "Blrrd" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

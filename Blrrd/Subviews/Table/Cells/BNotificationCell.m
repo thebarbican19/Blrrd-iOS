@@ -13,6 +13,7 @@
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self.credentials = [[BCredentialsObject alloc] init];
     if (self) {
         self.status = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.height, 0.0, self.bounds.size.width - self.bounds.size.height, self.bounds.size.height - 14.0)];
         self.status.clipsToBounds = true;
@@ -52,7 +53,7 @@
     }
     
     [self.status setAttributedText:[self format:item type:type]];
-    [self.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@content/image.php?id=%@" ,APP_HOST_URL ,[item objectForKey:@"imageurl"]]]];
+    [self.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@content/image.php?id=%@&tok=%@" ,APP_HOST_URL ,[item objectForKey:@"imageurl"], self.credentials.authToken]]];
     
 }
 

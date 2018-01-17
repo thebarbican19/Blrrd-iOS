@@ -211,13 +211,14 @@
 }
 
 -(void)applicationAuthorizeRemoteNotifications:(void (^)(NSError *error, BOOL granted))completion {
+    self.pushbots = [[Pushbots alloc] initWithAppId:@"5a5a6091a5d10304d650b176" prompt:true];
+
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
     center.delegate = self;
     
     [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound|UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error){
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [[UIApplication sharedApplication] registerForRemoteNotifications];
-            self.pushbots = [[Pushbots alloc] initWithAppId:@"5a5a6091a5d10304d650b176" prompt:true];
 
             completion(error, granted);
             
@@ -234,13 +235,10 @@
     NSString *token = [deviceToken.description stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
     
+    NSLog(@"token: %@ user: %@" ,deviceToken ,self.credentials.userHandle);
     if (self.credentials.userHandle != nil) {
         [self.pushbots registerOnPushbots:deviceToken];
         [self.pushbots setAlias:self.credentials.userHandle];
-        
-    }
-    else {
-        [self.pushbots removeAlias];
 
     }
 

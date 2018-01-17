@@ -118,7 +118,7 @@
     self.content = [[NSMutableDictionary alloc] initWithDictionary:content];
     self.userdata = [content objectForKey:@"user"];
     self.existingtimeviewed = [[self.content objectForKey:@"seconds"] intValue];
-    self.imageurl = [NSString stringWithFormat:@"%@content/image.php?id=%@" ,APP_HOST_URL ,[content objectForKey:@"imageurl"]];
+    self.imageurl = [NSString stringWithFormat:@"%@content/image.php?id=%@&tok=%@" ,APP_HOST_URL ,[content objectForKey:@"imageurl"] ,self.credentials.authToken];
 
     [self.subtitle setText:[content objectForKey:@"caption"]];
     [self.user setText:[[self.userdata objectForKey:@"username"] lowercaseString]];
@@ -149,7 +149,7 @@
 }
 
 -(void)givetime:(NSTimer *)timer {
-    if (timer != nil && ![[self.content objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
+    if (timer != nil && ![[[self.content objectForKey:@"user"] objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
         [self setExistingtimeviewed:self.existingtimeviewed+1];
         [self setTimeviewed:self.timeviewed+1];
         [self.time setText:self.timeformatted animate:true];

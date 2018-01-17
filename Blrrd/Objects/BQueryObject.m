@@ -168,7 +168,7 @@
                     NSMutableArray *posts = [[NSMutableArray alloc] init];
                     [posts addObjectsFromArray:[output objectForKey:@"output"]];
                     
-                    [self cacheSave:posts endpointname:[endpointparams objectForKey:@"type"] append:page==0?false:true expiry:60*60];
+                    [self cacheSave:posts endpointname:[endpointparams objectForKey:@"type"] append:page==0?false:true expiry:60*50];
                     
                     completion(posts, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
                     
@@ -409,7 +409,7 @@
                 NSDictionary *user = [output objectForKey:@"user"];
                 NSDictionary *stats = [user objectForKey:@"stats"];
                 
-                [self cacheSave:stats endpointname:endpoint append:false expiry:60*10];
+                [self cacheSave:stats endpointname:endpoint append:false expiry:60*5];
                 
                 [self.credentials setUserTotalTime:[[stats objectForKey:@"totaltime"] intValue] append:false];
                 [self.credentials setUserEmail:[user objectForKey:@"email"]];
@@ -507,6 +507,7 @@
 
         }
         
+        [format setObject:[item objectForKey:@"timestamp"] forKey:@"timestamp"];
         [merge addObject:format];
         
     }
@@ -535,6 +536,7 @@
             
         }
         
+        [append setObject:[merged objectForKey:@"timestamp"] forKey:@"timestamp"];
         [append setObject:[merged objectForKey:@"postid"] forKey:@"postid"];
         [append setObject:@(totaltime) forKey:@"totalsecs"];
         [append setObject:@([counted countForObject:merged]) forKey:@"sessions"];
@@ -583,8 +585,8 @@
     
     if (index < timelinedata.count) {
         NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:[timelinedata objectAtIndex:index]];
-        //[append setObject:[data objectForKey:@"seconds"] forKey:@"seconds"];
-        //[append setObject:@([[append objectForKey:@"sectotal"] integerValue] + [[data objectForKey:@"seconds"] intValue]) forKey:@"seconds"];
+        [append setObject:[data objectForKey:@"seconds"] forKey:@"seconds"];
+        [append setObject:@([[append objectForKey:@"sectotal"] integerValue] + [[data objectForKey:@"seconds"] intValue]) forKey:@"seconds"];
         [append setObject:@([[append objectForKey:@"seen"] intValue] + 1) forKey:@"seen"];
         
         [timelinedata replaceObjectAtIndex:index withObject:append];

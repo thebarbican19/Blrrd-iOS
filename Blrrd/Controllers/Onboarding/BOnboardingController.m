@@ -16,6 +16,12 @@
 
 @implementation BOnboardingController
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [self.viewLogin setEnabled:true];
+    [self.viewSignup setEnabled:true];
+    
+}
+
 -(void)viewDidLoad {
     [super viewDidLoad];
 
@@ -58,7 +64,10 @@
 -(void)viewPresentAuthentication:(UIButton *)button {
     BAuthenticateController *viewAuthentication = [[BAuthenticateController alloc] init];
     viewAuthentication.login = button.tag==2?true:false;
+    viewAuthentication.view.backgroundColor = UIColorFromRGB(0x140F26);
     
+    [self.viewLogin setEnabled:false];
+    [self.viewSignup setEnabled:false];
     [self.navigationController pushViewController:viewAuthentication animated:true];
     
 }

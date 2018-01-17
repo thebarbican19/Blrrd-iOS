@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Pushbots/Pushbots.h>
 
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
+#import "AppDelegate.h"
 
 #import "BLMultiColorLoader.h"
 #import "SAMLabel.h"
@@ -19,7 +21,9 @@
 @property (nonatomic, retain) Mixpanel *mixpanel;
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic, strong) BQueryObject *query;
+@property (nonatomic, strong) AppDelegate *appdel;
 @property (nonatomic, assign) BOOL login;
+@property (strong, nonatomic) Pushbots *pushbots;
 
 @property (nonatomic, strong) UIImageView *viewIcon;
 @property (nonatomic, strong) SAMLabel *viewInstructions;

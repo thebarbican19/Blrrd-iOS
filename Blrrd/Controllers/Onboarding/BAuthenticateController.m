@@ -355,6 +355,13 @@
                         
                     }
                     
+                    if (authorized == UNAuthorizationStatusAuthorized) {
+                        [self.appdel applicationAuthorizeRemoteNotifications:^(NSError *error, BOOL granted) {
+                            
+                        }];
+                        
+                    }
+                    
                 }
                 
             }];

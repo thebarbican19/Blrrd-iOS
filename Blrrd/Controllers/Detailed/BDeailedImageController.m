@@ -206,7 +206,7 @@
     self.index = [NSIndexPath indexPathForRow:self.page inSection:0];
     self.selected = [self.posts objectAtIndex:self.page];
     self.notifications = [[NSMutableArray alloc] initWithArray:[self.query notificationsForSpecificImage:[self.selected objectForKey:@"postid"]]];
-    NSLog(@"self.notifications: %@" ,self.notifications);
+
     [self.viewNavigation navigationTitle:[self.selected objectForKey:@"caption"]];
     [self.viewNotifications reloadData];
     

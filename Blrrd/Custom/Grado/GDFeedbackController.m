@@ -165,7 +165,7 @@
     
     if (self.imagedata != nil) {
         [attachement addObject:@{@"title":@"Image Information",
-                                 @"image_url":[NSString stringWithFormat:@"%@content/image.php?id=%@" ,APP_HOST_URL ,[self.imagedata objectForKey:@"imageurl"]],
+                                 @"image_url":[NSString stringWithFormat:@"%@content/image.php?id=%@&tok=%@" ,APP_HOST_URL ,[self.imagedata objectForKey:@"imageurl"], self.credentials.authToken],
                                  @"text":[NSString stringWithFormat:@"Key: %@\nCaption: %@\nUploaded By:%@" ,
                                           [self.imagedata objectForKey:@"postid"],
                                           [self.imagedata objectForKey:@"caption"],
