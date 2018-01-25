@@ -56,6 +56,8 @@
     
     self.credentials = [[BCredentialsObject alloc] init];
     
+    self.query = [[BQueryObject alloc] init];
+    
     self.view.backgroundColor = MAIN_BACKGROUND_COLOR;
     
     self.feedbackNavigation = [[BNavigationView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, 70.0)];
@@ -190,11 +192,28 @@
     [sessionRequest setHTTPBody:[NSJSONSerialization dataWithJSONObject:@{@"channel":channel, @"text":title, @"attachments":attachement, @"response_type":@"in_channel"} options:NSJSONWritingPrettyPrinted error:nil]];
     NSURLSessionDataTask *sessionTask = [session dataTaskWithRequest:sessionRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (!error && data.length > 0 && [[NSString stringWithUTF8String:data.bytes] isEqualToString:@"ok"]) {
-            [self.feedbackEntry setHidden:true];
-            [self.feedbackPlaceholder setHidden:false];
-            [self.feedbackPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Settings_FeedbackPlaceholderSent_Title", nil) instructions:NSLocalizedString(@"Settings_FeedbackPlaceholderSent_Body", nil)];
+            [self.query postReport:[self.imagedata objectForKey:@"postid"] message:self.feedbackEntry.text completion:^(NSError *error) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    if (error.code == 200) {
+                        [self.feedbackEntry setHidden:true];
+                        [self.feedbackPlaceholder setHidden:false];
+                        [self.feedbackPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Settings_FeedbackPlaceholderSent_Title", nil) instructions:NSLocalizedString(@"Settings_FeedbackPlaceholderSent_Body", nil)];
 
-            [self.mixpanel track:@"App Sent Feedback" properties:nil];
+                        [self.query cacheDestroy:@"trending"];
+                        [self.mixpanel track:@"App Sent Feedback" properties:nil];
+                        
+                    }
+                    else {
+                        [self.feedbackEntry becomeFirstResponder];
+                        [self.feedbackNavigation navigationTitle:error.domain];
+                        [self.feedbackNavigation navigationRightButton:NSLocalizedString(@"Settings_FeedbackRetry_Action", nil)];
+
+                        
+                    }
+                    
+                }];
+                    
+            }];
     
         }
         else {

@@ -16,9 +16,10 @@
 #import "BUsageObject.h"
 #import "BImageObject.h"
 #import "BCredentialsObject.h"
+#import "BDetailedTimelineController.h"
 
 @protocol BDetailedImageDelegate;
-@interface BDeailedImageController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, BNavigationDelegate, BBlurredCellDelegate, BTabbarDelegate, BImageObjectDelegate, GDActionSheetDelegate>
+@interface BDeailedImageController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, BNavigationDelegate, BDetailedTimelineDelegate, BBlurredCellDelegate, BTabbarDelegate, BImageObjectDelegate, GDActionSheetDelegate>
 
 @property (nonatomic, strong) id <BDetailedImageDelegate> delegate;
 @property (nonatomic, strong) BQueryObject *query;

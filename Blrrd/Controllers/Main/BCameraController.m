@@ -125,7 +125,7 @@
 
         }
             
-        [self.delegate viewHandleImage:self.image preview:true loading:false];
+        [self.delegate viewHandleImage:self.image preview:true loading:false camera:true];
         
     }
     

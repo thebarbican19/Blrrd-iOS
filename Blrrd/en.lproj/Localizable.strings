@@ -101,6 +101,7 @@
 "Profile_NotificationDetailed_Body" = "*%@* viewed your post"; //Joe viewed your post again
 "Profile_NotificationEmpty_Body" = "Nobody has viewed your post yet";
 "Profile_UnknownUserPlaceholder_Text" = "Unknown User";
+"Profile_UnknownTimetampPlaceholder_Text" = "Unknown Date";
 
 "Settings_Title" = "Settings";
 "Settings_SectionAbout_Title" = "About";
@@ -131,6 +132,7 @@
 "Friend_SuggestedHeader_Text" = "Suggested Users";
 "Friend_ActionFollow_Text" = "Follow";
 "Friend_ActionFollowing_Text" = "Following";
+"Friend_LastActive_Text" = "Last Active %@"; //last active 1 day ago
 
 "ImageDetailed_Report_Title" = "Reporting Image";
 "ImageDetailed_ReportSend_Placeholder" = "Reason for reporting this image?";

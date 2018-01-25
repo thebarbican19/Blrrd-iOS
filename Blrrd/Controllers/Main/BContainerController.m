@@ -209,11 +209,11 @@
     }
     else [self.viewDiscover viewSetupNotification:[self.query notificationsMergeByType:BNotificationMergeTypePosts] limit:0];
     
-    if ([self.query cacheExpired:@"user/posts.php"]) {
+    if ([self.query cacheExpired:self.credentials.userKey]) {
         [self.queue addOperationWithBlock:^{
-            [self.query queryUserPosts:self.credentials.userHandle page:0 completion:^(NSArray *items, NSError *error) {
+            [self.query queryUserPosts:self.credentials.userKey page:0 completion:^(NSArray *items, NSError *error) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    //[self.viewDiscover viewSetupRecentPosts:items];
+                    [self.viewDiscover viewSetupRecentPosts:items];
                     
                 }];
                 
@@ -222,7 +222,7 @@
         }];
         
     }
-    //else [self.viewDiscover viewSetupRecentPosts:[self.query cacheRetrive:@"user/posts.php"]];
+    else [self.viewDiscover viewSetupRecentPosts:[self.query cacheRetrive:self.credentials.userKey]];
     
     if ([self.query cacheExpired:@"user/friendship.php"]) {
         [self.queue addOperationWithBlock:^{
@@ -301,14 +301,6 @@
                 [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"following"] append:false loading:false error:nil];
                 
             }
-            /*
-            else if (index == 1) {
-                [self.viewTimeline.view removeFromSuperview];
-                [self.viewContainer addSubview:self.viewChannels.view];
-                [self.viewChannels viewSetupContent:[self.query cacheRetrive:@"channelsApi/getChannels"]];
-                
-            }
-            */
             else {
                 [self.viewChannels.view removeFromSuperview];
                 [self.viewContainer addSubview:self.viewTimeline.view];
@@ -320,20 +312,6 @@
             [self.viewContainer bringSubviewToFront:self.viewTabbar];
             
             [UIView animateWithDuration:0.35 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                /*
-                if (index == 1) {
-                    [self.viewChannels.collectionView setFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.viewContainer.bounds.size.height - (APP_STATUSBAR_HEIGHT + self.safearea))];
-                    [self.viewChannels.collectionView setAlpha:1.0];
-                    
-                }
-                else {
-                    [self.viewTimeline.collectionView setFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.viewContainer.bounds.size.height - (APP_STATUSBAR_HEIGHT + self.safearea))];
-                    [self.viewTimeline.collectionView setAlpha:1.0];
-                    
-                }
-                 
-                */
-                
                 [self.viewTimeline.collectionView setFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.viewContainer.bounds.size.height - (APP_STATUSBAR_HEIGHT + self.safearea))];
                 [self.viewTimeline.collectionView setAlpha:1.0];
                 
@@ -402,9 +380,11 @@
         } completion:nil];
         
     }
-    if (index == 0)
+    if (index == 0) {
         [self.viewTimeline collectionViewLoadContent:[self.query cacheRetrive:@"following"] append:false loading:false error:nil];
         [self.viewTimeline.collectionView reloadData];
+        
+    }
     
     if (index == 2) {
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
@@ -479,7 +459,7 @@
 -(void)viewPresentImageWithData:(NSDictionary *)data {
     BDeailedImageController *viewImage = [[BDeailedImageController alloc] init];
     viewImage.view.backgroundColor = self.view.backgroundColor;
-    viewImage.posts = [self.query cacheRetrive:@"user/posts.php"];
+    viewImage.posts = [self.query cacheRetrive:self.credentials.userKey];
     viewImage.selected = data;
     viewImage.delegate = self;
     

@@ -49,6 +49,13 @@
 
 }
 
+-(void)viewSetupRecentPosts:(NSArray *)posts {
+    BProfileContainerCell *cell = (BProfileContainerCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [cell setup];
+    [self.tableView reloadData];
+    
+}
+
 -(void)viewPresentProfile {
     [self.delegate viewPresentProfile];
     
@@ -133,7 +140,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        if ([[self.query cacheRetrive:@"user/posts.php"] count] == 0) return 0;
+        if ([[self.query cacheRetrive:self.credentials.userKey] count] == 0) return 0;
         else return 60.0;
         
     }
@@ -149,7 +156,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        if ([[self.query cacheRetrive:@"user/posts.php"] count] == 0) return 0;
+        if ([[self.query cacheRetrive:self.credentials.userKey] count] == 0) return 0;
         else return 1;
         
     }
@@ -196,17 +203,11 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *item = [[self.sections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    NSLog(@"secion: %d item: %@" ,(int)indexPath.section ,item);
     if (indexPath.section == 1) {
         [self.delegate viewPresentFriendProfile:item];
         
     }
     else if (indexPath.section == 2) {
-        //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@" ,[item objectForKey:@"postid"]];
-        //NSArray *profile = [[self.query cacheRetrive:@"user/posts.php"] filteredArrayUsingPredicate:predicate];
-        //NSDictionary *photodata = [[NSDictionary alloc] initWithDictionary:profile.firstObject];
-
-        //NSLog(@"photodata: %@" ,photodata);
         [self.delegate viewPresentImageWithData:item];
         
     }

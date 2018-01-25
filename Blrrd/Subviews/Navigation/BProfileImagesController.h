@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) id <BProfileImagesDelegate> delegate;
 @property (nonatomic, strong) BQueryObject *query;
+@property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic, strong) NSMutableArray *images;
 @property (nonatomic, assign) int limitimages;
 

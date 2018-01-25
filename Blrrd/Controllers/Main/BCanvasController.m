@@ -169,9 +169,9 @@
    
 }
 
--(void)viewHandleImage:(UIImage *)image preview:(BOOL)preview loading:(BOOL)loading {
+-(void)viewHandleImage:(UIImage *)image preview:(BOOL)preview loading:(BOOL)loading camera:(BOOL)camera {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        if (!self.gallerymode && self.credentials.appSaveImages) {
+        if (camera && self.credentials.appSaveImages) {
             [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
                 [PHAssetChangeRequest creationRequestForAssetFromImage:image];
                 
@@ -352,7 +352,7 @@
             [self.viewGallery.imageobj imagesFromAsset:self.viewGallery.selected thumbnail:false completion:^(NSDictionary *data, UIImage *image) { 
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     [self.viewNavigation title:NSLocalizedString(@"Canvas_CameraApproveImage_Title", nil)];
-                    [self viewHandleImage:image preview:true loading:false];
+                    [self viewHandleImage:image preview:true loading:false camera:false];
                     
                     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                         [self.viewGallery.collectionView setFrame:CGRectMake(0.0, 0.0 - self.viewGallery.collectionView.bounds.size.height, self.view.bounds.size.width, self.viewGallery.collectionView.bounds.size.height)];
@@ -367,7 +367,7 @@
                 
             } withProgressHandler:^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    [self viewHandleImage:nil preview:true loading:true];
+                    [self viewHandleImage:nil preview:true loading:true camera:false];
                     [self.viewCanvas canvasDownloadingImageWithProgress:progress];
                     
                 }];
@@ -380,7 +380,7 @@
     }
     else if ([self.viewCanvas canvasBlurred] == false && self.gallerymode == false) {
         [self.viewNavigation title:NSLocalizedString(@"Canvas_UploadCaptionError_Title", nil)];
-        [self viewHandleImage:self.image preview:false loading:false];
+        [self viewHandleImage:self.image preview:false loading:false camera:true];
         [self.viewCanvas canvasPresentKeyboard];
 
     }

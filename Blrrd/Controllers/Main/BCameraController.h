@@ -39,6 +39,6 @@
 
 @optional
 
--(void)viewHandleImage:(UIImage *)image preview:(BOOL)preview loading:(BOOL)loading;
+-(void)viewHandleImage:(UIImage *)image preview:(BOOL)preview loading:(BOOL)loading camera:(BOOL)camera;
 
 @end

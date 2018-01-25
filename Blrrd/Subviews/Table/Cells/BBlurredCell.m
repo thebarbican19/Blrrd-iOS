@@ -115,6 +115,7 @@
 }
 
 -(void)content:(NSDictionary *)content index:(NSIndexPath *)index {
+    self.indexpath = index;
     self.content = [[NSMutableDictionary alloc] initWithDictionary:content];
     self.userdata = [content objectForKey:@"user"];
     self.existingtimeviewed = [[self.content objectForKey:@"seconds"] intValue];
@@ -171,7 +172,6 @@
         if (self.timer.isValid) {
             [self.timer invalidate];
             if (![[[self.content objectForKey:@"user"] objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
-                [self.credentials setUserTotalTime:self.timeviewed append:true];
                 [self.query postTime:self.content secondsadded:self.timeviewed timeline:self.timeline completion:^(NSError *error) {
                     [self setTimeviewed:0];
                     [self.mixpanel track:@"App Image Revealed" properties:@{@"Image":[self.content objectForKey:@"imageurl"],
@@ -224,38 +224,53 @@
 
 }
 
--(NSString *)time:(NSString *)timestamp {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss ZZZ";
-    
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[formatter dateFromString:timestamp] toDate:[NSDate date] options:0];
-    
-    NSDateFormatter *formatted = [[NSDateFormatter alloc] init];
-    formatted.dateFormat = @"d MMMM YYYY";
+-(NSString *)time:(id)timestamp {
+    if (![timestamp isEqual:[NSNull null]]) {
+        NSDateComponents *components;
+        NSDate *outputdate;
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss ZZZ";
+        NSDateFormatter *formatted = [[NSDateFormatter alloc] init];
+        formatted.dateFormat = @"d MMMM YYYY";
+        if ([timestamp isKindOfClass:[NSString class]]) {
+            outputdate = [formatter dateFromString:timestamp];
+            components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:outputdate toDate:[NSDate date] options:0];
+            
+            
+            
+        }
+        else if ([timestamp isKindOfClass:[NSDate class]]) {
+            outputdate = timestamp;
+            components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:outputdate toDate:[NSDate date] options:0];
 
-    if (components.day > 7) {
-        return [formatted stringFromDate:[formatter dateFromString:timestamp]];
+        }
+                
+        if (components.day > 7) {
+            return [formatted stringFromDate:outputdate];
+            
+        }
+        else if (components.day > 0) {
+            return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.day, components.day==1?NSLocalizedString(@"Timestamp_Day", nil):NSLocalizedString(@"Timestamp_Days", nil)];
+            
+        }
+        else if (components.hour > 0) {
+            return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.hour, components.hour==1?NSLocalizedString(@"Timestamp_Hour", nil):NSLocalizedString(@"Timestamp_Hours", nil)];
+            
+        }
+        else if (components.minute > 0) {
+            return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Minute", nil):NSLocalizedString(@"Timestamp_Minutes", nil)];
+            
+        }
+        else if (components.second > 0) {
+            return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Second", nil):NSLocalizedString(@"Timestamp_Seconds", nil)];
+        }
+        else {
+            return [formatted stringFromDate:[formatter dateFromString:timestamp]];
+            
+        }
         
     }
-    else if (components.day > 0) {
-        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.day, components.day==1?NSLocalizedString(@"Timestamp_Day", nil):NSLocalizedString(@"Timestamp_Days", nil)];
-        
-    }
-    else if (components.hour > 0) {
-        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.hour, components.hour==1?NSLocalizedString(@"Timestamp_Hour", nil):NSLocalizedString(@"Timestamp_Hours", nil)];
-        
-    }
-    else if (components.minute > 0) {
-        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Minute", nil):NSLocalizedString(@"Timestamp_Minutes", nil)];
-        
-    }
-    else if (components.second > 0) {
-        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Second", nil):NSLocalizedString(@"Timestamp_Seconds", nil)];
-    }
-    else {
-        return [formatted stringFromDate:[formatter dateFromString:timestamp]];
-        
-    }
+    else return NSLocalizedString(@"Profile_UnknownTimetampPlaceholder_Text", nil);
     
 }
 

@@ -98,7 +98,7 @@
     }
     else {
         NSString *username ;
-        if ([[[content objectForKey:@"user"] objectForKey:@"username"] length] > 1) username = [content objectForKey:@"username"];
+        if ([[[content objectForKey:@"user"] objectForKey:@"username"] length] > 1) username = [[content objectForKey:@"user"] objectForKey:@"username"];
         else username = NSLocalizedString(@"Profile_UnknownUserPlaceholder_Text", nil);
         body = NSLocalizedString(@"Profile_NotificationDetailed_Body", nil);
         text = [NSString stringWithFormat:body, username];

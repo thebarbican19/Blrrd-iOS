@@ -226,7 +226,7 @@
                 [self.collectionView deleteItemsAtIndexPaths:@[action.indexPath]];
                 
             } completion:^(BOOL finished) {
-                
+
             }];
             
             [self.imageobj uploadRemove:data completion:^(NSError *error) {

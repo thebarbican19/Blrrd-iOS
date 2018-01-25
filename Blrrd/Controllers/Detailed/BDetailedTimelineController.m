@@ -108,7 +108,7 @@
 }
 
 -(void)viewContentRefresh:(UIRefreshControl *)refresh {
-    [self.query queryUserPosts:[self.data objectForKey:@"username"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
+    [self.query queryUserPosts:[self.data objectForKey:@"userid"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self.viewTimeline collectionViewLoadContent:items append:self.viewTimeline.pagenation==0?false:true loading:false error:error];
             
@@ -120,7 +120,7 @@
 
 -(void)viewUpdateTimeline:(BQueryTimeline)timeline {
     [self.viewTimeline.footer present:true status:nil];
-    [self.query queryUserPosts:[self.data objectForKey:@"username"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
+    [self.query queryUserPosts:[self.data objectForKey:@"userid"] page:self.viewTimeline.pagenation completion:^(NSArray *items, NSError *error) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {

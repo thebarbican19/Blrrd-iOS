@@ -19,6 +19,7 @@
     UIView *halo;
     UIView *hairline;
     SAMLabel *username;
+    SAMLabel *lastactive;
     UIButton *back;
     CAGradientLayer *gradient;
     BFollowAction *follow;

@@ -197,16 +197,22 @@
 -(void)queryUserPosts:(NSString *)username page:(int)page completion:(void (^)(NSArray *items, NSError *error))completion {
     NSString *endpoint = [NSString stringWithFormat:@"user/posts.php"];
     NSString *endpointmethod = @"GET";
-    NSDictionary *endpointparams = @{@"pagnation":@(page)};
+    NSDictionary *endpointparams;
+    NSLog(@"queryUserPosts %@" ,username);
+    if (username == nil || [self.credentials.userKey isEqualToString:username]) endpointparams = @{@"pagnation":@(page)};
+    else endpointparams = @{@"pagnation":@(page), @"userid":username};
+
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
         if (data.length > 0 && !error) {
+            NSLog(@"queryuser %@" ,[NSJSONSerialization JSONObjectWithData:data options:0 error:nil]);
             if (status.statusCode == 200) {
                 NSMutableArray *posts = [[NSMutableArray alloc] init];
                 [posts addObjectsFromArray:[[[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject] objectForKey:@"output"]];
 
-                if ([username isEqualToString:self.credentials.userHandle]) {
-                    [self cacheSave:posts endpointname:endpoint append:page==0?false:true expiry:60*60*24*4];
+                if ([username isEqualToString:self.credentials.userKey]) {
+                    NSLog(@"saving cache: %@" ,username)
+                    [self cacheSave:posts endpointname:self.credentials.userKey append:page==0?false:true expiry:60*60*24*4];
                     
                 }
                 
@@ -485,10 +491,35 @@
     
 }
 
+-(void)postReport:(NSString *)item message:(NSString *)message completion:(void (^)(NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"content/report.php"];
+    NSDictionary *endpointparams = @{@"item":item, @"message":message};
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:@"POST"] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (data.length > 0 && !error) {
+            NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
+            
+            completion([self requestErrorHandle:[[output objectForKey:@"error_code"] intValue] message:[output objectForKey:@"status"] error:nil endpoint:endpoint]);
+            
+        }
+        else {
+            completion([self requestErrorHandle:(int)status.statusCode message:error.domain error:error endpoint:endpoint]);
+            
+        }
+        
+    }];
+
+    [task resume];
+    
+}
+
 -(NSArray *)notificationsMergeByType:(BNotificationMergeType)type {
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:false];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username != %@" ,self.credentials.userHandle];
     NSMutableArray *notifications = [[NSMutableArray alloc] initWithArray:[self cacheRetrive:@"content/time.php"]];
+    
+    NSLog(@"notifications %@" ,notifications);
+    
     NSMutableArray *merge = [[NSMutableArray alloc] init];
     NSMutableArray *output = [[NSMutableArray alloc] init];
     for (NSDictionary *item in notifications) {
@@ -507,9 +538,8 @@
 
         }
         
-        [format setObject:[item objectForKey:@"timestamp"] forKey:@"timestamp"];
         [merge addObject:format];
-        
+
     }
     
     NSCountedSet *counted = [[NSCountedSet alloc] initWithArray:merge];
@@ -520,15 +550,16 @@
             
         }
         else if (type == BNotificationMergeTypeUniqueUsers) {
-            predicate = [NSPredicate predicateWithFormat:@"username == %@" ,[merged objectForKey:@"username"]];
+            predicate = [NSPredicate predicateWithFormat:@"user.username == %@" ,[merged objectForKey:@"username"]];
             
         }
         else if (type == BNotificationMergeTypeUniqueUsersAndPosts) {
-            predicate = [NSPredicate predicateWithFormat:@"postid == %@ && username == %@" ,[merged objectForKey:@"postid"], [merged objectForKey:@"username"]];
+            predicate = [NSPredicate predicateWithFormat:@"postid == %@ && user.username == %@" ,[merged objectForKey:@"postid"], [merged objectForKey:@"username"]];
 
         }
         
         NSArray *filtered = [notifications filteredArrayUsingPredicate:predicate];
+        NSLog(@"[notifications filteredArrayUsingPredicate:predicate] %@" ,[notifications filteredArrayUsingPredicate:predicate]);
         NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:filtered.firstObject];
         int totaltime = 0;
         for (NSDictionary *item in [notifications filteredArrayUsingPredicate:predicate]) {
@@ -536,7 +567,6 @@
             
         }
         
-        [append setObject:[merged objectForKey:@"timestamp"] forKey:@"timestamp"];
         [append setObject:[merged objectForKey:@"postid"] forKey:@"postid"];
         [append setObject:@(totaltime) forKey:@"totalsecs"];
         [append setObject:@([counted countForObject:merged]) forKey:@"sessions"];

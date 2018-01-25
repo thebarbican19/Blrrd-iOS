@@ -64,6 +64,7 @@
 		7778B1F31FCFB3D800E5B83D /* BSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1F21FCFB3D800E5B83D /* BSettingsCell.m */; };
 		77845262200F7DB3003A4841 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 77845261200F7DB3003A4841 /* NotificationService.m */; };
 		77845266200F7DB3003A4841 /* BlrrdNotifications.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7784525E200F7DB3003A4841 /* BlrrdNotifications.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7784526E20122887003A4841 /* blrrd_notification.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7784526D20122886003A4841 /* blrrd_notification.wav */; };
 		778D9B171FABB53600878A6A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778D9B161FABB53600878A6A /* AppDelegate.m */; };
 		778D9B1D1FABB53600878A6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1B1FABB53600878A6A /* Main.storyboard */; };
 		778D9B1F1FABB53600878A6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 778D9B1E1FABB53600878A6A /* Assets.xcassets */; };
@@ -230,6 +231,7 @@
 		77845260200F7DB3003A4841 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		77845261200F7DB3003A4841 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		77845263200F7DB3003A4841 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7784526D20122886003A4841 /* blrrd_notification.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = blrrd_notification.wav; sourceTree = "<group>"; };
 		778D9B121FABB53600878A6A /* Blrrd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blrrd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		778D9B151FABB53600878A6A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		778D9B161FABB53600878A6A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 		7757318C1FBE3F20002E0CCE /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				7784526A20122802003A4841 /* SFX */,
 				773712991FD1F20D00E507AE /* Models */,
 				773712871FD06B4600E507AE /* Documents */,
 				7757318D1FBE3F27002E0CCE /* Fonts */,
@@ -465,6 +468,14 @@
 				77845263200F7DB3003A4841 /* Info.plist */,
 			);
 			path = BlrrdNotifications;
+			sourceTree = "<group>";
+		};
+		7784526A20122802003A4841 /* SFX */ = {
+			isa = PBXGroup;
+			children = (
+				7784526D20122886003A4841 /* blrrd_notification.wav */,
+			);
+			path = SFX;
 			sourceTree = "<group>";
 		};
 		778D9B091FABB53600878A6A = {
@@ -898,6 +909,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7784526E20122887003A4841 /* blrrd_notification.wav in Resources */,
 				7757319E1FBE3F5E002E0CCE /* Nunito-Bold.ttf in Resources */,
 				775731A61FBE3F5E002E0CCE /* Nunito-Italic.ttf in Resources */,
 				775731A11FBE3F5E002E0CCE /* Nunito-Black.ttf in Resources */,
@@ -1219,7 +1231,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd.BlrrdNotifications;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1234,7 +1246,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd.BlrrdNotifications;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1377,7 +1389,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1416,7 +1428,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.blrrd.blrrd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

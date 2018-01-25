@@ -31,12 +31,17 @@
         [self.viewTimeline scrollToItemAtIndexPath:self.index atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:false];
 
     }
-    else if (self.selected != nil) {
-        [self.notifications addObject:self.selected];
-        [self setIndex:[NSIndexPath indexPathForRow:self.notifications.count - 1 inSection:0]];
-        [self.viewTimeline reloadData];
-        [self.viewTimeline scrollToItemAtIndexPath:self.index atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:false];
-    
+    else {
+        [self.viewTimeline performBatchUpdates:^{
+            [self setIndex:[NSIndexPath indexPathForRow:self.posts.count inSection:0]];
+            [self.posts addObject:self.selected];
+            [self.viewTimeline insertItemsAtIndexPaths:@[self.index]];
+            
+        } completion:^(BOOL finished) {
+            [self.viewTimeline scrollToItemAtIndexPath:self.index atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:false];
+            
+        }];
+        
     }
     
 }
@@ -176,7 +181,7 @@
     
     [cell setDelegate:self];
     [cell content:[self.posts objectAtIndex:indexPath.row] index:indexPath];
-    
+
     [cell.contentView.layer setShadowColor:UIColorFromRGB(0x000000).CGColor];
     [cell.contentView.layer setShadowOffset:CGSizeMake(0.0, 2.0)];
     [cell.contentView.layer setShadowRadius:9.0];
@@ -243,13 +248,20 @@
 -(void)collectionViewPresentOptions:(BBlurredCell *)item {
     NSDictionary *data = [self.posts objectAtIndex:item.indexpath.row];
     NSMutableArray *buttons = [[NSMutableArray alloc] init];
-    if ([[data objectForKey:@"username"] isEqualToString:self.credentials.userHandle] || [self.credentials.userType isEqualToString:@"admin"]) {
+    if ([self.credentials.userType isEqualToString:@"admin"]) {
         [buttons addObject:@{@"key":@"delete", @"title":NSLocalizedString(@"Timeline_ActionSheetDelete_Text", nil)}];
+        [buttons addObject:@{@"key":@"report", @"title":NSLocalizedString(@"Timeline_ActionSheetReport_Text", nil)}];
         
     }
-    
-    if (![[data objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
-        [buttons addObject:@{@"key":@"report", @"title":NSLocalizedString(@"Timeline_ActionSheetReport_Text", nil)}];
+    else {
+        if ([[[data objectForKey:@"user"] objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
+            [buttons addObject:@{@"key":@"delete", @"title":NSLocalizedString(@"Timeline_ActionSheetDelete_Text", nil)}];
+            
+        }
+        else {
+            [buttons addObject:@{@"key":@"report", @"title":NSLocalizedString(@"Timeline_ActionSheetReport_Text", nil)}];
+            
+        }
         
     }
     
@@ -269,6 +281,7 @@
                     [self.viewTimeline performBatchUpdates:^{
                         [self.posts removeObjectAtIndex:action.indexPath.row];
                         [self.viewTimeline deleteItemsAtIndexPaths:@[action.indexPath]];
+                        [self.query cacheDestroy:self.credentials.userKey];
                         
                     } completion:nil];
                     
@@ -330,6 +343,23 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     return cell;
+    
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.notifications.count > 0) {
+        BDetailedTimelineController *viewDetailed = [[BDetailedTimelineController alloc] init];
+        viewDetailed.view.backgroundColor = self.view.backgroundColor;
+        viewDetailed.type = BDetailedViewTypeUserProfile;
+        viewDetailed.data = [[self.notifications objectAtIndex:indexPath.row] objectForKey:@"user"];
+        viewDetailed.delegate = self;
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.navigationController pushViewController:viewDetailed animated:true];
+            
+        }];
+                             
+    }
     
 }
 

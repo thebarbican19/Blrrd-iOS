@@ -26,8 +26,9 @@
 
 -(void)setup {
     self.query = [[BQueryObject alloc] init];
+    self.credentials = [[BCredentialsObject alloc] init];
     self.images = [[NSMutableArray alloc] init];
-    for (NSDictionary *images in [self.query cacheRetrive:@"user/posts.php"]) {
+    for (NSDictionary *images in [self.query cacheRetrive:self.credentials.userKey]) {
         if (self.limitimages > self.images.count) {
             NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:images];
             [append setObject:@"image" forKey:@"type"];
@@ -38,7 +39,7 @@
         
     }
 
-    [self.images addObject:@{@"type":@"showall", @"publicpath":[[[self.query cacheRetrive:@"user/posts.php"] lastObject] objectForKey:@"imageurl"]}];
+    [self.images addObject:@{@"type":@"showall", @"publicpath":[[[self.query cacheRetrive:self.credentials.userKey] lastObject] objectForKey:@"imageurl"]}];
     [self.collectionView reloadData];
     
 }

@@ -44,14 +44,22 @@
         [self addSubview:halo];
         [self bringSubviewToFront:profile];
         
-        username = [[SAMLabel alloc] initWithFrame:CGRectMake(profile.bounds.size.width + 70.0, 7.0, self.bounds.size.width - (profile.bounds.size.width + 120.0), self.bounds.size.height - 14.0)];
+        username = [[SAMLabel alloc] initWithFrame:CGRectMake(profile.bounds.size.width + 70.0, 10.0, self.bounds.size.width - (profile.bounds.size.width - 120.0), (profile.bounds.size.height / 2))];
         username.backgroundColor = [UIColor clearColor];
         username.textAlignment = NSTextAlignmentLeft;
         username.textColor = [UIColor whiteColor];
         username.font = [UIFont fontWithName:@"Nunito-Bold" size:20];
-        username.alpha = 0.0;
         [self addSubview:username];
         
+        lastactive = [[SAMLabel alloc] initWithFrame:CGRectMake(profile.bounds.size.width + 70.0, 36.0, self.bounds.size.width - (profile.bounds.size.width - 120.0), 14.0)];
+        lastactive.backgroundColor = [UIColor clearColor];
+        lastactive.textAlignment = NSTextAlignmentLeft;
+        lastactive.textColor = [UIColor colorWithWhite:0.9 alpha:0.8];
+        lastactive.font = [UIFont fontWithName:@"Nunito-Light" size:10];
+        lastactive.verticalTextAlignment = SAMLabelVerticalTextAlignmentTop;
+        [self addSubview:lastactive];
+        
+        /*
         follow = [[BFollowAction alloc] initWithFrame:CGRectMake(self.bounds.size.width - 46.0, (self.bounds.size.height / 2) - 12.0, 45.0, 24.0)];
         follow.backgroundColor = [UIColor clearColor];
         follow.delegate = self;
@@ -59,6 +67,7 @@
         follow.style = BFollowActionStyleIcon;
         follow.transform = CGAffineTransformMakeScale(0.9, 0.9);
         [self addSubview:follow];
+        */
         
     }
     
@@ -69,6 +78,7 @@
     
     [profile sd_setImageWithURL:[self.data objectForKey:@"photo"] placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
     [username setText:[self.data objectForKey:@"username"]];
+    [lastactive setText:[NSString stringWithFormat:NSLocalizedString(@"Friend_LastActive_Text", nil) ,[self time:[self.data objectForKey:@"lastactive"]]]];
     [follow followSetType:BFollowActionTypeFollowed animate:false];
 
     /*
@@ -88,6 +98,41 @@
         [username setAlpha:1.0];
 
     } completion:nil];
+    
+}
+
+-(NSString *)time:(NSString *)timestamp {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[formatter dateFromString:timestamp] toDate:[NSDate date] options:0];
+    
+    NSDateFormatter *formatted = [[NSDateFormatter alloc] init];
+    formatted.dateFormat = @"d MMMM YYYY";
+    
+    if (components.day > 7) {
+        return [formatted stringFromDate:[formatter dateFromString:timestamp]];
+        
+    }
+    else if (components.day > 0) {
+        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.day, components.day==1?NSLocalizedString(@"Timestamp_Day", nil):NSLocalizedString(@"Timestamp_Days", nil)];
+        
+    }
+    else if (components.hour > 0) {
+        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.hour, components.hour==1?NSLocalizedString(@"Timestamp_Hour", nil):NSLocalizedString(@"Timestamp_Hours", nil)];
+        
+    }
+    else if (components.minute > 0) {
+        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Minute", nil):NSLocalizedString(@"Timestamp_Minutes", nil)];
+        
+    }
+    else if (components.second > 0) {
+        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Second", nil):NSLocalizedString(@"Timestamp_Seconds", nil)];
+    }
+    else {
+        return [formatted stringFromDate:[formatter dateFromString:timestamp]];
+        
+    }
     
 }
 

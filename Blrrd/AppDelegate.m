@@ -19,10 +19,12 @@
     self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
     self.credentials = [[BCredentialsObject alloc] init];
     self.mixpanel = [Mixpanel sharedInstance];
+    self.pushbots = [[Pushbots alloc] initWithAppId:@"5a5a6091a5d10304d650b176" prompt:false];
 
     [Mixpanel sharedInstanceWithToken:@"e25f29857e2e509f1f1e6befde7b7688"];
     [AppAnalytics initWithAppKey:@"4Xuz4xbSahIJ8VbfFkamJSve8fEQ5RwC" options:@{DebugLog:@(NO)}];
-    
+    [self.pushbots trackPushNotificationOpenedWithPayload:launchOptions];
+
     [self.credentials setDeviceIdentifyer];
     
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
@@ -211,8 +213,6 @@
 }
 
 -(void)applicationAuthorizeRemoteNotifications:(void (^)(NSError *error, BOOL granted))completion {
-    self.pushbots = [[Pushbots alloc] initWithAppId:@"5a5a6091a5d10304d650b176" prompt:true];
-
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
     center.delegate = self;
     
@@ -255,6 +255,8 @@
             NSLog(@"did recive notification");
             
         }];
+        
+        [self.pushbots trackPushNotificationOpenedWithPayload:userInfo];
         
     }
     

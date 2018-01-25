@@ -130,8 +130,6 @@
         
     }
     
-    NSLog(@"asdasdsad %@" ,[self.query cacheRetrive:@"user/suggested.php"]);
-
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

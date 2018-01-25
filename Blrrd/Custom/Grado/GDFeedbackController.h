@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <GBDeviceInfo/GBDeviceInfo.h>
 #import "BCredentialsObject.h"
+#import "BQueryObject.h"
 #import "BNavigationView.h"
 #import "GDPlaceholderView.h"
 #import "UITextView+Placeholder.h"
@@ -25,6 +26,7 @@
 @property (nonatomic, strong) IBOutlet UITextView *feedbackEntry;
 
 @property (nonatomic, strong) BCredentialsObject *credentials;
+@property (nonatomic, strong) BQueryObject *query;
 
 @property (nonatomic, strong) NSString *message;
 @property (nonatomic, strong) NSDictionary *userdata;
