@@ -174,6 +174,20 @@
         
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    BDetailedTimelineController *viewDetailed = [[BDetailedTimelineController alloc] init];
+    viewDetailed.view.backgroundColor = self.view.backgroundColor;
+    viewDetailed.type = BDetailedViewTypeUserProfile;
+    viewDetailed.data = [self.users objectAtIndex:indexPath.row];
+    viewDetailed.delegate = self;
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [self.navigationController pushViewController:viewDetailed animated:true];
+        
+    }];
+ 
+}
+
 -(void)searchFieldWasUpdated:(NSString *)query {
     NSMutableArray *output = [[NSMutableArray alloc] init];
     if (query.length > 1) {

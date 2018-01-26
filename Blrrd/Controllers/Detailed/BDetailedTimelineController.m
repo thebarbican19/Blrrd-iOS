@@ -38,7 +38,20 @@
 }
 
 -(void)viewNavigationButtonTapped:(UIButton *)button {
-    [self.navigationController popViewControllerAnimated:true];
+    if (button.tag == 1) {
+        NSMutableArray *buttons = [[NSMutableArray alloc] init];
+        //[buttons addObject:@{@"key":@"report", @"title":NSLocalizedString(@"Friend_ReportUser_Action", nil)}];
+        [buttons addObject:@{@"key":@"block", @"title":NSLocalizedString(@"Friend_BlockUser_Action", nil)}];
+
+        [self.viewSheet setKey:@"options"];
+        [self.viewSheet setButtons:buttons];
+        [self.viewSheet presentActionAlert];
+        
+    }
+    else {
+        [self.navigationController popViewControllerAnimated:true];
+
+    }
     
 }
 
@@ -93,6 +106,13 @@
     [self addChildViewController:self.viewTimeline];
     [self.view addSubview:self.viewTimeline.view];
     [self.view sendSubviewToBack:self.viewTimeline.view];
+    
+    self.viewSheet = [[GDActionSheet alloc] initWithFrame:super.view.bounds];
+    self.viewSheet.viewColour = [UIColor whiteColor];
+    self.viewSheet.delegate = self;
+    self.viewSheet.cancelText = NSLocalizedString(@"Timeline_ActionDismissShare_Text", nil);
+    self.viewSheet.cancelAction = false;
+    self.viewSheet.presentAction = false;
     
     self.viewTabbar = [[BTabbarView alloc] initWithFrame:CGRectMake(0.0, self.view.bounds.size.height - (self.safearea + MAIN_TABBAR_HEIGHT), self.view.bounds.size.width, self.safearea + MAIN_TABBAR_HEIGHT)];
     self.viewTabbar.buttons = @[@{@"image":@"tabbar_home", @"text":NSLocalizedString(@"Main_TabbarHome_Text", nil)} ,
@@ -154,6 +174,26 @@
         
     }
     */
+    
+}
+
+-(void)actionSheetTappedButton:(GDActionSheet *)action index:(NSInteger)index {
+    if ([action.key isEqualToString:@"options"]) {
+        if ([[[action.buttons objectAtIndex:index] objectForKey:@"key"] isEqualToString:@"report"]) {
+            
+        }
+        else if ([[[action.buttons objectAtIndex:index] objectForKey:@"key"] isEqualToString:@"block"]) {
+            [self.query postBlock:[self.data objectForKey:@"userid"] completion:^(NSError *error) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    [self.navigationController popViewControllerAnimated:true];
+                    
+                }];
+
+            }];
+            
+        }
+        
+    }
     
 }
 

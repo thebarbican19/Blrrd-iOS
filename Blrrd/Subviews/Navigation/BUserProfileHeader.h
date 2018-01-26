@@ -23,6 +23,7 @@
     UIButton *back;
     CAGradientLayer *gradient;
     BFollowAction *follow;
+    UIButton *action;
 
 }
 

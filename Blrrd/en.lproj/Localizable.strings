@@ -133,6 +133,8 @@
 "Friend_ActionFollow_Text" = "Follow";
 "Friend_ActionFollowing_Text" = "Following";
 "Friend_LastActive_Text" = "Last Active %@"; //last active 1 day ago
+"Friend_ReportUser_Action" = "Report User"; 
+"Friend_BlockUser_Action" = "Block User";
 
 "ImageDetailed_Report_Title" = "Reporting Image";
 "ImageDetailed_ReportSend_Placeholder" = "Reason for reporting this image?";

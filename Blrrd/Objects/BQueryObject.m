@@ -513,6 +513,28 @@
     
 }
 
+-(void)postBlock:(NSString *)user completion:(void (^)(NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"user/block.php"];
+    NSDictionary *endpointparams = @{@"userid":user};
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:@"POST"] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (data.length > 0 && !error) {
+            NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
+            
+            completion([self requestErrorHandle:[[output objectForKey:@"error_code"] intValue] message:[output objectForKey:@"status"] error:nil endpoint:endpoint]);
+            
+        }
+        else {
+            completion([self requestErrorHandle:(int)status.statusCode message:error.domain error:error endpoint:endpoint]);
+            
+        }
+        
+    }];
+    
+    [task resume];
+    
+}
+
 -(NSArray *)notificationsMergeByType:(BNotificationMergeType)type {
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:false];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username != %@" ,self.credentials.userHandle];

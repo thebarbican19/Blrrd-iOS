@@ -10,9 +10,9 @@
 		2BE2E861C4D7BD74507C4F52 /* libPods-BlrrdTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */; };
 		3C1837B2FB585C787DA1836D /* libPods-BlrrdUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */; };
 		5E70A3B067C44E695E9763A8 /* libPods-Blrrd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */; };
+		7734F9D4201ACE9700B1E7C0 /* terms.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 7734F9D3201ACE9700B1E7C0 /* terms.pdf */; };
 		7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7737127E1FCFBD4B00E507AE /* SafariServices.framework */; };
 		773712821FD0654000E507AE /* BDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 773712811FD0654000E507AE /* BDocumentController.m */; };
-		773712891FD06B5300E507AE /* terms.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 773712881FD06B5300E507AE /* terms.pdf */; };
 		7737128F1FD09B3A00E507AE /* BProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7737128E1FD09B3A00E507AE /* BProfileCell.m */; };
 		773712921FD0BFA600E507AE /* BProfileImagesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 773712911FD0BFA600E507AE /* BProfileImagesController.m */; };
 		773712951FD0C32700E507AE /* BProfileContainerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 773712941FD0C32700E507AE /* BProfileContainerCell.m */; };
@@ -149,10 +149,10 @@
 		525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A0DAE56A3D11D0960ED7839 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		6EC6E94C2F62261082206C6F /* Pods-BlrrdUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdUITests/Pods-BlrrdUITests.release.xcconfig"; sourceTree = "<group>"; };
+		7734F9D3201ACE9700B1E7C0 /* terms.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = terms.pdf; sourceTree = "<group>"; };
 		7737127E1FCFBD4B00E507AE /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		773712801FD0654000E507AE /* BDocumentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDocumentController.h; sourceTree = "<group>"; };
 		773712811FD0654000E507AE /* BDocumentController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BDocumentController.m; sourceTree = "<group>"; };
-		773712881FD06B5300E507AE /* terms.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = terms.pdf; sourceTree = "<group>"; };
 		7737128D1FD09B3A00E507AE /* BProfileCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BProfileCell.h; sourceTree = "<group>"; };
 		7737128E1FD09B3A00E507AE /* BProfileCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BProfileCell.m; sourceTree = "<group>"; };
 		773712901FD0BFA600E507AE /* BProfileImagesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BProfileImagesController.h; sourceTree = "<group>"; };
@@ -372,7 +372,7 @@
 		773712871FD06B4600E507AE /* Documents */ = {
 			isa = PBXGroup;
 			children = (
-				773712881FD06B5300E507AE /* terms.pdf */,
+				7734F9D3201ACE9700B1E7C0 /* terms.pdf */,
 			);
 			path = Documents;
 			sourceTree = "<group>";
@@ -918,10 +918,10 @@
 				775731A21FBE3F5E002E0CCE /* Nunito-BoldItalic.ttf in Resources */,
 				7757319C1FBE3F5E002E0CCE /* Nunito-ExtraLightItalic.ttf in Resources */,
 				775731A51FBE3F5E002E0CCE /* Nunito-ExtraBoldItalic.ttf in Resources */,
-				773712891FD06B5300E507AE /* terms.pdf in Resources */,
 				775731A71FBE3F5E002E0CCE /* Nunito-ExtraLight.ttf in Resources */,
 				775731A01FBE3F5E002E0CCE /* Nunito-SemiBold.ttf in Resources */,
 				778D9B4E1FABCC7700878A6A /* Localizable.strings in Resources */,
+				7734F9D4201ACE9700B1E7C0 /* terms.pdf in Resources */,
 				7778B1ED1FCFB03E00E5B83D /* Settings.plist in Resources */,
 				775731A31FBE3F5E002E0CCE /* Nunito-BlackItalic.ttf in Resources */,
 				7757319D1FBE3F5E002E0CCE /* Nunito-ExtraBold.ttf in Resources */,

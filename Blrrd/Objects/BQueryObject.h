@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, BNotificationMergeType) {
 -(void)postTime:(NSDictionary *)image secondsadded:(int)seconds timeline:(BQueryTimeline)timeline completion:(void (^)(NSError *error))completion;
 -(void)postRequest:(NSString *)user request:(NSString *)request completion:(void (^)(NSError *error))completion;
 -(void)postReport:(NSString *)item message:(NSString *)message completion:(void (^)(NSError *error))completion;
+-(void)postBlock:(NSString *)user completion:(void (^)(NSError *error))completion;
 
 -(NSArray *)friendsList;
 

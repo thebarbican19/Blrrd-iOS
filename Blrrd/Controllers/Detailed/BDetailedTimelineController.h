@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, BDetailedViewType) {
 @property (nonatomic, strong) BNavigationView *viewNavigation;
 @property (nonatomic, strong) BTabbarView *viewTabbar;
 @property (nonatomic, strong) BUserProfileHeader *viewHeader;
+@property (nonatomic, strong) GDActionSheet *viewSheet;
 
 @end
 

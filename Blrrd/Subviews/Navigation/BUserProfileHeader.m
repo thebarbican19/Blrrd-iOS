@@ -59,6 +59,14 @@
         lastactive.verticalTextAlignment = SAMLabelVerticalTextAlignmentTop;
         [self addSubview:lastactive];
         
+        
+        action = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 46.0, (self.bounds.size.height / 2) - 12.0, 45.0, 24.0)];
+        //action.backgroundColor = [UIColor purpleColor];
+        action.transform = CGAffineTransformMakeScale(0.9, 0.9);
+        [action setTag:1];
+        [action addTarget:self.delegate action:@selector(viewNavigationButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [action setImage:[UIImage imageNamed:@"timeline_options_action"] forState:UIControlStateNormal];
+        [self addSubview:action];
         /*
         follow = [[BFollowAction alloc] initWithFrame:CGRectMake(self.bounds.size.width - 46.0, (self.bounds.size.height / 2) - 12.0, 45.0, 24.0)];
         follow.backgroundColor = [UIColor clearColor];
@@ -105,34 +113,38 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
     
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[formatter dateFromString:timestamp] toDate:[NSDate date] options:0];
-    
-    NSDateFormatter *formatted = [[NSDateFormatter alloc] init];
-    formatted.dateFormat = @"d MMMM YYYY";
-    
-    if (components.day > 7) {
-        return [formatted stringFromDate:[formatter dateFromString:timestamp]];
+    if ([[formatter dateFromString:timestamp] isKindOfClass:[NSDate class]]) {
+        NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[formatter dateFromString:timestamp] toDate:[NSDate date] options:0];
+        
+        NSDateFormatter *formatted = [[NSDateFormatter alloc] init];
+        formatted.dateFormat = @"d MMMM YYYY";
+        
+        if (components.day > 7) {
+            return [formatted stringFromDate:[formatter dateFromString:timestamp]];
+            
+        }
+        else if (components.day > 0) {
+            return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.day, components.day==1?NSLocalizedString(@"Timestamp_Day", nil):NSLocalizedString(@"Timestamp_Days", nil)];
+            
+        }
+        else if (components.hour > 0) {
+            return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.hour, components.hour==1?NSLocalizedString(@"Timestamp_Hour", nil):NSLocalizedString(@"Timestamp_Hours", nil)];
+            
+        }
+        else if (components.minute > 0) {
+            return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Minute", nil):NSLocalizedString(@"Timestamp_Minutes", nil)];
+            
+        }
+        else if (components.second > 0) {
+            return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Second", nil):NSLocalizedString(@"Timestamp_Seconds", nil)];
+        }
+        else {
+            return [formatted stringFromDate:[formatter dateFromString:timestamp]];
+            
+        }
         
     }
-    else if (components.day > 0) {
-        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.day, components.day==1?NSLocalizedString(@"Timestamp_Day", nil):NSLocalizedString(@"Timestamp_Days", nil)];
-        
-    }
-    else if (components.hour > 0) {
-        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.hour, components.hour==1?NSLocalizedString(@"Timestamp_Hour", nil):NSLocalizedString(@"Timestamp_Hours", nil)];
-        
-    }
-    else if (components.minute > 0) {
-        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Minute", nil):NSLocalizedString(@"Timestamp_Minutes", nil)];
-        
-    }
-    else if (components.second > 0) {
-        return [NSString stringWithFormat:NSLocalizedString(@"Timestamp_Format", nil) ,(int)components.minute, components.minute==1?NSLocalizedString(@"Timestamp_Second", nil):NSLocalizedString(@"Timestamp_Seconds", nil)];
-    }
-    else {
-        return [formatted stringFromDate:[formatter dateFromString:timestamp]];
-        
-    }
+    else return NSLocalizedString(@"Profile_UnknownTimetampPlaceholder_Text", nil);
     
 }
 
