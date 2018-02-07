@@ -10,6 +10,10 @@
 		2BE2E861C4D7BD74507C4F52 /* libPods-BlrrdTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */; };
 		3C1837B2FB585C787DA1836D /* libPods-BlrrdUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C73BB36D7BF0A8555DE2297 /* libPods-BlrrdUITests.a */; };
 		5E70A3B067C44E695E9763A8 /* libPods-Blrrd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70883D9FE8759167D2618D1 /* libPods-Blrrd.a */; };
+		771E55E42024CD1700129FE8 /* BAdminStatsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 771E55E32024CD1700129FE8 /* BAdminStatsController.m */; };
+		771E55E72028DEAB00129FE8 /* BContactsObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 771E55E62028DEAB00129FE8 /* BContactsObject.m */; };
+		771E55E92028DF1700129FE8 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 771E55E82028DF1600129FE8 /* Contacts.framework */; };
+		771E55EB202A15F000129FE8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 771E55EA202A15F000129FE8 /* Security.framework */; };
 		7734F9D4201ACE9700B1E7C0 /* terms.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 7734F9D3201ACE9700B1E7C0 /* terms.pdf */; };
 		7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7737127E1FCFBD4B00E507AE /* SafariServices.framework */; };
 		773712821FD0654000E507AE /* BDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 773712811FD0654000E507AE /* BDocumentController.m */; };
@@ -149,6 +153,12 @@
 		525024B0D28D89B1872A70B5 /* libPods-BlrrdTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlrrdTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A0DAE56A3D11D0960ED7839 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		6EC6E94C2F62261082206C6F /* Pods-BlrrdUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlrrdUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlrrdUITests/Pods-BlrrdUITests.release.xcconfig"; sourceTree = "<group>"; };
+		771E55E22024CD1700129FE8 /* BAdminStatsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BAdminStatsController.h; sourceTree = "<group>"; };
+		771E55E32024CD1700129FE8 /* BAdminStatsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BAdminStatsController.m; sourceTree = "<group>"; };
+		771E55E52028DEAB00129FE8 /* BContactsObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BContactsObject.h; sourceTree = "<group>"; };
+		771E55E62028DEAB00129FE8 /* BContactsObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BContactsObject.m; sourceTree = "<group>"; };
+		771E55E82028DF1600129FE8 /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
+		771E55EA202A15F000129FE8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		7734F9D3201ACE9700B1E7C0 /* terms.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = terms.pdf; sourceTree = "<group>"; };
 		7737127E1FCFBD4B00E507AE /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		773712801FD0654000E507AE /* BDocumentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDocumentController.h; sourceTree = "<group>"; };
@@ -319,6 +329,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				771E55EB202A15F000129FE8 /* Security.framework in Frameworks */,
+				771E55E92028DF1700129FE8 /* Contacts.framework in Frameworks */,
 				7765B49D200AA97700374EDE /* CoreTelephony.framework in Frameworks */,
 				7765B49B200AA96F00374EDE /* SystemConfiguration.framework in Frameworks */,
 				7737129F1FD1FD1600E507AE /* CoreML.framework in Frameworks */,
@@ -456,6 +468,8 @@
 			children = (
 				7778B1EE1FCFB0C600E5B83D /* BSettingsController.h */,
 				7778B1EF1FCFB0C600E5B83D /* BSettingsController.m */,
+				771E55E22024CD1700129FE8 /* BAdminStatsController.h */,
+				771E55E32024CD1700129FE8 /* BAdminStatsController.m */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -554,6 +568,8 @@
 				779994AE1FBA03830002531B /* BUsageObject.m */,
 				7778B1D41FCCF16D00E5B83D /* BImageObject.h */,
 				7778B1D51FCCF16D00E5B83D /* BImageObject.m */,
+				771E55E52028DEAB00129FE8 /* BContactsObject.h */,
+				771E55E62028DEAB00129FE8 /* BContactsObject.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -728,6 +744,8 @@
 		DC2B262B6F1B871B7C26DD9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				771E55EA202A15F000129FE8 /* Security.framework */,
+				771E55E82028DF1600129FE8 /* Contacts.framework */,
 				7765B49C200AA97700374EDE /* CoreTelephony.framework */,
 				7765B49A200AA96F00374EDE /* SystemConfiguration.framework */,
 				7737129E1FD1FD1500E507AE /* CoreML.framework */,
@@ -862,6 +880,9 @@
 							com.apple.Push = {
 								enabled = 1;
 							};
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
 						};
 					};
 					778D9B291FABB53600878A6A = {
@@ -971,9 +992,58 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Blrrd/Pods-Blrrd-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/BLMultiColorLoader/BLMultiColorLoader.bundle",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_amatorka.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_miss_etikate.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_soft_elegance_1.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_soft_elegance_2.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPArrowLeft.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPArrowLeft@2x.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPArrowRight.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPArrowRight@2x.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPCheckmark.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPCheckmark@2x.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPCloseButton.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPCloseButton@2x.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPCloseButton@3x.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPDismissKeyboard.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPDismissKeyboard@2x.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPLogo.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/MPLogo@2x.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/Images/placeholder-image.png",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/MPTakeoverNotificationViewController~ipad.xib",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/MPTakeoverNotificationViewController~iphonelandscape.xib",
+				"${PODS_ROOT}/Mixpanel/Mixpanel/MPTakeoverNotificationViewController~iphoneportrait.xib",
+				"${PODS_ROOT}/SAMKeychain/Support/SAMKeychain.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BLMultiColorLoader.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_amatorka.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_miss_etikate.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_soft_elegance_1.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_soft_elegance_2.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPArrowLeft.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPArrowLeft@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPArrowRight.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPArrowRight@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPCheckmark.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPCheckmark@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPCloseButton.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPCloseButton@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPCloseButton@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPDismissKeyboard.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPDismissKeyboard@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPLogo.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPLogo@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/placeholder-image.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPTakeoverNotificationViewController~ipad.nib",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPTakeoverNotificationViewController~iphonelandscape.nib",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MPTakeoverNotificationViewController~iphoneportrait.nib",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SAMKeychain.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -986,13 +1056,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BlrrdUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5D80CB5C8E6ABF02A8EA9914 /* [CP] Copy Pods Resources */ = {
@@ -1046,13 +1119,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BlrrdTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F464ADF6548E59CD77EA563B /* [CP] Copy Pods Resources */ = {
@@ -1076,13 +1152,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Blrrd-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1112,6 +1191,8 @@
 				77BDA3EE1FBE15D100249572 /* BTabbarView.m in Sources */,
 				775C1C1E1FE22D7800C8EF7C /* BAuthenticateController.m in Sources */,
 				77D5AE6D1FDDBA8B00765EAE /* Reachability.m in Sources */,
+				771E55E72028DEAB00129FE8 /* BContactsObject.m in Sources */,
+				771E55E42024CD1700129FE8 /* BAdminStatsController.m in Sources */,
 				778D9B5A1FABD27900878A6A /* NSString+EmailAddresses.m in Sources */,
 				779994B21FBA155C0002531B /* BFooterView.m in Sources */,
 				779994BA1FBB69270002531B /* BChannelCell.m in Sources */,

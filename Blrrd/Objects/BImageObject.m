@@ -198,30 +198,36 @@
 }
 
 -(void)imagesFromAlbum:(NSString *)album completion:(void (^)(NSArray *images))completion {
-    PHFetchOptions *options = [[PHFetchOptions alloc] init];
-    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:false]];
+    if (self.output.count == 0) {
+        self.output = [[NSMutableArray alloc] init];
+   
+        PHFetchOptions *options = [[PHFetchOptions alloc] init];
+        options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:false]];
+        options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %d", PHAssetMediaTypeImage];
     
-    NSMutableArray *output = [[NSMutableArray alloc] init];
-    PHFetchResult *fetch = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:options];
-    if (fetch.count > 0) {
-        for (PHAsset *asset in fetch) {
-            if (asset.location) [output addObject:asset];
-            
-        }
-        
+        PHFetchResult *result = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:options];
+        [result enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self.output addObject:obj];
+
+        }];
+    
     }
     
-    completion(output);
+    completion(self.output);
     
     
 }
 
 -(void)imagesFromAsset:(PHAsset *)asset thumbnail:(BOOL)thumbnail completion:(void (^)(NSDictionary *data, UIImage *image))completion withProgressHandler:(PHAssetImageProgressHandler)process {
     PHImageRequestOptions  *options = [[PHImageRequestOptions alloc] init];
-    options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+    options.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     options.synchronous = true;
     options.networkAccessAllowed = true;
-    options.progressHandler = process;
+    options.version = PHImageRequestOptionsVersionCurrent;
+    options.progressHandler =  ^(double progress,NSError *error,BOOL* stop, NSDictionary* dict) {
+        NSLog(@"progress %lf",progress);  //never gets called
+        
+    };
     
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset targetSize:CGSizeMake(thumbnail?100.0:asset.pixelWidth, thumbnail?100.0:asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage* image, NSDictionary *info) {
@@ -252,12 +258,12 @@
 
 -(void)imagesRetriveAlbums:(void (^)(NSArray *albums))completion {
     PHFetchOptions *options = [PHFetchOptions new];
-    options.predicate = [NSPredicate predicateWithFormat:@"estimatedAssetCount > 0"];
+    //options.predicate = [NSPredicate predicateWithFormat:@"estimatedAssetCount > 0"];
     
     if (self.output == nil) {
         self.output = [[NSMutableArray alloc] init];
         
-        PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:options];
+        PHFetchResult *albums = [PHAssetCollection fetchTopLevelUserCollectionsWithOptions:options];
         [albums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [self.output addObject:collection.localizedTitle];

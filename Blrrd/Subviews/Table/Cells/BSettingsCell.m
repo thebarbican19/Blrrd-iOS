@@ -14,7 +14,7 @@
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.name = [[SAMLabel alloc] initWithFrame:CGRectMake(20.0, 20.0, self.bounds.size.width - 40.0 , 18.0)];
+        self.name = [[SAMLabel alloc] initWithFrame:CGRectMake(20.0, 20.0, (self.bounds.size.width / 2) - 20.0, 18.0)];
         self.name.text = @"Title";
         self.name.clipsToBounds = true;
         self.name.textColor = [UIColor whiteColor];
@@ -22,6 +22,17 @@
         self.name.clipsToBounds = true;
         self.name.layer.cornerRadius = 5.0;
         [self.contentView addSubview:self.name];
+        
+        self.variable = [[SAMLabel alloc] initWithFrame:CGRectMake(self.bounds.size.width / 2, 20.0, (self.bounds.size.width / 2) - 20.0, 18.0)];
+        self.variable.text = @"Variable";
+        self.variable.clipsToBounds = true;
+        self.variable.textColor = [UIColor whiteColor];
+        self.variable.font = [UIFont fontWithName:@"Nunito-Light" size:14];
+        self.variable.clipsToBounds = true;
+        self.variable.layer.cornerRadius = 5.0;
+        self.variable.textAlignment = NSTextAlignmentRight;
+        self.variable.hidden = true;
+        [self.contentView addSubview:self.variable];
         
         self.toggle = [[UISwitch alloc] initWithFrame:CGRectMake(self.bounds.size.width - 58.0, 0.0, 51.0, 31.0)];
         self.toggle.tintColor = [UIColor lightGrayColor];

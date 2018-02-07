@@ -11,14 +11,20 @@
 "Onboarding_ActionLoginShort_Text" = "LOGIN";
 "Onboarding_ActionLogin_Text" = "Already have a Blrrd Account, Login?";
 "Onboarding_ActionTerms_Text" = "Terms";
+"Onboarding_ActionReset_Text" = "Forgot?";
 "Onboarding_ActionAuthorizeNotifications_Text" = "AUTHORIZE NOTIFICATIONS";
 "Onboarding_ActionComplete_Text" = "Go!";
+"Onboarding_ActionCompleteReset_Text" = "Open Mail";
+"Onboarding_ActionCompleteBack_Text" = "Go Back";
 "Onboarding_ActionUpdating_Text" = "Updating...";
 "Onboarding_ActionSkip_Text" = "Next";
 "Onboarding_Authorization_Text" = "Please allow Push Potifications so we can update you with stuff!";
 "Onboarding_SetupLoading_Text" = "Almost done, we are just loading your timeline...";
+"Onboarding_ResetLoading_Text" = "We are just resetting your password...";
 "Onboarding_SetupComplete_Text" = "Everything is ready for you, welcome to Blrrd!";
+"Onboarding_ResetComplete_Text" = "We sent you your new password. Check your email now.";
 "Onboarding_SetupLoginComplete_Text" = "Everything is ready for you, welcome back to Blrrd!";
+"Onboarding_AutoLoginComplete_Text" = "Logging-in with new password...";
 
 "Authenticate_Loading_Title" = "Authenticating...";
 "Authenticate_UsernameTaken_Error" = "Username not available.";
@@ -46,6 +52,7 @@
 "Authentication_LoginButton_Title" = "Login";
 "Authentication_SignupAction_Title" = "Sign Me Up!";
 "Authentication_LoginAction_Title" = "Log Me In!";
+"Authentication_ResetAction_Title" = "Reset My Password";
 "Authentication_NextAction_Title" = "Next";
 "Authentication_RetryAction_Title" = "Retry";
 
@@ -104,8 +111,11 @@
 "Profile_UnknownTimetampPlaceholder_Text" = "Unknown Date";
 
 "Settings_Title" = "Settings";
+"Settings_SectionSettings_Title" = "General";
 "Settings_SectionAbout_Title" = "About";
 "Settings_SectionDanger_Title" = "Danger Zone";
+"Settings_SectionAdmin_Title" = "Admin";
+"Settings_ItemStats_Title" = "Blrrd Stats";
 "Settings_ItemSaveimages_Title" = "Save Captured Images";
 "Settings_ItemPermissions_Title" = "App Permissions";
 "Settings_ItemShare_Title" = "Share Blrrd";
@@ -126,15 +136,21 @@
 
 "Friend_ErrorPlaceholder_Title" = "Oh No!";
 "Friend_EmptyPlaceholder_Title" = "Not Found";
+"Friend_LoadingPlaceholder_Title" = "Loading...";
 "Friend_EmptyPlaceholder_Body" = "Try refining your search";
 "Friend_SearchPlaceholder_Text" = "Search Blrrd Users";
 "Friend_Header_Text" = "Add Friends!";
 "Friend_SuggestedHeader_Text" = "Suggested Users";
 "Friend_ActionFollow_Text" = "Follow";
+"Friend_ActionUnfollow_Text" = "UnFollow";
 "Friend_ActionFollowing_Text" = "Following";
 "Friend_LastActive_Text" = "Last Active %@"; //last active 1 day ago
 "Friend_ReportUser_Action" = "Report User"; 
 "Friend_BlockUser_Action" = "Block User";
+"Friend_VerifyUser_Action" = "Promote to Verifyed";
+"Friend_SectionSearch_Title" = "Results";
+"Friend_SectionContacts_Title" = "People you know";
+"Friend_SectionSuggested_Title" = "Suggested";
 
 "ImageDetailed_Report_Title" = "Reporting Image";
 "ImageDetailed_ReportSend_Placeholder" = "Reason for reporting this image?";

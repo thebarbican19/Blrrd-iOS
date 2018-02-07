@@ -57,9 +57,7 @@
         self.safearea = [UIApplication sharedApplication].keyWindow.window.safeAreaInsets.bottom + APP_STATUSBAR_HEIGHT;
         
     }
-    
-    self.imageobj = [BImageObject sharedInstance];
-    
+        
     self.queue = [[NSOperationQueue alloc] init];
     self.queue.qualityOfService = NSQualityOfServiceUtility;
 
@@ -81,6 +79,13 @@
     self.navigationController.view.backgroundColor = MAIN_BACKGROUND_COLOR;
 
     [self setNeedsStatusBarAppearanceUpdate];
+    
+    NSLog(@"Auth: %@" ,self.credentials.authToken);
+    NSLog(@"Email: %@" ,self.credentials.userEmail);
+    NSLog(@"Total Revealed: %d" ,self.credentials.userTotalRevealedTime);
+    NSLog(@"Total Posts: %d" ,self.credentials.userPosts);
+
+    [self.query cacheDestroy:nil];
     
 }
 
@@ -239,19 +244,6 @@
     }
     else [self.viewDiscover viewSetupRequests:[self.query cacheRetrive:@"user/friendship.php"] limit:3];
     
-    if ([self.query cacheExpired:@"user/suggested.php"]) {
-        [self.queue addOperationWithBlock:^{
-            [self.query querySuggestedUsers:nil completion:^(NSArray *users, NSError *error) {
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    
-                }];
-                
-            }];
-            
-        }];
-        
-    }
-    
     [self.queue addOperationWithBlock:^{
         [self.query queryUserStats:^(NSError *error) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -358,6 +350,8 @@
     if (self.viewindex == 1 && index == 1) {
         if (!self.viewCanvas.uploading) [self.viewCanvas viewCaptureImage];
         else [self.viewCanvas viewTermiateCamera];
+        
+        [self.viewCanvas viewLoadGalleryContents];
         
     }
     else {

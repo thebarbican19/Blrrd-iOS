@@ -17,7 +17,7 @@
                BlueprintIdentifier = 'E4369D56E02F9FDF8983C9DA630B972A'
                BlueprintName = 'BLMultiColorLoader-BLMultiColorLoader'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'BLMultiColorLoader.bundle'>
+               BuildableName = 'BLMultiColorLoader-BLMultiColorLoader.bundle'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

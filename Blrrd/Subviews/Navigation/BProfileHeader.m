@@ -17,7 +17,7 @@
     self.query = [[BQueryObject alloc] init];
     if (![self.subviews containsObject:profile]) {
         self.backgroundColor = UIColorFromRGB(0x181426);
-        
+
         hairline = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.bounds.size.height - 0.5, self.bounds.size.width, 0.5)];
         hairline.backgroundColor = UIColorFromRGB(0x23232B);
         [self addSubview:hairline];
@@ -37,7 +37,7 @@
         halo.layer.cornerRadius = halo.bounds.size.height / 2;
         [self addSubview:halo];
         [self sendSubviewToBack:halo];
-        
+
         username = [[SAMLabel alloc] initWithFrame:CGRectMake(profile.bounds.size.width + 35.0, 20.0, self.bounds.size.width - (profile.bounds.size.width - 75.0), (profile.bounds.size.height / 2))];
         username.backgroundColor = [UIColor clearColor];
         username.textAlignment = NSTextAlignmentLeft;
@@ -54,6 +54,16 @@
         email.text = self.credentials.userEmail;
         email.verticalTextAlignment = SAMLabelVerticalTextAlignmentTop;
         [self addSubview:email];
+        
+        verifyed = [[UIImageView alloc] initWithFrame:CGRectMake(email.frame.origin.x + [email.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, email.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:email.font} context:nil].size.width + 4.0, email.frame.origin.y + 1.0, 13.0 ,13.0)];
+        verifyed.contentMode = UIViewContentModeScaleAspectFill;
+        verifyed.layer.cornerRadius = verifyed.bounds.size.width / 2;
+        verifyed.clipsToBounds = true;
+        verifyed.hidden = !self.credentials.userVerifyed;
+        verifyed.image = [UIImage imageNamed:@"profile_verifyed_icon"];
+        verifyed.backgroundColor = [UIColor clearColor];
+        [self addSubview:verifyed];
+        [self bringSubviewToFront:verifyed];
         
         timeviewed = [[SAMLabel alloc] initWithFrame:CGRectMake(profile.bounds.size.width + 35.0, 80.0, 200.0, 16.0)];
         timeviewed.backgroundColor = [UIColor clearColor];

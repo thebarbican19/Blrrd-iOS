@@ -13,6 +13,7 @@
 
 #import "BQueryObject.h"
 #import "BCredentialsObject.h"
+#import "BContactsObject.h"
 #import "BFollowAction.h"
 #import "BDetailedTimelineController.h"
 
@@ -20,8 +21,11 @@
 
 @property (nonatomic, strong) BQueryObject *query;
 @property (nonatomic, strong) BCredentialsObject *credentials;
+@property (nonatomic, strong) BContactsObject *contacts;
 
-@property (nonatomic, strong) NSMutableArray *users;
+@property (nonatomic, strong) NSMutableArray *suggested;
+@property (nonatomic, strong) NSMutableArray *friends;
+@property (nonatomic, strong) NSMutableArray *sections;
 @property (nonatomic, strong) NSString *header;
 @property (nonatomic, assign) BOOL signup;
 
@@ -29,5 +33,6 @@
 @property (nonatomic, strong) UITableView *viewTable;
 @property (nonatomic, strong) GDPlaceholderView *viewPlaceholder;
 @property (nonatomic, strong) BSearchView *viewSearch;
+@property (nonatomic, strong) UIView *viewContacts;
 
 @end

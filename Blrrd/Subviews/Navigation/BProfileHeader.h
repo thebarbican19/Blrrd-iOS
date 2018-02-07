@@ -16,6 +16,7 @@
 @protocol BProfileHeaderDelegate;
 @interface BProfileHeader : UIView <UIGestureRecognizerDelegate> {
     UIImageView *profile;
+    UIImageView *verifyed;
     UIView *halo;
     UIView *hairline;
     SAMLabel *username;

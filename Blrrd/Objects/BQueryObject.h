@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, BNotificationMergeType) {
 
 @property (nonatomic, strong) id <BQueryDelegate> delegate;
 @property (nonatomic, assign) BOOL debug;
+@property (nonatomic, assign) BOOL background;
 @property (nonatomic, strong) NSUserDefaults *data;
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic, strong) Mixpanel *mixpanel;
@@ -44,15 +45,20 @@ typedef NS_ENUM(NSInteger, BNotificationMergeType) {
 -(void)queryUserPosts:(NSString *)username page:(int)page completion:(void (^)(NSArray *items, NSError *error))completion;
 -(void)queryNotifications:(void (^)(NSArray *notifications, NSError *error))completion;
 -(void)queryRequests:(void (^)(NSArray *requests, NSError *error))completion;
--(void)querySuggestedUsers:(NSString *)search completion:(void (^)(NSArray *users, NSError *error))completion;
+-(void)querySuggestedUsers:(NSString *)search emails:(NSArray *)emails completion:(void (^)(NSArray *users, NSError *error))completion;
 -(void)queryFriends:(NSString *)type completion:(void (^)(NSArray *users, NSError *error))completion;
 -(void)queryUserStats:(void (^)(NSError *error))completion;
+-(void)queryAdminStats:(void (^)(NSDictionary *stats, NSError *error))completion;
 
 -(void)postTime:(NSDictionary *)image secondsadded:(int)seconds timeline:(BQueryTimeline)timeline completion:(void (^)(NSError *error))completion;
 -(void)postRequest:(NSString *)user request:(NSString *)request completion:(void (^)(NSError *error))completion;
 -(void)postReport:(NSString *)item message:(NSString *)message completion:(void (^)(NSError *error))completion;
 -(void)postBlock:(NSString *)user completion:(void (^)(NSError *error))completion;
+-(void)postPasswordReset:(void (^)(NSError *error))completion;
+-(void)postUpdateUser:(NSString *)user type:(NSString *)type value:(NSString *)value completion:(void (^)(NSError *error))completion;
 
+-(BOOL)friendCheck:(NSString *)userid;
+-(void)friendsListAppend:(NSString *)userid remove:(BOOL)remove;
 -(NSArray *)friendsList;
 
 -(NSArray *)notificationsMergeByType:(BNotificationMergeType)type;

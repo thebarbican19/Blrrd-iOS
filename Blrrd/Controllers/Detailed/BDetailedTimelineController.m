@@ -15,6 +15,7 @@
 
 @implementation BDetailedTimelineController
 
+
 -(void)viewDidAppear:(BOOL)animated {
     [self.viewNavigation navigationTitle:[self.data objectForKey:@"username"]];
     [self.viewHeader setup:self.data];
@@ -40,9 +41,21 @@
 -(void)viewNavigationButtonTapped:(UIButton *)button {
     if (button.tag == 1) {
         NSMutableArray *buttons = [[NSMutableArray alloc] init];
-        //[buttons addObject:@{@"key":@"report", @"title":NSLocalizedString(@"Friend_ReportUser_Action", nil)}];
         [buttons addObject:@{@"key":@"block", @"title":NSLocalizedString(@"Friend_BlockUser_Action", nil)}];
+        if (self.credentials.userAdmin) {
+            [buttons addObject:@{@"key":@"verify", @"title":NSLocalizedString(@"Friend_VerifyUser_Action", nil)}];
 
+        }
+        
+        if ([self.query friendCheck:[self.data objectForKey:@"userid"]]) {
+            [buttons addObject:@{@"key":@"follow", @"title":NSLocalizedString(@"Friend_ActionUnfollow_Text", nil)}];
+            
+        }
+        else {
+            [buttons addObject:@{@"key":@"follow", @"title":NSLocalizedString(@"Friend_ActionFollow_Text", nil)}];
+
+        }
+        
         [self.viewSheet setKey:@"options"];
         [self.viewSheet setButtons:buttons];
         [self.viewSheet presentActionAlert];
@@ -148,10 +161,9 @@
                 if ((error == nil || error.code == 200) && items.count == 0) {
                     [self.viewTimeline setScrollend:true];
                     [self.viewTimeline.footer present:false status:NSLocalizedString(@"Timeline_ScrollEnd_Title", nil)];
-                    
+
                 }
                 else {
-                    [self.viewTimeline collectionViewLoadContent:items append:self.viewTimeline.pagenation==0?false:true loading:false error:nil];
                     if (error.code != 200 && error != nil) {
                         [self.viewTimeline.footer present:false status:error.domain];
                         
@@ -189,6 +201,36 @@
                     
                 }];
 
+            }];
+            
+        }
+        else if ([[[action.buttons objectAtIndex:index] objectForKey:@"key"] isEqualToString:@"verify"]) {
+            [self.query postUpdateUser:[self.data objectForKey:@"userid"] type:@"promote" value:@"yes" completion:^(NSError *error) {
+                
+                
+            }];
+            
+        }
+        else if ([[[action.buttons objectAtIndex:index] objectForKey:@"key"] isEqualToString:@"follow"]) {
+            NSString *request;
+            bool remove;
+            if ([self.query friendCheck:[self.data objectForKey:@"userid"]]) {
+                request = @"delete";
+                remove = true;
+            }
+            else {
+                request = @"add";
+                remove = false;
+                
+            }
+            
+            [self.query postRequest:[self.data objectForKey:@"userid"] request:request completion:^(NSError *error) {
+                NSLog(@"postRequest %@ error %@ user: %@" ,request ,error ,[self.data objectForKey:@"userid"]);
+                if (error.code == 200) {
+                    [self.query friendsListAppend:[self.data objectForKey:@"userid"] remove:remove];
+
+                }
+                
             }];
             
         }

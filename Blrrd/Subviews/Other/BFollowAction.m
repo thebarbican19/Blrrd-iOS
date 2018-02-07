@@ -19,14 +19,9 @@
         container.layer.borderColor = UIColorFromRGB(0x69DCCB).CGColor;
         container.layer.borderWidth = 2.0;
         container.alpha = 0.0;
+        container.userInteractionEnabled = true;
         [self addSubview:container];
         
-        icon = [[UIImageView alloc] initWithFrame:CGRectMake(4.0, 2.0, container.bounds.size.height - 4.0, container.bounds.size.height - 4.0)];
-        icon.backgroundColor = [UIColor clearColor];
-        icon.contentMode = UIViewContentModeCenter;
-        icon.userInteractionEnabled = false;
-        [container addSubview:icon];
-
         label = [[UILabel alloc] initWithFrame:CGRectMake(container.bounds.size.height, 2.0, container.bounds.size.width - container.bounds.size.height, container.bounds.size.height)];
         label.textColor = UIColorFromRGB(0x69DCCB);
         label.font = [UIFont fontWithName:@"Nunito-Black" size:12.0];
@@ -35,6 +30,12 @@
         label.userInteractionEnabled = false;
         [container addSubview:label];
         
+        icon = [[UIImageView alloc] initWithFrame:CGRectMake(4.0, 2.0, container.bounds.size.height - 4.0, container.bounds.size.height - 4.0)];
+        icon.backgroundColor = [UIColor clearColor];
+        icon.contentMode = UIViewContentModeCenter;
+        icon.userInteractionEnabled = false;
+        [container addSubview:icon];
+
         gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(followAction:)];
         gesture.delegate = self;
         gesture.numberOfTapsRequired = 1;

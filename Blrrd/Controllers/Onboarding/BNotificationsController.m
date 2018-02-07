@@ -114,8 +114,8 @@
 
         if (self.login) {
             BCompleteController *viewComplete = [[BCompleteController alloc] init];
-            viewComplete.login = self.login;
-            
+            viewComplete.type = BCompleteScreenLogin;
+
             [self.navigationController pushViewController:viewComplete animated:true];
             
         }

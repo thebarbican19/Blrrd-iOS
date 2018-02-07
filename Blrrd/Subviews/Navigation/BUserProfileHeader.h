@@ -24,6 +24,7 @@
     CAGradientLayer *gradient;
     BFollowAction *follow;
     UIButton *action;
+    UIImageView *verifyed;
 
 }
 

@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.1.1</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>16</string>
+	<string>17</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -40,6 +40,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Required to capture and share new images</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Let&apos;s search your contact to find people you know on Blrrd</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Required to share images from your photos</string>
 	<key>UIAppFonts</key>

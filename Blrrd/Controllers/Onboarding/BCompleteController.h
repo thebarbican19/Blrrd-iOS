@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Pushbots/Pushbots.h>
+#import <SAMKeychain/SAMKeychain.h>
 
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
@@ -16,13 +17,23 @@
 #import "BLMultiColorLoader.h"
 #import "SAMLabel.h"
 
+typedef NS_ENUM(NSInteger, BCompleteScreen) {
+    BCompleteScreenLogin,
+    BCompleteScreenAutoLogin,
+    BCompleteScreenSignup,
+    BCompleteScreenPasswordReset
+    
+};
+
 @interface BCompleteController : UIViewController
 
 @property (nonatomic, retain) Mixpanel *mixpanel;
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic, strong) BQueryObject *query;
 @property (nonatomic, strong) AppDelegate *appdel;
-@property (nonatomic, assign) BOOL login;
+@property (nonatomic, assign) BCompleteScreen type;
+@property (nonatomic, strong) NSDictionary *data;
+
 @property (strong, nonatomic) Pushbots *pushbots;
 
 @property (nonatomic, strong) UIImageView *viewIcon;

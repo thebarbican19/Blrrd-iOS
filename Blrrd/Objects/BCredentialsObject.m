@@ -11,7 +11,6 @@
 
 @implementation BCredentialsObject
 
-
 -(instancetype)init {
     self = [super init];
     if (self) {
@@ -28,6 +27,7 @@
     [self setUserHandle:nil];
     [self setUserIdentifyer:nil];
     [self setUserTotalTime:0 append:false];
+    [self setAppContactUpdateExpiry:true];
 
     if (!APP_DEBUG_MODE) {
         [self.mixpanel track:@"App Logged Out"];
@@ -94,14 +94,58 @@
     
 }
 
+-(void)setUserPhoneNumber:(NSString *)phone  {
+    [self.data setObject:phone forKey:@"user_phone"];
+    [self.data synchronize];
+    
+}
+
+-(void)setUserBirthday:(NSDate *)date {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss ZZZ";
+    
+    [self.data setObject:[formatter stringFromDate:date] forKey:@"user_dob"];
+    [self.data synchronize];
+    
+}
+
 -(BOOL)userPublic {
     return [[self.data objectForKey:@"user_public"] boolValue];
 
 }
 
+-(BOOL)userVerifyed {
+    return [[self.data objectForKey:@"user_verifyed"] boolValue];
+    
+}
+
+-(BOOL)userAdmin {
+    if ([[self.data objectForKey:@"user_type"] isEqualToString:@"admin"]) return true;
+    else return false;
+    
+}
+
+-(NSString *)userPhone {
+    return [[self.data objectForKey:@"user_phone"] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+}
+
+-(NSDate *)userBirthday {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
+    
+    return [formatter dateFromString:[self.data objectForKey:@"user_dob"]];
+    
+}
+
 -(int)userTotalTime {
     return [[self.data objectForKey:@"user_total_seconds"] intValue];
     
+}
+
+-(int)userTotalRevealedTime {
+    return [[self.data objectForKey:@"user_total_revealed"] intValue];
+
 }
 
 -(NSString *)userTotalTimeFormatted {
@@ -129,6 +173,14 @@
 -(BOOL)appSaveImages {
     return [[self.data objectForKey:@"app_save_images"] boolValue];
 
+}
+
+-(BOOL)appContactsUpdateExpired {
+    NSDate *expiry = [self.data objectForKey:@"app_contact_expiry"];
+    if ([[NSDate date] compare:expiry] == NSOrderedDescending || expiry == nil) return true;
+    else if ([self.data objectForKey:@"app_contact_expiry"] == nil) return true;
+    else return false;
+    
 }
 
 -(void)setDeviceIdentifyer {
@@ -169,6 +221,14 @@
 
 -(void)setAppSaveImages:(BOOL)save {
     [self.data setObject:[NSNumber numberWithBool:save] forKey:@"app_save_images"];
+    [self.data synchronize];
+    
+}
+
+-(void)setAppContactUpdateExpiry:(BOOL)expire {
+    if (expire) [self.data removeObjectForKey:@"app_contact_expiry"];
+    else [self.data setObject:[NSDate dateWithTimeIntervalSinceNow:60*60*24*5] forKey:@"app_contact_expiry"];
+    
     [self.data synchronize];
     
 }
@@ -219,6 +279,12 @@
     
 }
 
+-(void)setUserVerifyed:(BOOL)yes {
+    [self.data setObject:[NSNumber numberWithBool:yes] forKey:@"user_verifyed"];
+    [self.data synchronize];
+    
+}
+
 -(void)setUserTotalTime:(int)seconds append:(BOOL)append {
     int secondsset = seconds;
     if (append) secondsset += self.userTotalTime;
@@ -226,6 +292,15 @@
     [self.data setObject:[NSNumber numberWithInt:secondsset] forKey:@"user_total_seconds"];
     [self.data synchronize];
 
+}
+
+-(void)setUserTotalRevealed:(int)seconds append:(BOOL)append {
+    int secondsset = seconds;
+    if (append) secondsset += self.userTotalRevealedTime;
+    
+    [self.data setObject:[NSNumber numberWithInt:secondsset] forKey:@"user_total_revealed"];
+    [self.data synchronize];
+    
 }
 
 -(void)setUserTotalPosts:(int)posts {

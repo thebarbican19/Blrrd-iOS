@@ -54,40 +54,45 @@
 			<key>orderHint</key>
 			<integer>11</integer>
 		</dict>
-		<key>SAMLabel.xcscheme</key>
+		<key>SAMKeychain.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>12</integer>
 		</dict>
-		<key>SDWebImage.xcscheme</key>
+		<key>SAMLabel.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>13</integer>
 		</dict>
-		<key>SocketRocket.xcscheme</key>
+		<key>SDWebImage.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>14</integer>
 		</dict>
-		<key>TYBlurImage.xcscheme</key>
+		<key>SocketRocket.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>15</integer>
 		</dict>
-		<key>UCZProgressView.xcscheme</key>
+		<key>TYBlurImage.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>16</integer>
 		</dict>
-		<key>UIImage-Helpers.xcscheme</key>
+		<key>UCZProgressView.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>17</integer>
 		</dict>
-		<key>UIImage-ResizeMagick.xcscheme</key>
+		<key>UIImage-Helpers.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>18</integer>
+		</dict>
+		<key>UIImage-ResizeMagick.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>19</integer>
 		</dict>
 	</dict>
 </dict>

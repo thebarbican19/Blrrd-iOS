@@ -21,6 +21,7 @@ target 'Blrrd' do
   pod 'AppAnalytics'
   pod 'UIImage-ResizeMagick'
   pod 'Pushbots', '~> 2.0.4'
+  pod 'SAMKeychain'
 
   target 'BlrrdTests' do
     inherit! :search_paths

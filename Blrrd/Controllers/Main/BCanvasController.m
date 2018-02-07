@@ -20,6 +20,8 @@
     
     //self.imagerec = [[GoogLeNetPlaces alloc] init];
     
+    self.mixpanel = [[Mixpanel alloc] init];
+    
     self.imageobj = [BImageObject sharedInstance];
     self.imageobj.delegate = self;
     
@@ -56,6 +58,21 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewKeyboardWasShow:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewKeyboardWasShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewFieldKeyboardWasHidden:) name:UIKeyboardWillHideNotification object:nil];
+
+    
+    
+}
+
+-(void)viewLoadGalleryContents {
+    [self.imageobj imageAuthorization:^(PHAuthorizationStatus status) {
+        if (status == PHAuthorizationStatusAuthorized) {
+            [self.imageobj imagesFromAlbum:nil completion:^(NSArray *images) {
+                
+            }];
+            
+        }
+        
+    }];
     
 }
 
@@ -422,6 +439,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void) {
         [self setUploading:false];
         if (error.code != 200) {
+            [self.mixpanel track:@"App Image Uploaded With Error" properties:@{@"Error":error.domain==nil?@"Unknown":error.domain}];
             [self.viewPlaceholder setKey:@"retry"];
             [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Canvas_UploadErrorPlaceholder_Title", nil) instructions:error.domain==nil?NSLocalizedString(@"Canvas_UploadErrorPlaceholder_Body", nil):error.domain];
             
@@ -430,6 +448,8 @@
             [self.viewPlaceholder setKey:@"sucsess"];
             [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Canvas_UploadSucsessPlaceholder_Title", nil) instructions:NSLocalizedString(@"Canvas_UploadSucsessPlaceholder_Body", nil)];
             [self.delegate viewRefreshContent];
+            [self.mixpanel.people increment:@"App Image Uploaded" by:@+1];
+            [self.mixpanel track:@"App Image Uploaded"];
 
         }
         

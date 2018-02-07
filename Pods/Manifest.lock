@@ -9,6 +9,7 @@ PODS:
   - KVNBoundedImageView (1.0.0)
   - Mixpanel (3.2.6)
   - Pushbots (2.0.4)
+  - SAMKeychain (1.5.3)
   - SAMLabel (0.1.0)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -28,6 +29,7 @@ DEPENDENCIES:
   - KVNBoundedImageView
   - Mixpanel
   - Pushbots (~> 2.0.4)
+  - SAMKeychain
   - SAMLabel
   - SDWebImage (~> 3.8)
   - SocketRocket
@@ -45,6 +47,7 @@ SPEC CHECKSUMS:
   KVNBoundedImageView: be2dabe166952dc9870b8000ee30e601fae0bc67
   Mixpanel: 2304449c3580927db15c894652a6e135aafae8f5
   Pushbots: bfad6adb35765289c59c88f6eb3cbbb839d0eecc
+  SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SAMLabel: 3792d68d0a04da5600420843d44ec50631695c15
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
@@ -53,6 +56,6 @@ SPEC CHECKSUMS:
   UIImage-Helpers: 06b04a42bdd222844035602e87e936765c80f620
   UIImage-ResizeMagick: f08c2d14d1e8a5f0b402185408785540562f2fe7
 
-PODFILE CHECKSUM: 06f9fbfcf6d80d29ce60dc4b5bf5f200f499ccb9
+PODFILE CHECKSUM: b2ed332578bc4d57df23aece60fefa7a272d780a
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.4.0

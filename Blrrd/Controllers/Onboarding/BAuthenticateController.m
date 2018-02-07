@@ -21,9 +21,22 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     if (self.login) {
-        [self.formNavigation navigationRightButton:nil];
-        [self.formNavigation navigationTitle:NSLocalizedString(@"Authentication_LoginButton_Title", nil)];
-        [self.mixpanel track:@"App Login Form Viewed"];
+        if (self.resetmode) {
+            [self.formNavigation navigationRightButton:NSLocalizedString(@"Onboarding_ActionLoginShort_Text", nil)];
+            [self.formNavigation navigationTitle:NSLocalizedString(@"Onboarding_ActionReset_Text", nil)];
+            [self.formAction setTitle:NSLocalizedString(@"Authentication_ResetAction_Title", nil).uppercaseString forState:UIControlStateNormal];
+
+            [self.mixpanel track:@"App Login Reset Form Viewed"];
+            
+        }
+        else {
+            [self.formNavigation navigationRightButton:NSLocalizedString(@"Onboarding_ActionReset_Text", nil)];
+            [self.formNavigation navigationTitle:NSLocalizedString(@"Authentication_LoginButton_Title", nil)];
+            [self.formAction setTitle:NSLocalizedString(@"Onboarding_ActionLoginShort_Text", nil).uppercaseString forState:UIControlStateNormal];
+
+            [self.mixpanel track:@"App Login Form Viewed"];
+            
+        }
          
     }
     else {
@@ -40,7 +53,7 @@
         if (button.tag == 0) {
             if (self.page == 0) {
                 [self.view endEditing:true];
-                [self.navigationController popViewControllerAnimated:true];
+                [self.navigationController popToRootViewControllerAnimated:true];
                 
             }
             else {
@@ -60,7 +73,15 @@
         }
         else {
             if (self.login) {
+                [UIView animateWithDuration:0.7 delay:0 usingSpringWithDamping:0.75 initialSpringVelocity:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                        [self.formScroll setContentOffset:CGPointMake(self.view.bounds.size.width * 0, 0.0)];
+                    
+                } completion:nil];
                 
+                [self setPage:0];
+                [self setResetmode:!self.resetmode];
+                [self viewDidAppear:true];
+        
             }
             else {
                 if ([self.formNavigation.rightbutton isEqualToString:NSLocalizedString(@"Onboarding_ActionTerms_Text", nil)]) {
@@ -90,7 +111,7 @@
  
 -(void)viewDidLoad {
     [super viewDidLoad];
-
+    
     self.appdel = (AppDelegate*) [[UIApplication sharedApplication] delegate];
 
     self.mixpanel = [Mixpanel sharedInstance];
@@ -106,7 +127,7 @@
     self.formNavigation.backgroundColor = [UIColor clearColor];
     self.formNavigation.name = nil;
     self.formNavigation.delegate = self;
-    self.formNavigation.rightbutton = NSLocalizedString(@"Onboarding_ActionTerms_Text", nil);
+    self.formNavigation.rightbutton = @"";
     [self.view addSubview:self.formNavigation];
     
     self.formScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + 70.0, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + 70.0))];
@@ -166,10 +187,13 @@
                                 @"placeholder":NSLocalizedString(@"AuthenticateSignupEmailPlaceholder", nil),
                                 @"value":@""}];
         
-        [self.forms addObject:@{@"title":NSLocalizedString(@"Authentication_FormPassword_Title", nil),
-                                @"key":@"password",
-                                @"placeholder":NSLocalizedString(@"AuthenticateLoginPasswordPlaceholder", nil),
-                                @"value":@""}];
+        if (!self.resetmode) {
+            [self.forms addObject:@{@"title":NSLocalizedString(@"Authentication_FormPassword_Title", nil),
+                                    @"key":@"password",
+                                    @"placeholder":NSLocalizedString(@"AuthenticateLoginPasswordPlaceholder", nil),
+                                    @"value":@""}];
+        
+        }
         
     }
     
@@ -197,7 +221,14 @@
         
     }
     
-    [self.formAction setTitle:NSLocalizedString(@"Authentication_NextAction_Title", nil).uppercaseString forState:UIControlStateNormal];
+    if (!self.resetmode) {
+        [self.formAction setTitle:NSLocalizedString(@"Authentication_NextAction_Title", nil).uppercaseString forState:UIControlStateNormal];
+        
+    }
+    else {
+        [self.formAction setTitle:NSLocalizedString(@"Authentication_ResetAction_Title", nil).uppercaseString forState:UIControlStateNormal];
+
+    }
     [self.formScroll setContentSize:CGSizeMake(self.view.bounds.size.width * self.forms.count, self.view.bounds.size.height - 70.0)];
     [UIView animateWithDuration:0.7 delay:0 usingSpringWithDamping:0.75 initialSpringVelocity:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^{
         [self.formScroll setContentOffset:CGPointMake(self.view.bounds.size.width * self.page, 0.0)];
@@ -284,20 +315,34 @@
         }
         
         if ((self.page + 1) == self.forms.count) {
-            [self.formAction setTitle:self.login?NSLocalizedString(@"Authentication_LoginAction_Title", nil).uppercaseString:NSLocalizedString(@"Authentication_SignupAction_Title", nil).uppercaseString forState:UIControlStateNormal];
+            if (self.login) {
+                if (!self.resetmode) {
+                    [self.formAction setTitle:NSLocalizedString(@"Authentication_LoginAction_Title", nil).uppercaseString forState:UIControlStateNormal];
+                    
+                }
+                else {
+                    [self.formAction setTitle:NSLocalizedString(@"Authentication_ResetAction_Title", nil).uppercaseString forState:UIControlStateNormal];
+
+                }
+
+            }
+            else {
+                [self.formAction setTitle:NSLocalizedString(@"Authentication_SignupAction_Title", nil).uppercaseString forState:UIControlStateNormal];
+
+            }
             
         }
         
         GDFormInput *selected = [self formWithTag:self.page];
         [UIView animateWithDuration:0.7 delay:0 usingSpringWithDamping:0.75 initialSpringVelocity:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            if (self.page < self.forms.count) {
+            if (self.page < self.forms.count && !self.resetmode) {
                 [self.formScroll setContentOffset:CGPointMake(self.view.bounds.size.width * self.page, 0.0)];
                 [selected textFeildBecomeFirstResponder:self.credentials];
                 
             }
             
         } completion:^(BOOL finished) {
-            if (self.page == self.forms.count) {
+            if (self.page == self.forms.count && !self.resetmode) {
                 [selected textFeildSetTitle:NSLocalizedString(@"Authenticate_Loading_Title", nil)];
                 [self.formAction setEnabled:false];
                 if (self.login) {
@@ -306,7 +351,7 @@
                         [self formHandleContent:error];
 
                     }];
-                    
+                 
                 }
                 else {
                     [self.mixpanel track:@"App Signup Complete"];
@@ -314,6 +359,18 @@
                         [self formHandleContent:error];
                         
                     }];
+                    
+                }
+                
+            }
+            else if (self.resetmode) {
+                if ([self.credentials objectForKey:@"email"] != nil) {
+                    [self.user setUserEmail:[self.credentials objectForKey:@"email"]];
+                    
+                    BCompleteController *viewComplete = [[BCompleteController alloc] init];
+                    viewComplete.type = BCompleteScreenPasswordReset;
+                    
+                    [self.navigationController pushViewController:viewComplete animated:true];
                     
                 }
                 
@@ -330,6 +387,7 @@
         GDFormInput *last = [self formWithTag:(int)self.forms.count - 1];
 
         if (error.code == 200) {
+            [SAMKeychain setPassword:[self.credentials objectForKey:@"password"] forService:@"co.blrrd.blrrd" account:[self.credentials objectForKey:@"email"]];
             [self.appdel applicationNotificationsAuthorized:^(UNAuthorizationStatus authorized) {
                 if (authorized == UNAuthorizationStatusNotDetermined) {
                     BNotificationsController *viewNotifications = [[BNotificationsController alloc] init];
@@ -341,7 +399,7 @@
                 else {
                     if (self.login) {
                         BCompleteController *viewComplete = [[BCompleteController alloc] init];
-                        viewComplete.login = self.login;
+                        viewComplete.type = BCompleteScreenLogin;
                         
                         [self.navigationController pushViewController:viewComplete animated:true];
                        

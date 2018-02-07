@@ -37,7 +37,7 @@
         profile.layer.borderWidth = 1.4;
         [self addSubview:profile];
 
-        halo = [[UIView alloc] initWithFrame:CGRectMake(profile.frame.origin.x - 2.0, profile.frame.origin.y - 2.0, profile.bounds.size.width + 4.0, profile.bounds.size.height + 4.0)];
+        halo = [[UIView alloc] initWithFrame:CGRectMake(profile.frame.origin.x - 2.5, profile.frame.origin.y - 2.5, profile.bounds.size.width + 5.0, profile.bounds.size.height + 5.0)];
         halo.clipsToBounds = true;
         halo.backgroundColor = UIColorFromRGB(0x26CADF);
         halo.layer.cornerRadius = halo.bounds.size.height / 2;
@@ -59,9 +59,17 @@
         lastactive.verticalTextAlignment = SAMLabelVerticalTextAlignmentTop;
         [self addSubview:lastactive];
         
+        verifyed = [[UIImageView alloc] initWithFrame:CGRectZero];
+        verifyed.contentMode = UIViewContentModeScaleAspectFill;
+        verifyed.layer.cornerRadius = verifyed.bounds.size.width / 2;
+        verifyed.clipsToBounds = true;
+        verifyed.hidden = true;
+        verifyed.backgroundColor = [UIColor clearColor];
+        verifyed.image = [UIImage imageNamed:@"profile_verifyed_icon"];
+        [self addSubview:verifyed];
+        [self bringSubviewToFront:verifyed];
         
         action = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - 46.0, (self.bounds.size.height / 2) - 12.0, 45.0, 24.0)];
-        //action.backgroundColor = [UIColor purpleColor];
         action.transform = CGAffineTransformMakeScale(0.9, 0.9);
         [action setTag:1];
         [action addTarget:self.delegate action:@selector(viewNavigationButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -83,26 +91,14 @@
 
 -(void)setup:(NSDictionary *)data {
     self.data = [[NSDictionary alloc] initWithDictionary:data];
-    
-    [profile sd_setImageWithURL:[self.data objectForKey:@"photo"] placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
+
+    [profile sd_setImageWithURL:[self.data objectForKey:@"avatar"] placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
     [username setText:[self.data objectForKey:@"username"]];
     [lastactive setText:[NSString stringWithFormat:NSLocalizedString(@"Friend_LastActive_Text", nil) ,[self time:[self.data objectForKey:@"lastactive"]]]];
-    [follow followSetType:BFollowActionTypeFollowed animate:false];
-
-    /*
-    if ([self.query friendCheck:[self.data objectForKey:@"username"]]) {
-        [follow followSetType:BFollowActionTypeFollowed animate:false];
-        
-    }
-    else {
-        [follow followSetType:BFollowActionTypeUnfollowed animate:false];
-
-    }
-    */
+    [verifyed setHidden:![[self.data objectForKey:@"promoted"] boolValue]];
+    [verifyed setFrame:CGRectMake(lastactive.frame.origin.x + [lastactive.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, lastactive.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:lastactive.font} context:nil].size.width + 6.0, lastactive.frame.origin.y + 1.0, 14.0 ,14.0)];
     
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        [follow setAlpha:1.0];
-        [follow setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
         [username setAlpha:1.0];
 
     } completion:nil];

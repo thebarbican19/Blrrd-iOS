@@ -33,6 +33,10 @@
         [self.collectionView reloadData];
         
     }];
+    
+    [self.imageobj imagesRetriveAlbums:^(NSArray *albums) {
+        NSLog(@"albums: %@" ,albums);
+    }];
 
 }
 

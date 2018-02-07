@@ -173,7 +173,9 @@
             [self.timer invalidate];
             if (![[[self.content objectForKey:@"user"] objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
                 [self.query postTime:self.content secondsadded:self.timeviewed timeline:self.timeline completion:^(NSError *error) {
+                    [self.credentials setUserTotalRevealed:self.timeviewed append:true];
                     [self setTimeviewed:0];
+                    [self.mixpanel.people increment:@"App Image Revealed" by:@+1];
                     [self.mixpanel track:@"App Image Revealed" properties:@{@"Image":[self.content objectForKey:@"imageurl"],
                                                                         @"ID":[self.content objectForKey:@"postid"],
                                                                         @"User":[[self.content objectForKey:@"user"] objectForKey:@"username"]}];
@@ -198,7 +200,7 @@
         if (!self.timer.isValid) {
             self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(givetime:) userInfo:nil repeats:true];
             
-            [self.feedback notificationOccurred:UINotificationFeedbackTypeSuccess];
+            [self.feedback notificationOccurred:UINotificationFeedbackTypeWarning];
             [self.feedback prepare];
             
         }

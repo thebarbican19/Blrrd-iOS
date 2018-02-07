@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <SAMKeychain/SAMKeychain.h>
+
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
 #import "BNavigationView.h"

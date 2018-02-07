@@ -12,6 +12,7 @@
 #import "BSettingsCell.h"
 #import "GDFeedbackController.h"
 #import "BDocumentController.h"
+#import "BAdminStatsController.h"
 
 @interface BSettingsController ()
 
@@ -21,8 +22,13 @@
 
 -(NSArray *)viewContents {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"];
-    NSArray *contents = [NSArray arrayWithContentsOfFile:path];
-    
+    NSMutableArray *contents = [[NSMutableArray alloc] init];
+    if (self.credentials.userAdmin) {
+        [contents addObject:@{@"section":@"admin", @"items":@[@{@"key":@"stats", @"switch":@(false)}]}];
+                              
+    }
+    [contents addObjectsFromArray:[NSArray arrayWithContentsOfFile:path]];
+
     return contents;
     
 }
@@ -49,6 +55,7 @@
     
     self.view.clipsToBounds = true;
     self.navigationController.navigationBarHidden = true;
+    self.navigationController.view.clipsToBounds = true;
 
     self.viewNavigation = [[BNavigationView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, 70.0)];
     self.viewNavigation.backgroundColor = [UIColor clearColor];
@@ -59,9 +66,10 @@
     self.viewTable = [[UITableView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height - APP_STATUSBAR_HEIGHT)];
     self.viewTable.delegate = self;
     self.viewTable.dataSource = self;
+    self.viewTable.clipsToBounds = true;
     self.viewTable.backgroundColor = [UIColor clearColor];
     self.viewTable.separatorColor = [UIColor clearColor];
-    self.viewTable.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height)];
+    self.viewTable.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.viewNavigation.bounds.size.height)];
     [self.view addSubview:self.viewTable];
     [self.viewTable registerClass:[BSettingsCell class] forCellReuseIdentifier:@"item"];
     [self.view bringSubviewToFront:self.viewNavigation];
@@ -81,8 +89,7 @@
     header.name = NSLocalizedString(localized, nil);
     header.tag = section;
     header.backgroundColor = [UIColor clearColor];
-    if ([[[self.viewContents objectAtIndex:section] objectForKey:@"items"] count] == 0) header.hidden = true;
-    else if (section == 0 || section == self.viewContents.count - 1) header.hidden = true;
+    if (section == self.viewContents.count - 1) header.hidden = true;
     else header.hidden = false;
     return header;
     
@@ -90,7 +97,6 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if ([[self.viewContents objectAtIndex:section] count] == 0) return 0.0;
-    else if (section == 0) return 0.0;
     else if (section == self.viewContents.count - 1) return 30.0;
     else return 60.0;
     
@@ -140,8 +146,11 @@
     if ([key isEqualToString:@"logout"]) {
         [cell.name setTextAlignment:NSTextAlignmentCenter];
         [cell.name setBackgroundColor:UIColorFromRGB(0x69DCCB)];
+        [cell.name setFont:[UIFont fontWithName:@"Nunito-Black" size:12]];
+        [cell.name setTextColor:UIColorFromRGB(0x140F26)];
+        [cell.name setText:cell.name.text.uppercaseString];
         [cell.accessory setHidden:true];
-
+        
     }
     else if ([key isEqualToString:@"cache"]) {
         [cell.name setTextAlignment:NSTextAlignmentCenter];
@@ -169,6 +178,16 @@
     NSString *key = [item objectForKey:@"key"];
     NSString *localized = [NSString stringWithFormat:@"Settings_Item%@_Title" ,key.capitalizedString];
 
+    if ([key isEqualToString:@"stats"]) {
+        BAdminStatsController *viewStats = [[BAdminStatsController alloc] init];
+        viewStats.header = NSLocalizedString(localized, nil);
+        viewStats.view.clipsToBounds = true;
+        viewStats.view.backgroundColor = self.view.backgroundColor;
+
+        [self.navigationController pushViewController:viewStats animated:true];
+        
+    }
+    
     if ([key isEqualToString:@"permissions"]) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
             
@@ -207,36 +226,6 @@
         [self.mixpanel track:@"App Terms & Conditions Viewed"];
         [self.navigationController pushViewController:viewDocument animated:true];
 
-    }
-    
-    if ([key isEqualToString:@"instagram"]) {
-        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"instagram://"]]) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"instagram://user?username=blrrd_app"] options:@{} completionHandler:^(BOOL success) {
-                
-            }];
-            
-        }
-        else {
-            self.safari = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://www.instagram.com/blrrd_app/"]];
-            if (APP_DEVICE_FLOAT >= 11.0) {
-                self.safari.dismissButtonStyle = SFSafariViewControllerDismissButtonStyleDone;
-                
-            }
-            else {
-                self.safari.preferredBarTintColor = [UIColor whiteColor];
-                self.safari.preferredControlTintColor =  UIColorFromRGB(0x69DCCB);
-                
-            }
-            self.safari.view.tintColor = UIColorFromRGB(0x69DCCB);
-            self.safari.delegate = self;
-            
-            [self presentViewController:self.safari animated:true completion:^{
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
-
-            }];
-            
-        }
-        
     }
     
     if ([key isEqualToString:@"cache"]) {

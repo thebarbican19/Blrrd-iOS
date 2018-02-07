@@ -23,6 +23,8 @@
     
 }
 
+
+
 -(void)authenticationLoginWithCredentials:(NSDictionary *)credentials completion:(void (^)(NSDictionary *user, NSError *error))completion {
     NSString *endpoint = @"user/login.php";
     NSString *endpointmethod = @"POST";
@@ -166,7 +168,10 @@
                 NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
                 if ([[output objectForKey:@"error_code"] intValue] == 200) {
                     NSMutableArray *posts = [[NSMutableArray alloc] init];
-                    [posts addObjectsFromArray:[output objectForKey:@"output"]];
+                    for (NSDictionary *post in [output objectForKey:@"output"]) {
+                        [posts addObject:post];
+
+                    }
                     
                     [self cacheSave:posts endpointname:[endpointparams objectForKey:@"type"] append:page==0?false:true expiry:60*50];
                     
@@ -198,20 +203,17 @@
     NSString *endpoint = [NSString stringWithFormat:@"user/posts.php"];
     NSString *endpointmethod = @"GET";
     NSDictionary *endpointparams;
-    NSLog(@"queryUserPosts %@" ,username);
     if (username == nil || [self.credentials.userKey isEqualToString:username]) endpointparams = @{@"pagnation":@(page)};
     else endpointparams = @{@"pagnation":@(page), @"userid":username};
 
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
         if (data.length > 0 && !error) {
-            NSLog(@"queryuser %@" ,[NSJSONSerialization JSONObjectWithData:data options:0 error:nil]);
             if (status.statusCode == 200) {
                 NSMutableArray *posts = [[NSMutableArray alloc] init];
                 [posts addObjectsFromArray:[[[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject] objectForKey:@"output"]];
 
                 if ([username isEqualToString:self.credentials.userKey]) {
-                    NSLog(@"saving cache: %@" ,username)
                     [self cacheSave:posts endpointname:self.credentials.userKey append:page==0?false:true expiry:60*60*24*4];
                     
                 }
@@ -321,10 +323,11 @@
     
 }
 
--(void)querySuggestedUsers:(NSString *)search completion:(void (^)(NSArray *users, NSError *error))completion {
+-(void)querySuggestedUsers:(NSString *)search emails:(NSArray *)emails completion:(void (^)(NSArray *users, NSError *error))completion {
     NSString *endpointsearch =  [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSString *endpoint;
     if (search.length > 0) endpoint = [NSString stringWithFormat:@"user/suggested.php?search=%@" ,endpointsearch];
+    else if (emails.count > 0) endpoint = [NSString stringWithFormat:@"user/suggested.php?emails=%@" ,[emails componentsJoinedByString:@","]];
     else endpoint = [NSString stringWithFormat:@"user/suggested.php"];
     NSString *endpointmethod = @"GET";
 
@@ -336,8 +339,16 @@
                 NSMutableArray *requests = [[NSMutableArray alloc] init];
                 [requests addObjectsFromArray:[output objectForKey:@"output"]];
                 
-                if (search == nil) {
+                if (search == nil && emails == nil) {
                     [self cacheSave:requests endpointname:endpoint append:false expiry:60*30];
+                    
+                }
+                
+                for (NSDictionary *friend in requests) {
+                    if ([[friend objectForKey:@"following"] boolValue]) {
+                        [self friendsListAppend:[friend objectForKey:@"userid"] remove:false];
+                        
+                    }
                     
                 }
                 
@@ -377,6 +388,11 @@
                 NSMutableArray *requests = [[NSMutableArray alloc] init];
                 [requests addObjectsFromArray:[NSJSONSerialization JSONObjectWithData:data options:0 error:nil]];
                 
+                for (NSDictionary *friend in requests) {
+                    [self friendsListAppend:[friend objectForKey:@"userid"] remove:false];
+                    
+                }
+                
                 [self cacheSave:requests endpointname:endpoint append:false expiry:60*30];
                 
                 completion(requests, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
@@ -403,6 +419,32 @@
     
 }
 
+-(void)postUpdateUser:(NSString *)user type:(NSString *)type value:(NSString *)value completion:(void (^)(NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"user/me.php"];
+    NSString *endpointmethod = @"PUT";
+    NSMutableDictionary *endpointparams = [[NSMutableDictionary alloc] init];
+    if (user != nil && self.credentials.userAdmin) [endpointparams setObject:user forKey:@"user"];
+    [endpointparams setObject:type forKey:@"type"];
+    [endpointparams setObject:value forKey:@"value"];
+    
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (data.length > 0 && !error) {
+            NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
+            completion([self requestErrorHandle:[[output objectForKey:@"error_code"] intValue] message:[output objectForKey:@"status"] error:nil endpoint:endpoint]);
+            
+        }
+        else {
+            completion([self requestErrorHandle:(int)status.statusCode message:error.domain error:nil endpoint:endpoint]);
+
+        }
+        
+    }];
+    
+    [task resume];
+    
+}
+
 -(void)queryUserStats:(void (^)(NSError *error))completion {
     NSString *endpoint = [NSString stringWithFormat:@"user/me.php"];
     NSString *endpointmethod = @"GET";
@@ -421,6 +463,7 @@
                 [self.credentials setUserEmail:[user objectForKey:@"email"]];
                 [self.credentials setUserType:[user objectForKey:@"type"]];
                 [self.credentials setUserPublic:[[user objectForKey:@"public"] boolValue]];
+                [self.credentials setUserVerifyed:[[user objectForKey:@"promoted"] boolValue]];
                 [self.credentials setUserAvatar:[user objectForKey:@"avatar"]];
                 [self.credentials setUserTotalPosts:[[stats objectForKey:@"posts"] intValue]];
 
@@ -438,6 +481,41 @@
     
     [task resume];
     
+}
+
+-(void)queryAdminStats:(void (^)(NSDictionary *stats, NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"user/admin.php"];
+    NSString *endpointmethod = @"GET";
+    
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:nil method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (data.length > 0 && !error) {
+            NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
+            NSMutableDictionary *formatted = [[NSMutableDictionary alloc] init];
+            if ([[output objectForKey:@"error_code"] intValue] == 200) {
+                NSDictionary *stats = [output objectForKey:@"output"];
+                for (NSString *keys in stats.allKeys) {
+                    id value = [stats objectForKey:keys];
+                    NSString *title = [[keys stringByReplacingOccurrencesOfString:@"_" withString:@" "] capitalizedString];
+                    [formatted setObject:value forKey:title];
+                    
+                }
+                
+            }
+            
+            completion(formatted, [self requestErrorHandle:[[output objectForKey:@"error_code"] intValue] message:[output objectForKey:@"status"] error:nil endpoint:endpoint]);
+
+            
+        }
+        else {
+            completion(nil, [self requestErrorHandle:(int)status.statusCode message:error.domain error:nil endpoint:endpoint]);
+            
+        }
+        
+    }];
+    
+    [task resume];
+                            
 }
 
 -(void)postTime:(NSDictionary *)image secondsadded:(int)seconds timeline:(BQueryTimeline)timeline completion:(void (^)(NSError *error))completion {
@@ -459,8 +537,8 @@
 
     }];
     
-    if (timeline == BQueryTimelineFriends) [self cacheUpdatePostWithData:endpointparams endpoint:@"following"];
-    else [self cacheUpdatePostWithData:endpointparams endpoint:@"trending"];
+    //if (timeline == BQueryTimelineFriends) [self cacheUpdatePostWithData:endpointparams endpoint:@"following"];
+    //else [self cacheUpdatePostWithData:endpointparams endpoint:@"trending"];
     
     [task resume];
     
@@ -535,12 +613,32 @@
     
 }
 
+-(void)postPasswordReset:(void (^)(NSError *error))completion {
+    NSString *endpoint = [NSString stringWithFormat:@"user/reset.php"];
+    NSDictionary *endpointparams = @{@"email":self.credentials.userEmail};
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:@"POST"] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
+        if (data.length > 0 && !error) {
+            NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
+            
+            completion([self requestErrorHandle:[[output objectForKey:@"error_code"] intValue] message:[output objectForKey:@"status"] error:nil endpoint:endpoint]);
+            
+        }
+        else {
+            completion([self requestErrorHandle:(int)status.statusCode message:error.domain error:error endpoint:endpoint]);
+            
+        }
+        
+    }];
+    
+    [task resume];
+    
+}
+
 -(NSArray *)notificationsMergeByType:(BNotificationMergeType)type {
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:false];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username != %@" ,self.credentials.userHandle];
     NSMutableArray *notifications = [[NSMutableArray alloc] initWithArray:[self cacheRetrive:@"content/time.php"]];
-    
-    NSLog(@"notifications %@" ,notifications);
     
     NSMutableArray *merge = [[NSMutableArray alloc] init];
     NSMutableArray *output = [[NSMutableArray alloc] init];
@@ -581,7 +679,6 @@
         }
         
         NSArray *filtered = [notifications filteredArrayUsingPredicate:predicate];
-        NSLog(@"[notifications filteredArrayUsingPredicate:predicate] %@" ,[notifications filteredArrayUsingPredicate:predicate]);
         NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:filtered.firstObject];
         int totaltime = 0;
         for (NSDictionary *item in [notifications filteredArrayUsingPredicate:predicate]) {
@@ -597,8 +694,6 @@
         
     }
     
-    
-
     return [[output filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
     
 }
@@ -608,22 +703,30 @@
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:false];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"postid == %@" ,identifyer];
     
-    NSLog(@"identifyer %@ - %@" ,notifications ,identifyer)
     return [[notifications filteredArrayUsingPredicate:predicate] sortedArrayUsingDescriptors:@[sort]];
     
 }
 
--(BOOL)friendCheck:(NSString *)username {
-    NSArray *users = [[NSArray alloc] initWithArray:[self cacheRetrive:@"user/friendship.php"]];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username == %@" ,username];
+-(BOOL)friendCheck:(NSString *)userid {
+    NSArray *friends = [[NSArray alloc] initWithArray:self.friendsList];
+    if ([friends containsObject:userid]) return true;
+    else return false;
     
-    if ([[users filteredArrayUsingPredicate:predicate] count] > 0) return false;
-    else return true;
+}
+
+-(void)friendsListAppend:(NSString *)userid remove:(BOOL)remove {
+    NSMutableArray *friends = [[NSMutableArray alloc] initWithArray:self.friendsList];
+    if (remove && [friends containsObject:userid]) [friends removeObject:userid];
+    else [friends addObject:userid];
+    
+    [self.data setObject:friends forKey:@"friends_list"];
+    [self.data synchronize];
     
 }
 
 -(NSArray *)friendsList {
-    return nil;
+    if ([[self.data objectForKey:@"friends_list"] count] == 0) return [[NSArray alloc] init];
+    else return [[NSArray alloc] initWithArray:[self.data objectForKey:@"friends_list"]];
     
 }
 
@@ -657,8 +760,8 @@
         NSString *key = [NSString stringWithFormat:@"cache_%@" ,endpoint];
         NSMutableArray *content = [[NSMutableArray alloc] init];
         if (append) [content addObjectsFromArray:[self cacheRetrive:endpoint]];
-        [content addObjectsFromArray:data];
-
+        [content addObjectsFromArray:[self cacheEncode:data]];
+        
         [self.data setObject:@{@"data":content, @"expiry":[NSDate dateWithTimeIntervalSinceNow:expiry]} forKey:key];
         [self.data synchronize];
         
@@ -742,7 +845,7 @@
     [buildendpoint appendString:APP_HOST_URL];
     [buildendpoint appendString:endpoint];
     
-    if (![method isEqualToString:@"POST"] && [params isKindOfClass:[NSDictionary class]]) {
+    if ((![method isEqualToString:@"POST"] && ![method isEqualToString:@"PUT"]) && [params isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dictionary = (NSDictionary *)params;
         
         [buildendpoint appendString:@"?"];
@@ -758,10 +861,12 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:buildendpoint] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:40];
     [request addValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"blappversion"];
     [request addValue:APP_LANGUAGE forHTTPHeaderField:@"bllanguage"];
-    if (self.credentials.authToken) [request addValue:self.credentials.authToken forHTTPHeaderField:@"blbearer"];
+    [request addValue:self.background?@"true":@"false" forHTTPHeaderField:@"blbackgroundrqst"];
+    if (self.credentials.authToken != nil) [request addValue:self.credentials.authToken forHTTPHeaderField:@"blbearer"];
+    if ([[UIDevice currentDevice] name] != nil) [request addValue:[[UIDevice currentDevice] name] forHTTPHeaderField:@"bldevicename"];
     [request setHTTPMethod:method];
         
-    if (params != nil && [method isEqualToString:@"POST"]) {
+    if (params != nil && ([method isEqualToString:@"POST"] || [method isEqualToString:@"PUT"])) {
         [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil]];
         
     }
@@ -783,4 +888,37 @@
     else return [formatter dateFromString:timestamp];
     
 }
+
+-(nonnull id)cacheEncode:(id)value {
+    if (value == nil) return @"";
+    else if ([value isKindOfClass:[NSString class]]) return value;
+    else if ([value isKindOfClass:[NSDate class]]) return value;
+    else if ([value isKindOfClass:[NSNumber class]]) return value;
+    else if ([value isKindOfClass:[NSArray class]]) {
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        for (id v in value) {
+            [array addObject:[self cacheEncode:v]];
+            
+        }
+        return array;
+    }
+    else if ([value isKindOfClass:[NSDictionary class]]) {
+        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+        NSArray *keys = [value allKeys];
+        for (id key in keys) {
+            [dictionary setValue:[self cacheEncode:[value valueForKey:key]] forKey:key];
+            
+        }
+        
+        return dictionary;
+        
+    }
+    else {
+        NSLog(@"Here: Cannot store %@ in Cache", value);
+        return @"";
+        
+    }
+    
+}
+
 @end

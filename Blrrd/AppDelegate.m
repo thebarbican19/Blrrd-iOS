@@ -8,6 +8,10 @@
 
 #import "AppDelegate.h"
 #import "BConstants.h"
+#import "BDetailedTimelineController.h"
+#import "BOnboardingController.h"
+#import "BCompleteController.h"
+#import "GDFeedbackController.h"
 
 @interface AppDelegate ()
 
@@ -76,6 +80,7 @@
     self.mixpanel = [Mixpanel sharedInstance];
     if ([[self.data objectForKey:@"app_installed"] boolValue] && ![[self.data objectForKey:@"app_killed"] boolValue]) {
         if (!APP_DEBUG_MODE) [self.mixpanel track:@"App Crashed"];
+        [self.query cacheDestroy:nil];
         
     }
     
@@ -115,7 +120,7 @@
 -(void)applicationRatePrompt {
     self.credentials = [[BCredentialsObject alloc] init];
     self.mixpanel = [Mixpanel sharedInstance];
-    if (self.credentials.userTotalTime > 60 * 7 && self.credentials.appRated == false) {
+    if (self.credentials.userTotalRevealedTime > 60 * 5 && self.credentials.userPosts > 0 && self.credentials.appRated == false) {
         if (APP_DEVICE_FLOAT >= 10.3) {
             [SKStoreReviewController requestReview];
             [self.credentials setAppRated:true];
@@ -124,11 +129,13 @@
         }
         
     }
+    
 }
 
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
     self.query =  [[BQueryObject alloc] init];
+    self.query.background = true;
     self.mixpanel = [Mixpanel sharedInstance];
     self.backgroundtask = [application beginBackgroundTaskWithExpirationHandler:^{
         [application endBackgroundTask:self.backgroundtask];
@@ -258,6 +265,136 @@
         
         [self.pushbots trackPushNotificationOpenedWithPayload:userInfo];
         
+    }
+    
+}
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    [self applicationOpenFromURL:url];
+    
+    return true;
+    
+}
+
+-(void)applicationOpenFromURL:(NSURL *)url {
+    self.mixpanel = [Mixpanel sharedInstance];
+    self.credentials = [[BCredentialsObject alloc] init];
+    self.query = [[BQueryObject alloc] init];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    for (NSString *components in [url.query componentsSeparatedByString:@"&"]) {
+        [parameters setObject:[[components componentsSeparatedByString:@"="] lastObject] forKey:[[components componentsSeparatedByString:@"="] firstObject]];
+        
+    }
+    
+    if (parameters) {
+        [self.mixpanel track:@"App Opened from URL" properties:@{@"URL":[NSString stringWithFormat:@"%@" ,url]}];
+        
+        [(UINavigationController  *)self.window.rootViewController popToRootViewControllerAnimated:false];
+        [(UINavigationController  *)self.window.rootViewController dismissViewControllerAnimated:false completion:nil];
+        
+        if ([url.host isEqualToString:@"login"]) {
+            if (self.credentials.userEmail != nil) {
+                BCompleteController *viewCompletion = [[BCompleteController alloc] init];
+                viewCompletion.type = BCompleteScreenAutoLogin;
+                viewCompletion.data = @{@"password":[parameters objectForKey:@"newpass"], @"email":self.credentials.userEmail};
+                
+                UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:viewCompletion];
+                navigation.navigationBarHidden = true;
+                
+                [(UINavigationController  *)self.window.rootViewController presentViewController:navigation animated:true    completion:nil];
+
+            }
+            else {
+                BOnboardingController *viewOnboarding = [[BOnboardingController alloc] init];
+                viewOnboarding.view.backgroundColor = MAIN_BACKGROUND_COLOR;
+                
+                UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:viewOnboarding];
+                navigation.navigationBarHidden = true;
+
+                [(UINavigationController  *)self.window.rootViewController presentViewController:navigation animated:true    completion:nil];
+                
+            }
+            
+        }
+        
+        if ([url.host isEqualToString:@"user"]) {
+            BDetailedTimelineController *viewProfile = [[BDetailedTimelineController alloc] init];
+            if ([[parameters objectForKey:@"key"] containsString:@"user_"]) {
+                if ([self.credentials.userKey isEqualToString:[parameters objectForKey:@"key"]]) {
+                    viewProfile.type = BDetailedViewTypeMyPosts;
+                    viewProfile.data = @{@"name":NSLocalizedString(@"Profile_MyPosts_Header", nil), @"username":self.credentials.userHandle};
+                    
+                }
+                else viewProfile.type = BDetailedViewTypeUserProfile;
+                
+            }
+            else {
+                if ([self.credentials.userHandle isEqualToString:[parameters objectForKey:@"handle"]]) {
+                    viewProfile.type = BDetailedViewTypeMyPosts;
+                    viewProfile.data = @{@"name":NSLocalizedString(@"Profile_MyPosts_Header", nil), @"username":self.credentials.userHandle};
+
+                    [(UINavigationController  *)self.window.rootViewController pushViewController:viewProfile animated:false];
+
+                }
+                else {
+                    [self.query querySuggestedUsers:[parameters objectForKey:@"handle"] emails:nil completion:^(NSArray *users, NSError *error) {
+                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                            if (error.code == 200 && users.count > 0) {
+                                viewProfile.type = BDetailedViewTypeUserProfile;
+                                viewProfile.data = users.firstObject;
+                                
+                                NSLog(@"querySuggestedUsers; %@" ,users.firstObject);
+                                
+                                [(UINavigationController  *)self.window.rootViewController pushViewController:viewProfile animated:true];
+                                
+                            }
+                            
+                        }];
+                        
+                    }];
+                   
+
+                }
+                
+            }
+
+
+        }
+        
+        if ([url.host isEqualToString:@"feedback"]) {
+            GDFeedbackController *viewFeedback = [[GDFeedbackController alloc] init];
+            viewFeedback.header = NSLocalizedString(@"Settings_ItemFeedback_Title", nil);
+            viewFeedback.type = @"In-App Feedback";
+            viewFeedback.placeholder = NSLocalizedString(@"Settings_FeedbackPlaceholder_Text", nil);
+            
+            [(UINavigationController  *)self.window.rootViewController pushViewController:viewFeedback animated:false];
+
+        }
+        
+        if ([url.host isEqualToString:@"rate"]) {
+            [SKStoreReviewController requestReview];
+            [self.credentials setAppRated:true];
+            [self.mixpanel track:@"App Rated"];
+            
+        }
+        
+        if ([url.host isEqualToString:@"reset"]) {
+            if ([parameters objectForKey:@"full"]) {
+                [self.credentials destoryAllCredentials];
+            
+                BOnboardingController *viewOnboarding = [[BOnboardingController alloc] init];
+                viewOnboarding.view.backgroundColor = MAIN_BACKGROUND_COLOR;
+
+                [(UINavigationController  *)self.window.rootViewController presentViewController:viewOnboarding animated:true    completion:nil];
+
+            }
+            
+            [self.query cacheDestroy:nil];
+
+            [[SDImageCache sharedImageCache] clearMemory];
+            [[SDImageCache sharedImageCache] clearDisk];
+            
+        }
     }
     
 }

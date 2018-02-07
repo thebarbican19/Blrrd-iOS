@@ -75,7 +75,7 @@
 -(void)placeholderUpdateTitle:(NSString *)title instructions:(NSString *)instructions {
     self.text = title!=nil?title:@"";
     self.instructions = instructions!=nil?instructions:@"";
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if (![placeholderTitle.attributedText isEqual:[self format:title subtitle:instructions]]) {
             [placeholderTitle setAttributedText:[self format:title subtitle:instructions]];
@@ -86,9 +86,11 @@
             
         }
         
+        [placeholderTitle setFrame:CGRectMake(15.0, 20.0, self.bounds.size.width - 30.0, self.bounds.size.height - 40.0)];
         [self placeholderLoading:0];
         
     });
+    
 
 }
 

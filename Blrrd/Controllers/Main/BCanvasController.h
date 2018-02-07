@@ -11,6 +11,8 @@
 #import <AVFoundation/AVFoundation.h>
 #import <UIImage+BlurEffects.h>
 #import <UIImage+ResizeMagick.h>
+#import <Mixpanel.h>
+
 #import "GDPlaceholderView.h"
 #import "GPUImage.h"
 #import "BCanvasNavigation.h"
@@ -37,6 +39,7 @@
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic) UIImage *image;
 @property (nonatomic, strong) NSDictionary *outputsettings;
+@property (nonatomic, strong) Mixpanel *mixpanel;
 
 @property (nonatomic, assign) BOOL gallerymode;
 @property (nonatomic, assign) BOOL uploading;
@@ -44,6 +47,7 @@
 -(void)viewAuthorizeCamera:(BOOL)authorize;
 -(void)viewTermiateCamera;
 -(void)viewCaptureImage;
+-(void)viewLoadGalleryContents;
 
 @end
 
