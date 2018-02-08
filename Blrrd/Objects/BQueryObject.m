@@ -857,15 +857,22 @@
         [buildendpoint setString:[buildendpoint substringWithRange:NSMakeRange(0, buildendpoint.length - 1)]];
                                        
     }
-        
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterLongStyle];
+    [formatter setTimeStyle:NSDateFormatterLongStyle];
+    [formatter setDateFormat:@"ZZZ"];
+    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:buildendpoint] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:40];
     [request addValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"blappversion"];
+    [request addValue:[formatter stringFromDate:[NSDate date]] forHTTPHeaderField:@"bltimezone"];
     [request addValue:APP_LANGUAGE forHTTPHeaderField:@"bllanguage"];
     [request addValue:self.background?@"true":@"false" forHTTPHeaderField:@"blbackgroundrqst"];
     if (self.credentials.authToken != nil) [request addValue:self.credentials.authToken forHTTPHeaderField:@"blbearer"];
     if ([[UIDevice currentDevice] name] != nil) [request addValue:[[UIDevice currentDevice] name] forHTTPHeaderField:@"bldevicename"];
+    NSLog(@"request: %@" ,request)
     [request setHTTPMethod:method];
-        
+            
     if (params != nil && ([method isEqualToString:@"POST"] || [method isEqualToString:@"PUT"])) {
         [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil]];
         
@@ -880,10 +887,14 @@
 -(NSDate *)requestTimestamp:(NSString *)timestamp {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+    formatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
     NSDateFormatter *formattertwo = [[NSDateFormatter alloc] init];
     formattertwo.dateFormat = @"yyyy-MM-dd HH:mm:ss ZZZ";
-
+    formattertwo.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+    formattertwo.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    
     if ([formatter dateFromString:timestamp] == nil) return [formattertwo dateFromString:timestamp];
     else return [formatter dateFromString:timestamp];
     

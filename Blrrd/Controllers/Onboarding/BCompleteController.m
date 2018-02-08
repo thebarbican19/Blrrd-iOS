@@ -206,16 +206,28 @@
     }
     [self.viewAction.layer setCornerRadius:5.0];
     [self.viewAction setTag:1];
-    [self.viewAction addTarget:self action:@selector(viewComplete) forControlEvents:UIControlEventTouchUpInside];
+    [self.viewAction addTarget:self action:@selector(viewComplete:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.viewAction];
 
 }
 
--(void)viewComplete {
+-(void)viewComplete:(UIButton *)button {
     if (self.type == BCompleteScreenLogin || self.type == BCompleteScreenSignup) {
         [self.mixpanel track:@"App Completed Onboarding with Content"];
         [self.navigationController dismissViewControllerAnimated:true completion:nil];
         
+    }
+    else if (self.type == BCompleteScreenAutoLogin) {
+        if ([button.titleLabel.text isEqualToString:NSLocalizedString(@"Onboarding_ActionCompleteBack_Text", nil)]) {
+            [self.navigationController popViewControllerAnimated:true];
+
+        }
+        else {
+            [self.mixpanel track:@"App Completed Auto Login"];
+            [self.navigationController dismissViewControllerAnimated:true completion:nil];
+
+        }
+            
     }
     else {
         if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"message://"]]) {

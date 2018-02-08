@@ -13,8 +13,9 @@ typedef NS_ENUM(NSInteger, GDFormInputType) {
     GDFormInputTypePassword,
     GDFormInputTypePasswordReenter,
     GDFormInputTypeUsername,
-    GDFormInputTypeEmail
-    
+    GDFormInputTypeEmail,
+    GDFormInputTypePhone
+
 };
 
 @protocol GDFormInputDelegate;
@@ -28,7 +29,7 @@ typedef NS_ENUM(NSInteger, GDFormInputType) {
 @property (nonatomic, strong) NSDictionary *data;
 @property (nonatomic) BOOL login;
 @property (nonatomic) BOOL validated;
-@property (nonatomic) NSString *entry;
+@property (nonatomic, strong) NSString *entry;
 
 @property (nonatomic, strong) GDStatusLabel *formLabel;
 @property (nonatomic, strong) UITextField *formInput;

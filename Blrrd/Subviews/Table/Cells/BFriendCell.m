@@ -21,6 +21,7 @@
         self.user.textColor = [UIColor whiteColor];
         self.user.font = [UIFont fontWithName:@"Nunito-Bold" size:14];
         self.user.numberOfLines = 2;
+        self.user.userInteractionEnabled = true;
         [self.contentView addSubview:self.user];
         
         self.avatar = [[UIImageView alloc] initWithFrame:CGRectMake(19.0, 6.0, self.bounds.size.height - 12.0 ,self.bounds.size.height - 12.0)];
@@ -30,6 +31,10 @@
         self.avatar.layer.cornerRadius = self.avatar.bounds.size.height / 2;
         self.avatar.clipsToBounds = true;
         [self.contentView addSubview:self.avatar];
+        
+        self.gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(gesture:)];
+        self.gesture.delegate = self;
+        [self.user addGestureRecognizer:self.gesture];
         
         self.follow = [[BFollowAction alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - (100 + 55.0), 10.0, 100, self.contentView.bounds.size.height - 20.0)];
         self.follow.backgroundColor = [UIColor clearColor];
@@ -47,7 +52,8 @@
 
 -(void)content:(NSDictionary *)item {
     self.data = [[NSDictionary alloc] initWithDictionary:item];
-  
+    NSLog(@"content: %@" ,item);
+    
     [self name:item];
     [self avatar:[item objectForKey:@"avatar"]];
 
@@ -91,17 +97,41 @@
     
 }
 
--(void)name:(NSDictionary *)data {
-    if ([data objectForKey:@"fullname"] == nil) [self.user setText:[data objectForKey:@"username"]];
-    else {
-        NSString *text = [NSString stringWithFormat:@"%@\n@%@" ,[data objectForKey:@"fullname"], [data objectForKey:@"username"]];
-        NSMutableAttributedString *formatted = [[NSMutableAttributedString alloc] initWithString:text];
-        [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Nunito-Regular" size:9.0] range:NSMakeRange([[data objectForKey:@"fullname"] length], [[data objectForKey:@"username"] length] + 2)];
-        [formatted addAttribute:NSForegroundColorAttributeName value:[self.user.textColor colorWithAlphaComponent:0.6] range:NSMakeRange([[data objectForKey:@"fullname"] length], [[data objectForKey:@"username"] length] + 2)];
-            
-        [self.user setAttributedText:formatted];
+-(void)gesture:(UITapGestureRecognizer *)gesture {
+    if ([self.delegate respondsToSelector:@selector(viewPresentProfile:)]) {
+        [self.delegate viewPresentProfile:self.data];
         
     }
+    
+}
+
+-(void)name:(NSDictionary *)data {
+    NSString *header;
+    NSString *subtitle;
+    NSString *text;
+    if ([data objectForKey:@"fullname"] != nil) {
+        header = [data objectForKey:@"fullname"];
+        subtitle = [data objectForKey:@"username"];
+        text = [NSString stringWithFormat:@"%@\n@%@" ,header, subtitle.lowercaseString];
+
+    }
+    else if ([[data objectForKey:@"follows"] boolValue]) {
+        header = [data objectForKey:@"username"];
+        subtitle = NSLocalizedString(@"Friend_CellSubtitleFollows_Text", nil);
+        text = [NSString stringWithFormat:@"%@\n%@ " ,header, subtitle.lowercaseString];
+
+    }
+    else {
+        header = [data objectForKey:@"username"];
+        text = [NSString stringWithFormat:@"%@  " ,header];
+
+    }
+  
+    NSMutableAttributedString *formatted = [[NSMutableAttributedString alloc] initWithString:text];
+    [formatted addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Nunito-Regular" size:9.0] range:NSMakeRange(header.length, subtitle.length + 2)];
+    [formatted addAttribute:NSForegroundColorAttributeName value:[self.user.textColor colorWithAlphaComponent:0.6] range:NSMakeRange(header.length, subtitle.length + 2)];
+    
+    [self.user setAttributedText:formatted];
     
 }
 

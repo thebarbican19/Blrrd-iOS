@@ -4,6 +4,31 @@
 <array>
 	<dict>
 		<key>section</key>
+		<string>user</string>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>key</key>
+				<string>useremail</string>
+				<key>switch</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>key</key>
+				<string>userpassword</string>
+				<key>switch</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>key</key>
+				<string>userphone</string>
+				<key>switch</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>section</key>
 		<string>settings</string>
 		<key>items</key>
 		<array>

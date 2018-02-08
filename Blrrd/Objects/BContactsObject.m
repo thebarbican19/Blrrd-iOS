@@ -267,11 +267,16 @@
 -(void)contactUpdateCredentials {
     [self.credentials setUserBirthday:[self.user objectForKey:@"dob"]];
     [self.credentials setUserPhoneNumber:[[self.user objectForKey:@"phones"] objectForKey:@"number"]];
-    
-    if (self.credentials.userBirthday != nil) {
+    [self.credentials setUserFullname:[self.user objectForKey:@"name"]];
+
+    [self.mixpanel track:@"App Parsed Contacts Data"];
+
+    if ([self.credentials userBirthday] != nil) {
         [self.queue addOperationWithBlock:^{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             formatter.dateFormat = @"yyyy-MM-dd";
+            formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+            formatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
             
             [self.query postUpdateUser:nil type:@"dob" value:[formatter stringFromDate:self.credentials.userBirthday] completion:^(NSError *error) {
                 [self.credentials setAppContactUpdateExpiry:false];
@@ -282,10 +287,23 @@
         
     }
     
-    if (self.credentials.userPhone != nil) {
+    if ([self.credentials userPhone:false] != nil) {
         [self.queue addOperationWithBlock:^{
-            [self.query postUpdateUser:nil type:@"phone" value:self.credentials.userPhone completion:^(NSError *error) {
+            [self.query postUpdateUser:nil type:@"phone" value:[self.credentials userPhone:false] completion:^(NSError *error) {
                 [self.credentials setAppContactUpdateExpiry:false];
+                [self.mixpanel.people set:@{@"$phone":[self.credentials userPhone:false]}];
+
+            }];
+            
+        }];
+        
+    }
+    
+    if ([self.credentials userFullname] != nil) {
+        [self.queue addOperationWithBlock:^{
+            [self.query postUpdateUser:nil type:@"fullname" value:self.credentials.userFullname completion:^(NSError *error) {
+                [self.credentials setAppContactUpdateExpiry:false];
+                [self.mixpanel.people set:@{@"$name":self.credentials.userFullname}];
 
             }];
             

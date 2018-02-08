@@ -167,7 +167,7 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.posts.count;
+    return [self.posts count];
     
 }
 

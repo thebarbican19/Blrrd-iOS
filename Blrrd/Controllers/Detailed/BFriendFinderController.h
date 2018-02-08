@@ -16,9 +16,12 @@
 #import "BContactsObject.h"
 #import "BFollowAction.h"
 #import "BDetailedTimelineController.h"
+#import "BFriendCell.h"
 
-@interface BFriendFinderController : UIViewController <UITableViewDelegate, UITableViewDataSource, BNavigationDelegate, BSearchViewDelegate, BFollowActionDelegate, GDPlaceholderDelegate, BDetailedTimelineDelegate>
+@protocol BFriendFinderDelegate;
+@interface BFriendFinderController : UIViewController <UITableViewDelegate, UITableViewDataSource, BNavigationDelegate, BSearchViewDelegate, BFollowActionDelegate, GDPlaceholderDelegate, BDetailedTimelineDelegate, BFriendDelegateCell>
 
+@property (nonatomic, strong) id <BFriendFinderDelegate> delegate;
 @property (nonatomic, strong) BQueryObject *query;
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic, strong) BContactsObject *contacts;
@@ -34,5 +37,13 @@
 @property (nonatomic, strong) GDPlaceholderView *viewPlaceholder;
 @property (nonatomic, strong) BSearchView *viewSearch;
 @property (nonatomic, strong) UIView *viewContacts;
+
+@end
+
+@protocol BFriendFinderDelegate <NSObject>
+
+@optional
+
+-(void)viewPresentSubviewWithIndex:(int)index animated:(BOOL)animated;
 
 @end

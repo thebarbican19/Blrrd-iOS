@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>17</string>
+	<string>18</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -41,7 +41,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Required to capture and share new images</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Let&apos;s search your contact to find people you know on Blrrd</string>
+	<string>Let's search your contact to find people you know on Blrrd</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Required to share images from your photos</string>
 	<key>UIAppFonts</key>

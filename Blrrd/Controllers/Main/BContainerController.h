@@ -21,8 +21,9 @@
 #import "BTabbarView.h"
 #import "BDetailedTimelineController.h"
 #import "BDeailedImageController.h"
+#import "BFriendFinderController.h"
 
-@interface BContainerController : UIViewController <UIScrollViewDelegate, BSegmentDelegate, BQueryDelegate, BTimelineDelegate, BUsageDelegate, BDiscoverDelegate, BTabbarDelegate, BChannelDelegate, BDetailedTimelineDelegate, BDetailedImageDelegate, BCanvasDelegate>
+@interface BContainerController : UIViewController <UIScrollViewDelegate, BSegmentDelegate, BQueryDelegate, BTimelineDelegate, BUsageDelegate, BDiscoverDelegate, BTabbarDelegate, BChannelDelegate, BDetailedTimelineDelegate, BDetailedImageDelegate, BCanvasDelegate, BFriendFinderDelegate>
 
 @property (nonatomic, retain) AppDelegate *appdel;
 @property (nonatomic, strong) BQueryObject *query;

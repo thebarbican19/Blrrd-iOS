@@ -34,7 +34,8 @@
 -(int)userTotalRevealedTime;
 -(NSString *)userTotalTimeFormatted;
 -(int)userPosts;
--(NSString *)userPhone;
+-(NSString *)userPhone:(BOOL)countrycode;
+-(NSString *)userFullname;
 -(NSDate *)userBirthday;
 
 -(BOOL)appRated;
@@ -59,6 +60,7 @@
 -(void)setAppContactUpdateExpiry:(BOOL)expire;
 
 -(void)setUserType:(NSString *)type;
+-(void)setUserFullname:(NSString *)fullname;
 -(void)setUserEmail:(NSString *)email;
 -(void)setUserIdentifyer:(NSString *)key;
 -(void)setUserHandle:(NSString *)handle;

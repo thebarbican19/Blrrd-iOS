@@ -8,7 +8,6 @@
 
 #import "BFriendFinderController.h"
 #import "BConstants.h"
-#import "BFriendCell.h"
 #import "BCompleteController.h"
 
 @interface BFriendFinderController ()
@@ -226,6 +225,30 @@
     
 }
 
+-(void)viewPresentSubviewWithIndex:(int)index animated:(BOOL)animated {
+    if ([self.delegate respondsToSelector:@selector(viewPresentSubviewWithIndex:animated:)]) {
+        [self.delegate viewPresentSubviewWithIndex:index animated:true];
+        
+    }
+    
+}
+
+-(void)viewPresentProfile:(NSDictionary *)data {
+    BDetailedTimelineController *viewDetailed = [[BDetailedTimelineController alloc] init];
+    viewDetailed.view.backgroundColor = self.view.backgroundColor;
+    viewDetailed.type = BDetailedViewTypeUserProfile;
+    viewDetailed.data = data;
+    viewDetailed.delegate = self;
+    
+    NSLog(@"viewPresentProfile %@" ,data);
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [self.navigationController pushViewController:viewDetailed animated:true];
+        
+    }];
+    
+}
+
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSInteger items = [[[self.sections objectAtIndex:section] objectForKey:@"items"] count];
     BSectionHeader *header = [[BSectionHeader alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, 35.0)];
@@ -278,28 +301,13 @@
     [cell.follow setDelegate:self];
     [cell.follow setIndexPath:indexPath];
     [cell content:item];
-    
+    [cell setDelegate:self];
+
     [cell setBackgroundColor:[UIColor clearColor]];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     return cell;
         
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *item = [[[self.sections objectAtIndex:indexPath.section] objectForKey:@"items"] objectAtIndex:indexPath.row];
-
-    BDetailedTimelineController *viewDetailed = [[BDetailedTimelineController alloc] init];
-    viewDetailed.view.backgroundColor = self.view.backgroundColor;
-    viewDetailed.type = BDetailedViewTypeUserProfile;
-    viewDetailed.data = item;
-    viewDetailed.delegate = self;
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [self.navigationController pushViewController:viewDetailed animated:true];
-        
-    }];
- 
 }
 
 -(void)searchFieldWasUpdated:(NSString *)query {

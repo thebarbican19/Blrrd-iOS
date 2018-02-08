@@ -285,15 +285,21 @@
     NSString *endpointmethod = @"POST";
     NSDictionary *endpointparams = @{@"caption":caption, @"file":formatdata};
     
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterLongStyle];
+    [formatter setTimeStyle:NSDateFormatterLongStyle];
+    [formatter setDateFormat:@"ZZZ"];
+    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:endpoint] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:40];
     [request addValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"blappversion"];
+    [request addValue:[formatter stringFromDate:[NSDate date]] forHTTPHeaderField:@"bltimezone"];
     [request addValue:APP_LANGUAGE forHTTPHeaderField:@"bllanguage"];
-    if (self.credentials.authToken) [request addValue:self.credentials.authToken forHTTPHeaderField:@"blbearer"];
+    if (self.credentials.authToken != nil) [request addValue:self.credentials.authToken forHTTPHeaderField:@"blbearer"];
+    if ([[UIDevice currentDevice] name] != nil) [request addValue:[[UIDevice currentDevice] name] forHTTPHeaderField:@"bldevicename"];
     [request setHTTPMethod:endpointmethod];
     [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:endpointparams options:NSJSONWritingPrettyPrinted error:nil]];
 
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    
     NSURLSessionUploadTask *task = [session uploadTaskWithStreamedRequest:request];
     
     [task resume];
@@ -339,24 +345,22 @@
 
 -(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent
     totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
-    CGFloat progress = (float)totalBytesSent/totalBytesExpectedToSend;
-    NSLog(@"downloaded %d%%", (int)(100.0 * progress));
-    
-    if ([self.delegate respondsToSelector:@selector(imageUploadedBytesWithPercentage:)]) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self.delegate imageUploadedBytesWithPercentage:progress];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        CGFloat progress = (float)totalBytesSent/totalBytesExpectedToSend;
+        if ([self.delegate respondsToSelector:@selector(imageUploadedBytesWithPercentage:)]) {
+            [self.delegate imageUploadedBytesWithPercentage:(progress - 0.1)];
         
-        }];
-        
-    }
+        }
+     
+    }];
     
 }
 
 -(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
-    NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
-    if ([[output objectForKey:@"error_code"] intValue] == 200) {
-        if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
+        if ([[output objectForKey:@"error_code"] intValue] == 200) {
+            if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
                 [self.query cacheDestroy:@"following"];
                 [self.query queryTimeline:BQueryTimelineFriends page:0 completion:^(NSArray *posts, NSError *error) {
                     [self.delegate imageUploadedBytesWithPercentage:1.0];
@@ -364,22 +368,19 @@
                     
                 }];
                 
-            }];
+            }
             
         }
-        
-    }
-    else {
-        if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        else {
+            if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
                 NSError *error = [NSError errorWithDomain:[output objectForKey:@"status"] code:[[output objectForKey:@"error_code"] intValue] userInfo:nil];
                 [self.delegate imageUploadedWithErrors:error];
-                
-            }];
+
+            }
             
         }
         
-    }
+    }];
         
 }
 

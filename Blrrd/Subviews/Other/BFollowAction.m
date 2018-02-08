@@ -13,13 +13,14 @@
 
 -(void)drawRect:(CGRect)rect {
     if (![self.subviews containsObject:container]) {
-        container = [[UIView alloc] initWithFrame:self.bounds];
+        container = [[UIButton alloc] initWithFrame:self.bounds];
         container.backgroundColor = [UIColor clearColor];
         container.layer.cornerRadius = 6.0;
         container.layer.borderColor = UIColorFromRGB(0x69DCCB).CGColor;
         container.layer.borderWidth = 2.0;
         container.alpha = 0.0;
         container.userInteractionEnabled = true;
+        [container addTarget:self action:@selector(followAction:) forControlEvents:UIControlEventTouchDown];
         [self addSubview:container];
         
         label = [[UILabel alloc] initWithFrame:CGRectMake(container.bounds.size.height, 2.0, container.bounds.size.width - container.bounds.size.height, container.bounds.size.height)];
@@ -35,11 +36,6 @@
         icon.contentMode = UIViewContentModeCenter;
         icon.userInteractionEnabled = false;
         [container addSubview:icon];
-
-        gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(followAction:)];
-        gesture.delegate = self;
-        gesture.numberOfTapsRequired = 1;
-        [container addGestureRecognizer:gesture];
         
     }
     

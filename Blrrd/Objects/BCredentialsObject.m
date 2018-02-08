@@ -26,8 +26,11 @@
     [self setUserEmail:nil];
     [self setUserHandle:nil];
     [self setUserIdentifyer:nil];
+    [self setUserPhoneNumber:nil];
+    [self setUserFullname:nil];
     [self setUserTotalTime:0 append:false];
     [self setAppContactUpdateExpiry:true];
+    [self setAuthToken:nil];
 
     if (!APP_DEBUG_MODE) {
         [self.mixpanel track:@"App Logged Out"];
@@ -103,7 +106,9 @@
 -(void)setUserBirthday:(NSDate *)date {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss ZZZ";
-    
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+    formatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+
     [self.data setObject:[formatter stringFromDate:date] forKey:@"user_dob"];
     [self.data synchronize];
     
@@ -125,14 +130,36 @@
     
 }
 
--(NSString *)userPhone {
-    return [[self.data objectForKey:@"user_phone"] stringByReplacingOccurrencesOfString:@" " withString:@""];
+-(NSString *)userPhone:(BOOL)countrycode {
+    if ([self.data objectForKey:@"user_phone"] != nil) {
+        return [[self.data objectForKey:@"user_phone"] stringByReplacingOccurrencesOfString:@" " withString:@""];
+        
+    }
+    else {
+        if (countrycode) {
+            NSString *path = [[NSBundle mainBundle] pathForResource:@"CountryCodes" ofType:@"json"];
+            NSArray *content = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:0 error:nil];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"code == %@" ,APP_COUNTRY_CODE];
+            NSDictionary *output = [[content filteredArrayUsingPredicate:predicate] firstObject];
+            return [output objectForKey:@"dial_code"];
+            
+        }
+        else return nil;
+        
+    }
+    
+}
+
+-(NSString *)userFullname {
+    return [self.data objectForKey:@"user_fullname"];
     
 }
 
 -(NSDate *)userBirthday {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss zzz";
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+    formatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
     return [formatter dateFromString:[self.data objectForKey:@"user_dob"]];
     
@@ -241,6 +268,14 @@
     
 }
 
+-(void)setUserFullname:(NSString *)fullname {
+    if (fullname) [self.data setObject:fullname forKey:@"user_fullname"];
+    else [self.data removeObjectForKey:@"user_fullname"];
+    
+    [self.data synchronize];
+    
+}
+
 -(void)setUserEmail:(NSString *)email {
     if (email) [self.data setObject:[email stringByCorrectingEmailTypos] forKey:@"user_email"];
     else [self.data removeObjectForKey:@"user_email"];
@@ -321,6 +356,8 @@
     NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
     formatter.timeZone = [NSTimeZone defaultTimeZone];
     formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+    formatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
     if (expiry) [self.data setObject:[formatter dateFromString:expiry] forKey:@"auth_expiry"];
     else [self.data removeObjectForKey:@"auth_expiry"];

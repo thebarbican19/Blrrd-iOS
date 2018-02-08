@@ -22,10 +22,9 @@ typedef NS_ENUM(NSInteger, BFollowActionStyle) {
 
 @protocol BFollowActionDelegate;
 @interface BFollowAction : UIView <UIGestureRecognizerDelegate> {
-    UIView *container;
+    UIButton *container;
     UIImageView *icon;
     UILabel *label;
-    UITapGestureRecognizer *gesture;
 
 }
 

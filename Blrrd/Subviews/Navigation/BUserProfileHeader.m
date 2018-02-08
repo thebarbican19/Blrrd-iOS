@@ -108,12 +108,16 @@
 -(NSString *)time:(NSString *)timestamp {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+    formatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
     if ([[formatter dateFromString:timestamp] isKindOfClass:[NSDate class]]) {
         NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[formatter dateFromString:timestamp] toDate:[NSDate date] options:0];
         
         NSDateFormatter *formatted = [[NSDateFormatter alloc] init];
         formatted.dateFormat = @"d MMMM YYYY";
+        formatted.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+        formatted.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         
         if (components.day > 7) {
             return [formatted stringFromDate:[formatter dateFromString:timestamp]];

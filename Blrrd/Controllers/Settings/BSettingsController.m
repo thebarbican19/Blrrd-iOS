@@ -13,6 +13,7 @@
 #import "GDFeedbackController.h"
 #import "BDocumentController.h"
 #import "BAdminStatsController.h"
+#import "BSettingsUserEditController.h"
 
 @interface BSettingsController ()
 
@@ -185,6 +186,33 @@
         viewStats.view.backgroundColor = self.view.backgroundColor;
 
         [self.navigationController pushViewController:viewStats animated:true];
+        
+    }
+    
+    if ([key containsString:@"user"]) {
+        BSettingsUserEditController *viewUser = [[BSettingsUserEditController alloc] init];
+        viewUser.header = NSLocalizedString(localized, nil);
+        
+        if ([key containsString:@"email"]) {
+            viewUser.type = GDFormInputTypeEmail;
+            viewUser.value = [self.credentials userEmail];
+            
+        }
+        else if ([key containsString:@"phone"]) {
+            viewUser.type = GDFormInputTypePhone;
+            viewUser.value = [self.credentials userPhone:true];
+
+        }
+        else if ([key containsString:@"password"]) {
+            viewUser.type = GDFormInputTypePassword;
+            viewUser.value = nil;
+
+        }
+        
+        viewUser.view.clipsToBounds = true;
+        viewUser.view.backgroundColor = self.view.backgroundColor;
+        
+        [self.navigationController pushViewController:viewUser animated:true];
         
     }
     

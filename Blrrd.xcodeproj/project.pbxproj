@@ -14,6 +14,8 @@
 		771E55E72028DEAB00129FE8 /* BContactsObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 771E55E62028DEAB00129FE8 /* BContactsObject.m */; };
 		771E55E92028DF1700129FE8 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 771E55E82028DF1600129FE8 /* Contacts.framework */; };
 		771E55EB202A15F000129FE8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 771E55EA202A15F000129FE8 /* Security.framework */; };
+		7722A867202AFF2100BCA0C0 /* BSettingsUserEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7722A866202AFF2100BCA0C0 /* BSettingsUserEditController.m */; };
+		7722A86D202C810200BCA0C0 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 7722A86C202C810200BCA0C0 /* CountryCodes.json */; };
 		7734F9D4201ACE9700B1E7C0 /* terms.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 7734F9D3201ACE9700B1E7C0 /* terms.pdf */; };
 		7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7737127E1FCFBD4B00E507AE /* SafariServices.framework */; };
 		773712821FD0654000E507AE /* BDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 773712811FD0654000E507AE /* BDocumentController.m */; };
@@ -159,6 +161,9 @@
 		771E55E62028DEAB00129FE8 /* BContactsObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BContactsObject.m; sourceTree = "<group>"; };
 		771E55E82028DF1600129FE8 /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
 		771E55EA202A15F000129FE8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		7722A865202AFF2100BCA0C0 /* BSettingsUserEditController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSettingsUserEditController.h; sourceTree = "<group>"; };
+		7722A866202AFF2100BCA0C0 /* BSettingsUserEditController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSettingsUserEditController.m; sourceTree = "<group>"; };
+		7722A86C202C810200BCA0C0 /* CountryCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CountryCodes.json; sourceTree = "<group>"; };
 		7734F9D3201ACE9700B1E7C0 /* terms.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = terms.pdf; sourceTree = "<group>"; };
 		7737127E1FCFBD4B00E507AE /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		773712801FD0654000E507AE /* BDocumentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDocumentController.h; sourceTree = "<group>"; };
@@ -381,6 +386,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		7722A86B202C80DA00BCA0C0 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				7722A86C202C810200BCA0C0 /* CountryCodes.json */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		773712871FD06B4600E507AE /* Documents */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,6 +413,7 @@
 		7757318C1FBE3F20002E0CCE /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				7722A86B202C80DA00BCA0C0 /* Data */,
 				7784526A20122802003A4841 /* SFX */,
 				773712991FD1F20D00E507AE /* Models */,
 				773712871FD06B4600E507AE /* Documents */,
@@ -470,6 +484,8 @@
 				7778B1EF1FCFB0C600E5B83D /* BSettingsController.m */,
 				771E55E22024CD1700129FE8 /* BAdminStatsController.h */,
 				771E55E32024CD1700129FE8 /* BAdminStatsController.m */,
+				7722A865202AFF2100BCA0C0 /* BSettingsUserEditController.h */,
+				7722A866202AFF2100BCA0C0 /* BSettingsUserEditController.m */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -939,6 +955,7 @@
 				775731A21FBE3F5E002E0CCE /* Nunito-BoldItalic.ttf in Resources */,
 				7757319C1FBE3F5E002E0CCE /* Nunito-ExtraLightItalic.ttf in Resources */,
 				775731A51FBE3F5E002E0CCE /* Nunito-ExtraBoldItalic.ttf in Resources */,
+				7722A86D202C810200BCA0C0 /* CountryCodes.json in Resources */,
 				775731A71FBE3F5E002E0CCE /* Nunito-ExtraLight.ttf in Resources */,
 				775731A01FBE3F5E002E0CCE /* Nunito-SemiBold.ttf in Resources */,
 				778D9B4E1FABCC7700878A6A /* Localizable.strings in Resources */,
@@ -1207,6 +1224,7 @@
 				7778B1E11FCF3EB500E5B83D /* GDFeedbackController.m in Sources */,
 				778D9B6D1FABEC1600878A6A /* BBlurredCell.m in Sources */,
 				778D9B5F1FABD63700878A6A /* BQueryObject.m in Sources */,
+				7722A867202AFF2100BCA0C0 /* BSettingsUserEditController.m in Sources */,
 				7778B1F31FCFB3D800E5B83D /* BSettingsCell.m in Sources */,
 				77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */,
 				778D9B6A1FABEBD300878A6A /* BTimelineSubview.m in Sources */,

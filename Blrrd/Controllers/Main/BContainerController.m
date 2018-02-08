@@ -9,7 +9,6 @@
 #import "BContainerController.h"
 #import "BOnboardingController.h"
 #import "BSettingsController.h"
-#import "BFriendFinderController.h"
 #import "BConstants.h"
 
 @interface BContainerController ()
@@ -468,6 +467,7 @@
     BFriendFinderController *viewFriends = [[BFriendFinderController alloc] init];
     viewFriends.view.backgroundColor = self.view.backgroundColor;
     viewFriends.header = NSLocalizedString(@"Friend_Header_Text", nil);
+    viewFriends.delegate = self;
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [self.navigationController pushViewController:viewFriends animated:true];

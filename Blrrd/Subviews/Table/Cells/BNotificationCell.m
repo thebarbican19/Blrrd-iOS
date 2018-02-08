@@ -62,6 +62,8 @@
     
     NSDateFormatter *formatted = [[NSDateFormatter alloc] init];
     formatted.dateFormat = @"d MMMM YYYY";
+    formatted.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+    formatted.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
     if (components.day > 7) {
         return [formatted stringFromDate:timestamp];

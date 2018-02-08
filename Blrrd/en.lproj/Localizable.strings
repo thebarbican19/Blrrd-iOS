@@ -37,24 +37,32 @@
 "Authenticate_PasswordUnsecure_Error" = "Come on, you can do better than that! Add some numbers to make it more secure.";
 "Authenticate_PasswordIncorrect_Error" = "Whoops, it looks like your username or password was incorrect.";
 "Authenticate_PasswordOkay_Error" = "Perfect!";
+"Authenticate_PhoneOkay_Error" = "Got your number. Call me, maybe?";
 "Authenticate_RePasswordOkay_Error" = "Looking good!";
 "Authenticate_RePasswordUnmatched_Error" = "Passwords do not match.";
-
+"Authenticate_NoChanges_Error" = "You didn't change anything!";
+"Authenticate_Updating_Error" = "Saving your new information";
 "Authentication_FormEmail_Title" = "Enter your email address";
-"Authentication_FormPassword_Title" = "Now your password...";
+"Authentication_FormPassword_Title" = "Enter your password...";
 "Authentication_FormRePassword_Title" = "And your password one more time...";
+"Authentication_FormPhone_Title" = "What's your number";
 "Authentication_FormUsername_Title" = "Pick an awesome username";
 "Authentication_FormLoginUsername_Title" = "Your username";
 "Authentication_FormEmail_Placeholder" = "you@domain.com";
 "Authentication_FormPassword_Placeholder" = "Password";
+"Authentication_FormPhone_Placeholder" = "Phone Number";
 "Authentication_FormUsername_Placeholder" = "blrrduser1";
 "Authentication_SignupButton_Title" = "Signup";
+"Authentication_UpdateButton_Title" = "Update";
 "Authentication_LoginButton_Title" = "Login";
 "Authentication_SignupAction_Title" = "Sign Me Up!";
 "Authentication_LoginAction_Title" = "Log Me In!";
 "Authentication_ResetAction_Title" = "Reset My Password";
 "Authentication_NextAction_Title" = "Next";
 "Authentication_RetryAction_Title" = "Retry";
+"Authentication_ChangeOkayError_Title" = "Updated!";
+"Authentication_ChangeOkayError_Body" = "Your information has been updated. Tap to go back.";
+"Authentication_ChangeErrorError_Title" = "Oh no!";
 
 "Main_TabbarHome_Text" = "home";
 "Main_TabbarProfile_Text" = "profile";
@@ -113,17 +121,19 @@
 "Settings_Title" = "Settings";
 "Settings_SectionSettings_Title" = "General";
 "Settings_SectionAbout_Title" = "About";
-"Settings_SectionDanger_Title" = "Danger Zone";
 "Settings_SectionAdmin_Title" = "Admin";
+"Settings_SectionUser_Title" = "User Details";
 "Settings_ItemStats_Title" = "Blrrd Stats";
 "Settings_ItemSaveimages_Title" = "Save Captured Images";
 "Settings_ItemPermissions_Title" = "App Permissions";
 "Settings_ItemShare_Title" = "Share Blrrd";
-"Settings_ItemInstagram_Title" = "Follow us on Instagram";
 "Settings_ItemFeedback_Title" = "Contact Us";
 "Settings_ItemTerms_Title" = "Terms & Conditions";
 "Settings_ItemCache_Title" = "Destroy Cached Data";
 "Settings_ItemCacheDestroyed_Title" = "Cache Destroyed!";
+"Settings_ItemUserphone_Title" = "Add/Change Phone Number";
+"Settings_ItemUserpassword_Title" = "Change Password";
+"Settings_ItemUseremail_Title" = "Change Email";
 "Settings_ItemLogout_Title" = "Logout";
 "Settings_FeedbackPlaceholder_Text" = "Tell us what you think...";
 "Settings_FeedbackSend_Action" = "Send";
@@ -151,6 +161,8 @@
 "Friend_SectionSearch_Title" = "Results";
 "Friend_SectionContacts_Title" = "People you know";
 "Friend_SectionSuggested_Title" = "Suggested";
+"Friend_CellSubtitleFollows_Text" = "Follows you";
+"Friend_CellSubtitleVerifyed_Text" = "Recently Verifyed";
 
 "ImageDetailed_Report_Title" = "Reporting Image";
 "ImageDetailed_ReportSend_Placeholder" = "Reason for reporting this image?";

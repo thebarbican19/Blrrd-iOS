@@ -14,12 +14,13 @@
 #import "BQueryObject.h"
 
 @protocol BFriendDelegateCell;
-@interface BFriendCell : UITableViewCell <BFollowActionDelegate>
+@interface BFriendCell : UITableViewCell <BFollowActionDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) id <BFriendDelegateCell> delegate;
 @property (nonatomic, strong) UILabel *user;
 @property (nonatomic, strong) UIImageView *avatar;
 @property (nonatomic, strong) BFollowAction *follow;
+@property (nonatomic, strong) UITapGestureRecognizer *gesture;
 
 @property (nonatomic, strong) NSDictionary *data;
 @property (nonatomic, strong) BQueryObject *query;
@@ -31,5 +32,7 @@
 @protocol BFriendDelegateCell <NSObject>
 
 @optional
+
+-(void)viewPresentProfile:(NSDictionary *)data;
 
 @end

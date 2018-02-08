@@ -28,14 +28,15 @@
     self.formInput.textAlignment = NSTextAlignmentLeft;
     self.formInput.textColor = [UIColor whiteColor];
     self.formInput.delegate = self;
-    self.formInput.text = nil;
+    self.formInput.text = self.entry;
     self.formInput.keyboardAppearance = UIKeyboardAppearanceDark;
     self.formInput.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.formInput.autocorrectionType = UITextAutocorrectionTypeNo;
     self.formInput.font =  [UIFont fontWithName:@"Nunito-Light" size:30.0];
     self.formInput.returnKeyType = UIReturnKeyNext;
     if (self.type == GDFormInputTypeEmail) self.formInput.keyboardType = UIKeyboardTypeEmailAddress;
-    else if (self.type == GDFormInputTypeEmail) self.formInput.keyboardType = UIKeyboardTypeAlphabet;
+    else if (self.type == GDFormInputTypeUsername) self.formInput.keyboardType = UIKeyboardTypeAlphabet;
+    else if (self.type == GDFormInputTypePhone) self.formInput.keyboardType = UIKeyboardTypePhonePad;
     else self.formInput.keyboardType = UIKeyboardTypeDefault;
     if (self.type == GDFormInputTypePassword) self.formInput.secureTextEntry = true;
     else if (self.type == GDFormInputTypePasswordReenter) self.formInput.secureTextEntry = true;
@@ -107,6 +108,13 @@
         [self.formInput setPlaceholder:NSLocalizedString(@"Authentication_FormPassword_Placeholder", nil)];
         
     }
+    else if (self.type == GDFormInputTypePhone) {
+        if (initate) [self.formLabel setContent:NSLocalizedString(@"Authentication_FormPhone_Title", nil)];
+        else [self.formLabel setText:NSLocalizedString(@"Authentication_FormPhone_Title", nil) animate:animate];
+        
+        [self.formInput setPlaceholder:NSLocalizedString(@"Authentication_FormPhone_Placeholder", nil)];
+        
+    }
     
     [self.formInput setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:self.formInput.placeholder attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:0.8 alpha:0.4]}]];
     
@@ -149,6 +157,7 @@
 }
 
 -(void)textFeildBecomeFirstResponder:(NSDictionary *)data {
+    NSLog(@"textFeildBecomeFirstResponder %@", data)
     self.data = [[NSMutableDictionary alloc] initWithDictionary:data];
     
     [self textFeildSetup:false animate:false];
@@ -262,6 +271,7 @@
             
         }
         else if (self.type == GDFormInputTypePasswordReenter) {
+            NSLog(@"tezt %@" ,self.data);
             if (textField.text.length > 2) {
                 if ([[self.data objectForKey:@"password"] isEqualToString:textField.text]) {
                     [self setValidated:true];
@@ -279,6 +289,24 @@
             else {
                 [self setValidated:false];
                 [self textFeildSetup:false animate:true];
+                
+            }
+            
+        }
+        else if (self.type == GDFormInputTypePhone) {
+            if (textField.text.length > 3) {
+                if ([[NSPredicate predicateWithFormat:@"SELF MATCHES %@", REGEX_PHONE] evaluateWithObject:textField.text]) {
+                    [self setValidated:true];
+                    [self.formLabel setText:NSLocalizedString(@"Authenticate_PhoneOkay_Error", nil) animate:true];
+                    [self.formLabel setStatusColour:UIColorFromRGB(0x69DCCB) animate:true];
+                    
+                }
+                else {
+                    [self setValidated:false];
+                    [self.formLabel setText:NSLocalizedString(@"Authenticate_EmailInvalid_Error", nil) animate:true];
+                    [self.formLabel setStatusColour:UIColorFromRGB(0xFF5656) animate:true];
+                    
+                }
                 
             }
             
@@ -316,6 +344,7 @@
         }
         
     }
+    
     
 }
 

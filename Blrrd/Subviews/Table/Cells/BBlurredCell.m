@@ -175,7 +175,7 @@
                 [self.query postTime:self.content secondsadded:self.timeviewed timeline:self.timeline completion:^(NSError *error) {
                     [self.credentials setUserTotalRevealed:self.timeviewed append:true];
                     [self setTimeviewed:0];
-                    [self.mixpanel.people increment:@"App Image Revealed" by:@+1];
+                    [self.mixpanel.people increment:@"Revealed" by:@+1];
                     [self.mixpanel track:@"App Image Revealed" properties:@{@"Image":[self.content objectForKey:@"imageurl"],
                                                                         @"ID":[self.content objectForKey:@"postid"],
                                                                         @"User":[[self.content objectForKey:@"user"] objectForKey:@"username"]}];
@@ -232,8 +232,14 @@
         NSDate *outputdate;
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss ZZZ";
+        formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+        formatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        
         NSDateFormatter *formatted = [[NSDateFormatter alloc] init];
         formatted.dateFormat = @"d MMMM YYYY";
+        formatted.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+        formatted.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        
         if ([timestamp isKindOfClass:[NSString class]]) {
             outputdate = [formatter dateFromString:timestamp];
             components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:outputdate toDate:[NSDate date] options:0];

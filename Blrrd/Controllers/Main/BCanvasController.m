@@ -20,7 +20,7 @@
     
     //self.imagerec = [[GoogLeNetPlaces alloc] init];
     
-    self.mixpanel = [[Mixpanel alloc] init];
+    self.mixpanel = [Mixpanel sharedInstance];
     
     self.imageobj = [BImageObject sharedInstance];
     self.imageobj.delegate = self;
@@ -206,6 +206,8 @@
         
         self.image = [self.imageobj processImageRemoveOrentation:image];
         self.image = [self.image resizedImageByMagick:@"500"];
+
+        [self.mixpanel track:[NSString stringWithFormat:@"App %@ Image" ,camera?@"Captured New":@"Imported"]];
 
         [self.viewCapture.viewFrame.layer setMask:nil];
         [self.viewCanvas canvasImage:self.image];
@@ -436,25 +438,22 @@
 }
 
 -(void)imageUploadedWithErrors:(NSError *)error {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void) {
-        [self setUploading:false];
-        if (error.code != 200) {
-            [self.mixpanel track:@"App Image Uploaded With Error" properties:@{@"Error":error.domain==nil?@"Unknown":error.domain}];
-            [self.viewPlaceholder setKey:@"retry"];
-            [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Canvas_UploadErrorPlaceholder_Title", nil) instructions:error.domain==nil?NSLocalizedString(@"Canvas_UploadErrorPlaceholder_Body", nil):error.domain];
-            
-        }
-        else {
-            [self.viewPlaceholder setKey:@"sucsess"];
-            [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Canvas_UploadSucsessPlaceholder_Title", nil) instructions:NSLocalizedString(@"Canvas_UploadSucsessPlaceholder_Body", nil)];
-            [self.delegate viewRefreshContent];
-            [self.mixpanel.people increment:@"App Image Uploaded" by:@+1];
-            [self.mixpanel track:@"App Image Uploaded"];
-
-        }
+    [self setUploading:false];
+    if (error.code != 200) {
+        [self.mixpanel track:@"App Image Uploaded With Error" properties:@{@"Error":error.domain==nil?@"Unknown":error.domain}];
+        [self.viewPlaceholder setKey:@"retry"];
+        [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Canvas_UploadErrorPlaceholder_Title", nil) instructions:error.domain==nil?NSLocalizedString(@"Canvas_UploadErrorPlaceholder_Body", nil):error.domain];
         
-    });
+    }
+    else {
+        [self.viewPlaceholder setKey:@"sucsess"];
+        [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Canvas_UploadSucsessPlaceholder_Title", nil) instructions:NSLocalizedString(@"Canvas_UploadSucsessPlaceholder_Body", nil)];
+        [self.delegate viewRefreshContent];
+        [self.mixpanel.people increment:@"Posts" by:@+1];
+        [self.mixpanel track:@"App Image Uploaded"];
 
+    }
+    
 }
 
 @end
