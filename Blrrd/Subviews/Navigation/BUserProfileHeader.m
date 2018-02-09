@@ -93,8 +93,16 @@
     self.data = [[NSDictionary alloc] initWithDictionary:data];
 
     [profile sd_setImageWithURL:[self.data objectForKey:@"avatar"] placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
-    [username setText:[self.data objectForKey:@"username"]];
-    [lastactive setText:[NSString stringWithFormat:NSLocalizedString(@"Friend_LastActive_Text", nil) ,[self time:[self.data objectForKey:@"lastactive"]]]];
+    if ([[self.data objectForKey:@"displayname"] length] > 0) {
+        [username setText:[self.data objectForKey:@"displayname"]];
+        [lastactive setText:[NSString stringWithFormat:NSLocalizedString(@"Friend_StatusWithUsername_Text", nil), [self.data objectForKey:@"username"] ,[self time:[self.data objectForKey:@"lastactive"]]]];
+    
+    }
+    else {
+        [username setText:[self.data objectForKey:@"username"]];
+        [lastactive setText:[NSString stringWithFormat:NSLocalizedString(@"Friend_StatusWithLastActive_Text", nil) ,[self time:[self.data objectForKey:@"lastactive"]]]];
+
+    }
     [verifyed setHidden:![[self.data objectForKey:@"promoted"] boolValue]];
     [verifyed setFrame:CGRectMake(lastactive.frame.origin.x + [lastactive.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, lastactive.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:lastactive.font} context:nil].size.width + 6.0, lastactive.frame.origin.y + 1.0, 14.0 ,14.0)];
     

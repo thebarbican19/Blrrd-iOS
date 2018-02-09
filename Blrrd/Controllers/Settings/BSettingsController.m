@@ -36,6 +36,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [self.viewNavigation navigationTitle:NSLocalizedString(@"Settings_Title", nil)];
+    [self.viewFooter present:false status:[NSString stringWithFormat:NSLocalizedString(@"Settings_VersionInfomation_Title", nil) ,APP_VERSION, APP_DEBUG_MODE?@"Debug Mode":@"", self.credentials.userAdmin?@"You have admin privillages":@""]];
     [self.mixpanel track:@"App Settings Viewed"];
 
 }
@@ -64,6 +65,10 @@
     self.viewNavigation.delegate = self;
     [self.view addSubview:self.viewNavigation];
     
+    self.viewFooter = [[BFooterView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, 70.0)];
+    self.viewFooter.backgroundColor = [UIColor clearColor];
+    self.viewFooter.noformatting = true;
+    
     self.viewTable = [[UITableView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height - APP_STATUSBAR_HEIGHT)];
     self.viewTable.delegate = self;
     self.viewTable.dataSource = self;
@@ -71,6 +76,7 @@
     self.viewTable.backgroundColor = [UIColor clearColor];
     self.viewTable.separatorColor = [UIColor clearColor];
     self.viewTable.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.viewNavigation.bounds.size.height)];
+    self.viewTable.tableFooterView = self.viewFooter;
     [self.view addSubview:self.viewTable];
     [self.viewTable registerClass:[BSettingsCell class] forCellReuseIdentifier:@"item"];
     [self.view bringSubviewToFront:self.viewNavigation];
@@ -155,12 +161,15 @@
     }
     else if ([key isEqualToString:@"cache"]) {
         [cell.name setTextAlignment:NSTextAlignmentCenter];
+        [cell.name setBackgroundColor:[UIColor clearColor]];
+        [cell.name setTextColor:[UIColor whiteColor]];
         [cell.accessory setHidden:true];
 
     }
     else {
         [cell.name setTextAlignment:NSTextAlignmentLeft];
         [cell.name setBackgroundColor:[UIColor clearColor]];
+        [cell.name setTextColor:[UIColor whiteColor]];
         [cell.accessory setHidden:toggle];
         
     }
@@ -207,6 +216,11 @@
             viewUser.type = GDFormInputTypePassword;
             viewUser.value = nil;
 
+        }
+        else if ([key containsString:@"display"]) {
+            viewUser.type = GDFormInputTypeDisplay;
+            viewUser.value = [self.credentials userFullname];
+            
         }
         
         viewUser.view.clipsToBounds = true;

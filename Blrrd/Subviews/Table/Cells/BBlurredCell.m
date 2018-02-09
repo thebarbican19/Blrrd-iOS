@@ -89,7 +89,7 @@
         [self.container addSubview:self.options];
 
         self.subtitle = [[SAMLabel alloc] initWithFrame:CGRectMake(20.0, 20.0, self.container.bounds.size.width - 40.0, self.container.bounds.size.height - 40.0)];
-        self.subtitle.numberOfLines = 3;
+        self.subtitle.numberOfLines = 5;
         self.subtitle.textAlignment = NSTextAlignmentCenter;
         self.subtitle.text = nil;
         self.subtitle.textColor = [UIColor colorWithWhite:0.95 alpha:1.0];

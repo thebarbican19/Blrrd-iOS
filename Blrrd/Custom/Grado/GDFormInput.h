@@ -14,7 +14,8 @@ typedef NS_ENUM(NSInteger, GDFormInputType) {
     GDFormInputTypePasswordReenter,
     GDFormInputTypeUsername,
     GDFormInputTypeEmail,
-    GDFormInputTypePhone
+    GDFormInputTypePhone,
+    GDFormInputTypeDisplay,
 
 };
 

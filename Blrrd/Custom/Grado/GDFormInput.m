@@ -41,6 +41,8 @@
     if (self.type == GDFormInputTypePassword) self.formInput.secureTextEntry = true;
     else if (self.type == GDFormInputTypePasswordReenter) self.formInput.secureTextEntry = true;
     else self.formInput.secureTextEntry = false;
+    if (self.type == GDFormInputTypeDisplay) self.formInput.autocapitalizationType = UITextAutocapitalizationTypeWords;
+    else self.formInput.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.formContainer addSubview:self.formInput];
     
     [self textFeildSetup:true animate:false];
@@ -115,6 +117,13 @@
         [self.formInput setPlaceholder:NSLocalizedString(@"Authentication_FormPhone_Placeholder", nil)];
         
     }
+    else if (self.type == GDFormInputTypeDisplay) {
+        if (initate) [self.formLabel setContent:NSLocalizedString(@"Authentication_FormDisplay_Title", nil)];
+        else [self.formLabel setText:NSLocalizedString(@"Authentication_FormDisplay_Title", nil) animate:animate];
+        
+        [self.formInput setPlaceholder:NSLocalizedString(@"Authentication_FormDisplay_Placeholder", nil)];
+        
+    }
     
     [self.formInput setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:self.formInput.placeholder attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:0.8 alpha:0.4]}]];
     
@@ -157,7 +166,6 @@
 }
 
 -(void)textFeildBecomeFirstResponder:(NSDictionary *)data {
-    NSLog(@"textFeildBecomeFirstResponder %@", data)
     self.data = [[NSMutableDictionary alloc] initWithDictionary:data];
     
     [self textFeildSetup:false animate:false];
@@ -307,6 +315,21 @@
                     [self.formLabel setStatusColour:UIColorFromRGB(0xFF5656) animate:true];
                     
                 }
+                
+            }
+            
+        }
+        else if (self.type == GDFormInputTypeDisplay) {
+            if (textField.text.length > 5) {
+                [self setValidated:true];
+                [self.formLabel setText:NSLocalizedString(@"Authenticate_DisplayOkay_Error", nil) animate:true];
+                [self.formLabel setStatusColour:UIColorFromRGB(0x69DCCB) animate:true];
+    
+            }
+            else {
+                [self setValidated:false];
+                [self.formLabel setText:NSLocalizedString(@"Authenticate_DisplayInvalid_Error", nil) animate:true];
+                [self.formLabel setStatusColour:UIColorFromRGB(0xFF5656) animate:true];
                 
             }
             

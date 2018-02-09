@@ -11,6 +11,7 @@
 #import <UIImageView+WebCache.h>
 #import <Mixpanel.h>
 #import "BNavigationView.h"
+#import "BFooterView.h"
 #import "GDActionSheet.h"
 
 #import "BCredentialsObject.h"
@@ -26,5 +27,6 @@
 @property (nonatomic, strong) BNavigationView *viewNavigation;
 @property (nonatomic, strong) UITableView *viewTable;
 @property (nonatomic, strong) GDActionSheet *viewSheet;
+@property (nonatomic, strong) BFooterView *viewFooter;
 
 @end

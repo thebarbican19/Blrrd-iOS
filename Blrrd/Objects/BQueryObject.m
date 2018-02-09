@@ -39,6 +39,8 @@
                     [self.credentials setUserIdentifyer:[user objectForKey:@"key"]];
                     [self.credentials setUserEmail:[user objectForKey:@"email"]];
                     [self.credentials setUserHandle:[user objectForKey:@"username"]];
+                    [self.credentials setUserFullname:[user objectForKey:@"displayname"]];
+                    [self.credentials setUserPhoneNumber:[user objectForKey:@"phone"]];
                     [self.credentials setUserAvatar:[user objectForKey:@"avatar"]];
                     [self.credentials setUserPublic:[[user objectForKey:@"public"] boolValue]];
                     [self.credentials setUserType:[user objectForKey:@"type"]];
@@ -92,6 +94,8 @@
                 [self.credentials setUserIdentifyer:[user objectForKey:@"key"]];
                 [self.credentials setUserEmail:[user objectForKey:@"email"]];
                 [self.credentials setUserHandle:[user objectForKey:@"username"]];
+                [self.credentials setUserFullname:[user objectForKey:@"displayname"]];
+                [self.credentials setUserPhoneNumber:[user objectForKey:@"phone"]];
                 [self.credentials setUserAvatar:[user objectForKey:@"avatar"]];
                 [self.credentials setUserPublic:[[user objectForKey:@"public"] boolValue]];
                 [self.credentials setUserType:[user objectForKey:@"type"]];
@@ -325,9 +329,10 @@
 
 -(void)querySuggestedUsers:(NSString *)search emails:(NSArray *)emails completion:(void (^)(NSArray *users, NSError *error))completion {
     NSString *endpointsearch =  [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString *endpointemails =  [[emails componentsJoinedByString:@","] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSString *endpoint;
     if (search.length > 0) endpoint = [NSString stringWithFormat:@"user/suggested.php?search=%@" ,endpointsearch];
-    else if (emails.count > 0) endpoint = [NSString stringWithFormat:@"user/suggested.php?emails=%@" ,[emails componentsJoinedByString:@","]];
+    else if (emails.count > 0) endpoint = [NSString stringWithFormat:@"user/suggested.php?emails=%@" ,endpointemails];
     else endpoint = [NSString stringWithFormat:@"user/suggested.php"];
     NSString *endpointmethod = @"GET";
 
@@ -338,7 +343,7 @@
             if ([[output objectForKey:@"error_code"] intValue] == 200) {
                 NSMutableArray *requests = [[NSMutableArray alloc] init];
                 [requests addObjectsFromArray:[output objectForKey:@"output"]];
-                
+                                
                 if (search == nil && emails == nil) {
                     [self cacheSave:requests endpointname:endpoint append:false expiry:60*30];
                     
@@ -461,6 +466,8 @@
                 
                 [self.credentials setUserTotalTime:[[stats objectForKey:@"totaltime"] intValue] append:false];
                 [self.credentials setUserEmail:[user objectForKey:@"email"]];
+                [self.credentials setUserFullname:[user objectForKey:@"displayname"]];
+                [self.credentials setUserPhoneNumber:[user objectForKey:@"phone"]];
                 [self.credentials setUserType:[user objectForKey:@"type"]];
                 [self.credentials setUserPublic:[[user objectForKey:@"public"] boolValue]];
                 [self.credentials setUserVerifyed:[[user objectForKey:@"promoted"] boolValue]];
@@ -870,7 +877,6 @@
     [request addValue:self.background?@"true":@"false" forHTTPHeaderField:@"blbackgroundrqst"];
     if (self.credentials.authToken != nil) [request addValue:self.credentials.authToken forHTTPHeaderField:@"blbearer"];
     if ([[UIDevice currentDevice] name] != nil) [request addValue:[[UIDevice currentDevice] name] forHTTPHeaderField:@"bldevicename"];
-    NSLog(@"request: %@" ,request)
     [request setHTTPMethod:method];
             
     if (params != nil && ([method isEqualToString:@"POST"] || [method isEqualToString:@"PUT"])) {

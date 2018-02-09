@@ -67,6 +67,7 @@
             [self.contacts addObject:@{@"contact_id":contact.identifier,
                                        @"contact_name":[self contactsFormatName:contact],
                                        @"contact_email":[self contactsFormatEmail:contact],
+                                       @"contact_phone":[self contactsFormatPhone:contact],
                                        @"contact_socials":[self contactsFormatSocialHandles:contact],
                                        @"contact_thumbnail":contact.thumbnailImageData==nil?[NSData data]:contact.thumbnailImageData}];
             
@@ -221,8 +222,10 @@
     for (CNLabeledValue *phone in contact.phoneNumbers) {
         CNPhoneNumber *digits = phone.value;
         NSString *label = [CNLabeledValue localizedStringForLabel:phone.label]==nil?@"phone":[CNLabeledValue localizedStringForLabel:phone.label];
-        
-        [phones addObject:@{@"label":label, @"number":digits.stringValue}];
+        NSCharacterSet *characters = [[NSCharacterSet characterSetWithCharactersInString:@"+0123456789"] invertedSet];
+        NSString *number = [[digits.stringValue componentsSeparatedByCharactersInSet:characters] componentsJoinedByString:@""];
+        NSLog(@"number %@" ,number);
+        [phones addObject:@{@"label":label, @"number":number}];
         
     }
     
@@ -265,13 +268,12 @@
 }
 
 -(void)contactUpdateCredentials {
-    [self.credentials setUserBirthday:[self.user objectForKey:@"dob"]];
-    [self.credentials setUserPhoneNumber:[[self.user objectForKey:@"phones"] objectForKey:@"number"]];
-    [self.credentials setUserFullname:[self.user objectForKey:@"name"]];
+    
 
     [self.mixpanel track:@"App Parsed Contacts Data"];
 
-    if ([self.credentials userBirthday] != nil) {
+    if ([self.credentials userBirthday] == nil && [self.user objectForKey:@"dob"] != nil) {
+        [self.credentials setUserBirthday:[self.user objectForKey:@"dob"]];
         [self.queue addOperationWithBlock:^{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             formatter.dateFormat = @"yyyy-MM-dd";
@@ -287,7 +289,9 @@
         
     }
     
-    if ([self.credentials userPhone:false] != nil) {
+    
+    if ([self.credentials userPhone:false] == nil && [[self.user objectForKey:@"phones"] objectForKey:@"number"] != nil) {
+        [self.credentials setUserPhoneNumber:[[self.user objectForKey:@"phones"] objectForKey:@"number"]];
         [self.queue addOperationWithBlock:^{
             [self.query postUpdateUser:nil type:@"phone" value:[self.credentials userPhone:false] completion:^(NSError *error) {
                 [self.credentials setAppContactUpdateExpiry:false];
@@ -299,7 +303,8 @@
         
     }
     
-    if ([self.credentials userFullname] != nil) {
+    if ([self.credentials userFullname] == nil && [self.user objectForKey:@"name"] != nil) {
+        [self.credentials setUserFullname:[self.user objectForKey:@"name"]];
         [self.queue addOperationWithBlock:^{
             [self.query postUpdateUser:nil type:@"fullname" value:self.credentials.userFullname completion:^(NSError *error) {
                 [self.credentials setAppContactUpdateExpiry:false];

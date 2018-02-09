@@ -43,7 +43,8 @@
         username.textAlignment = NSTextAlignmentLeft;
         username.textColor = [UIColor whiteColor];
         username.font = [UIFont fontWithName:@"Nunito-Bold" size:24];
-        username.text = self.credentials.userHandle;
+        if (self.credentials.userFullname != nil) username.text = self.credentials.userFullname;
+        else username.text = self.credentials.userHandle;
         [self addSubview:username];
         
         email = [[SAMLabel alloc] initWithFrame:CGRectMake(profile.bounds.size.width + 35.0, 56.0, self.bounds.size.width - (profile.bounds.size.width - 75.0), 14.0)];
@@ -98,9 +99,10 @@
     
     [profile sd_setImageWithURL:self.credentials.userAvatar placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
     [email setText:self.credentials.userEmail];
-    [username setText:self.credentials.userHandle];
+    [username setText:self.credentials.userFullname==nil?self.credentials.userHandle:self.credentials.userFullname];
     [timeviewed setAttributedText:self.format];
-    
+    [verifyed setFrame:CGRectMake(email.frame.origin.x + [email.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, email.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:email.font} context:nil].size.width + 4.0, email.frame.origin.y + 1.0, 13.0 ,13.0)];
+
 }
 
 -(void)tapped:(UIGestureRecognizer *)gesture {

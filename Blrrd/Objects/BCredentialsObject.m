@@ -98,7 +98,10 @@
 }
 
 -(void)setUserPhoneNumber:(NSString *)phone  {
-    [self.data setObject:phone forKey:@"user_phone"];
+    if ([[NSPredicate predicateWithFormat:@"SELF MATCHES %@", REGEX_PHONE] evaluateWithObject:phone])
+        [self.data setObject:phone forKey:@"user_phone"];
+    else [self.data removeObjectForKey:@"user_phone"];
+    
     [self.data synchronize];
     
 }
@@ -269,7 +272,7 @@
 }
 
 -(void)setUserFullname:(NSString *)fullname {
-    if (fullname) [self.data setObject:fullname forKey:@"user_fullname"];
+    if (fullname.length > 0) [self.data setObject:fullname forKey:@"user_fullname"];
     else [self.data removeObjectForKey:@"user_fullname"];
     
     [self.data synchronize];

@@ -68,7 +68,8 @@
     self.viewInput.delegate = self;
     self.viewInput.login = false;
     [self.view addSubview:self.viewInput];
-    
+    [self.view sendSubviewToBack:self.viewInput];
+
     self.viewPlaceholder = [[GDPlaceholderView alloc] initWithFrame:self.view.frame];
     self.viewPlaceholder.delegate = self;
     self.viewPlaceholder.backgroundColor = [UIColor clearColor];
@@ -88,7 +89,7 @@
     [self.viewAction setTag:0];
     [self.viewAction addTarget:self action:@selector(formAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.viewAction];
-        
+
 }
 
 -(void)formPresentedKeyboard:(float)height {
@@ -121,7 +122,6 @@
 }
 
 -(void)formAction:(UIButton *)button {
-    NSLog(@"entry %@" ,self.viewInput.entry);
     if (self.type == GDFormInputTypeEmail && [self.viewInput.entry isEqualToString:[self.credentials userEmail]]) {
         [self.viewInput setValidated:false];
         [self.viewInput textFeildSetTitle:NSLocalizedString(@"Authenticate_NoChanges_Error", nil)];
@@ -133,6 +133,12 @@
         [self.viewInput textFeildSetTitle:NSLocalizedString(@"Authenticate_NoChanges_Error", nil)];
         [self.viewInput textFeildValidateCheck];
 
+    }
+    else if (self.type == GDFormInputTypeDisplay && [self.viewInput.entry isEqualToString:[self.credentials userFullname]]) {
+        [self.viewInput setValidated:false];
+        [self.viewInput textFeildSetTitle:NSLocalizedString(@"Authenticate_NoChanges_Error", nil)];
+        [self.viewInput textFeildValidateCheck];
+        
     }
     else if (self.type == GDFormInputTypePasswordReenter && ![self.viewInput.entry isEqualToString:self.password]) {
         [self.viewInput setValidated:false];
@@ -147,6 +153,7 @@
             else if (self.type == GDFormInputTypePhone) type = @"phone";
             else if (self.type == GDFormInputTypePassword) type = @"password";
             else if (self.type == GDFormInputTypePasswordReenter) type = @"password";
+            else if (self.type == GDFormInputTypeDisplay) type = @"fullname";
 
             if (self.type == GDFormInputTypePassword) {
                 [self setPassword:self.viewInput.entry];
@@ -163,9 +170,13 @@
                 [self.query postUpdateUser:nil type:type value:self.viewInput.entry completion:^(NSError *error) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                         if (error.code == 200) {
-                            if (self.type == GDFormInputTypeEmail) [self.credentials setUserEmail:self.viewInput.entry];
-                            else if (self.type == GDFormInputTypePhone) [self.credentials setUserPhoneNumber:self.viewInput.entry];
-                            
+                            if (self.type == GDFormInputTypeEmail)
+                                [self.credentials setUserEmail:self.viewInput.entry];
+                            else if (self.type == GDFormInputTypePhone)
+                                [self.credentials setUserPhoneNumber:self.viewInput.entry];
+                            else if (self.type == GDFormInputTypeDisplay)
+                                [self.credentials setUserFullname:self.viewInput.entry];
+
                             [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                                 [self.viewAction setTransform:CGAffineTransformMakeScale(0.85, 0.85)];
                                 [self.viewAction setAlpha:0.0];
@@ -184,10 +195,7 @@
                             [self.viewInput.formInput resignFirstResponder];
                             
                         }
-                        else {
-                            [self.viewInput textFeildSetTitle:error.domain];
-
-                        }
+                        else [self.viewInput textFeildSetTitle:error.domain];
                         
                     }];
                     

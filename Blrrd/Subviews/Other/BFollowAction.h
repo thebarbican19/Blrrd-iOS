@@ -10,8 +10,9 @@
 
 typedef NS_ENUM(NSInteger, BFollowActionType) {
     BFollowActionTypeUnfollowed,
-    BFollowActionTypeFollowed
-    
+    BFollowActionTypeFollowed,
+    BFollowActionTypeFollowBack,
+
 };
 
 typedef NS_ENUM(NSInteger, BFollowActionStyle) {

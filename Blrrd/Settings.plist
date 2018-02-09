@@ -21,6 +21,12 @@
 			</dict>
 			<dict>
 				<key>key</key>
+				<string>userdisplay</string>
+				<key>switch</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>key</key>
 				<string>userphone</string>
 				<key>switch</key>
 				<false/>

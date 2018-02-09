@@ -30,19 +30,28 @@
                 NSMutableArray *contactslist = [[NSMutableArray alloc] init];
                 for (NSDictionary *contact in contacts) {
                     for (NSDictionary *email in [contact objectForKey:@"contact_email"]) {
-                        if (![emails containsObject:[email objectForKey:@"address"]]) {
-                            [emails addObject:[email objectForKey:@"address"]];
+                        if (![emails containsObject:[[email objectForKey:@"address"] lowercaseString]]) {
+                            [emails addObject:[[email objectForKey:@"address"] lowercaseString]];
+                            
+                        }
+                        
+                    }
+                    
+                    for (NSDictionary *phone in [contact objectForKey:@"contact_phone"]) {
+                        if (![emails containsObject:[phone objectForKey:@"number"]]) {
+                            [emails addObject:[phone objectForKey:@"number"]];
                             
                         }
                         
                     }
                     
                     [contactslist addObject:contact];
-                    
+
                 }
                 
                 [self.query querySuggestedUsers:nil emails:emails completion:^(NSArray *users, NSError *error) {
                     self.friends = [[NSMutableArray alloc] init];
+                    NSLog(@"all users %@" ,users);
                     for (NSDictionary *user in users) {
                         NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:user];
                         for (NSDictionary *contact in contactslist) {
@@ -56,6 +65,25 @@
                                     if ([contact objectForKey:@"contact_thumbnail"] != nil && [[user objectForKey:@"avatar"] length] == 0) {
                                         [append setObject:[contact objectForKey:@"contact_thumbnail"] forKey:@"avatar"];
 
+                                    }
+                                    
+                                    break;
+                                    
+                                }
+                                
+                            }
+                            
+                            for (NSDictionary *phonedata in [contact objectForKey:@"contact_phone"]) {
+                                //NSLog(@"phone data: %@ user %@" ,phonedata, user);
+                                if ([[phonedata objectForKey:@"number"] isEqualToString:[user objectForKey:@"phone"]]) {
+                                    if ([contact objectForKey:@"contact_name"] != nil) {
+                                        [append setObject:[contact objectForKey:@"contact_name"] forKey:@"fullname"];
+                                        
+                                    }
+                                    
+                                    if ([contact objectForKey:@"contact_thumbnail"] != nil && [[user objectForKey:@"avatar"] length] == 0) {
+                                        [append setObject:[contact objectForKey:@"contact_thumbnail"] forKey:@"avatar"];
+                                        
                                     }
                                     
                                     break;
@@ -295,7 +323,12 @@
     BFriendCell *cell = (BFriendCell *)[tableView dequeueReusableCellWithIdentifier:@"user" forIndexPath:indexPath];
     
     if ([self.query friendCheck:[item objectForKey:@"userid"]]) cell.follow.type = BFollowActionTypeFollowed;
-    else cell.follow.type = BFollowActionTypeUnfollowed;
+    else {
+        if ([[item objectForKey:@"follows"] boolValue]) cell.follow.type = BFollowActionTypeUnfollowed;
+        else cell.follow.type = BFollowActionTypeUnfollowed;
+
+    }
+        
     
     [cell.follow followSetType:cell.follow.type animate:false];
     [cell.follow setDelegate:self];

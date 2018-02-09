@@ -52,7 +52,6 @@
 
 -(void)content:(NSDictionary *)item {
     self.data = [[NSDictionary alloc] initWithDictionary:item];
-    NSLog(@"content: %@" ,item);
     
     [self name:item];
     [self avatar:[item objectForKey:@"avatar"]];
@@ -116,9 +115,24 @@
 
     }
     else if ([[data objectForKey:@"follows"] boolValue]) {
-        header = [data objectForKey:@"username"];
-        subtitle = NSLocalizedString(@"Friend_CellSubtitleFollows_Text", nil);
+        if ([[data objectForKey:@"displayname"] length] > 0) {
+            header = [data objectForKey:@"displayname"];
+            subtitle = [NSString stringWithFormat:@"@%@ %@" ,[data objectForKey:@"username"], NSLocalizedString(@"Friend_CellSubtitleFollows_Text", nil)];
+
+        }
+        else {
+            header = [data objectForKey:@"username"];
+            subtitle = NSLocalizedString(@"Friend_CellSubtitleFollows_Text", nil);
+            
+        }
+        
         text = [NSString stringWithFormat:@"%@\n%@ " ,header, subtitle.lowercaseString];
+
+    }
+    else if ([[data objectForKey:@"displayname"] length] > 0) {
+        header = [data objectForKey:@"displayname"];
+        subtitle = [data objectForKey:@"username"];
+        text = [NSString stringWithFormat:@"%@\n@%@ " ,header, subtitle.lowercaseString];
 
     }
     else {

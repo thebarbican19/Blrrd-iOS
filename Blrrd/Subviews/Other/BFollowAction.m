@@ -64,7 +64,14 @@
             
         }
         else {
-            [label setText:NSLocalizedString(@"Friend_ActionFollow_Text", nil).uppercaseString];
+            if (type == BFollowActionTypeUnfollowed) {
+                [label setText:NSLocalizedString(@"Friend_ActionFollow_Text", nil).uppercaseString];
+                
+            }
+            else if (type == BFollowActionTypeFollowBack) {
+                [label setText:NSLocalizedString(@"Friend_ActionFollowBack_Text", nil).uppercaseString];
+
+            }
             [label setTextColor:UIColorFromRGB(0x69DCCB)];
             [container setBackgroundColor:UIColorFromRGB(0x140F26)];
             [container.layer setBorderColor:UIColorFromRGB(0x69DCCB).CGColor];
@@ -90,7 +97,8 @@
     else {
         NSString *content;
         if (self.type == BFollowActionTypeFollowed) content = NSLocalizedString(@"Friend_ActionFollowing_Text", nil).uppercaseString;
-        else content = NSLocalizedString(@"Friend_ActionFollow_Text", nil).uppercaseString;
+        else if (self.type == BFollowActionTypeUnfollowed) content = NSLocalizedString(@"Friend_ActionFollow_Text", nil).uppercaseString;
+        else if (self.type == BFollowActionTypeFollowBack) content = NSLocalizedString(@"Friend_ActionFollowBack_Text", nil).uppercaseString;
 
         CGRect rect = [content boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont fontWithName:@"Nunito-Black" size:12.0]} context:nil];
         

@@ -16,6 +16,7 @@
 		771E55EB202A15F000129FE8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 771E55EA202A15F000129FE8 /* Security.framework */; };
 		7722A867202AFF2100BCA0C0 /* BSettingsUserEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7722A866202AFF2100BCA0C0 /* BSettingsUserEditController.m */; };
 		7722A86D202C810200BCA0C0 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 7722A86C202C810200BCA0C0 /* CountryCodes.json */; };
+		7722A873202DC02500BCA0C0 /* BFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7722A872202DC02400BCA0C0 /* BFooterView.m */; };
 		7734F9D4201ACE9700B1E7C0 /* terms.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 7734F9D3201ACE9700B1E7C0 /* terms.pdf */; };
 		7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7737127E1FCFBD4B00E507AE /* SafariServices.framework */; };
 		773712821FD0654000E507AE /* BDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 773712811FD0654000E507AE /* BDocumentController.m */; };
@@ -90,7 +91,6 @@
 		779994AB1FB9EB130002531B /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 779994AA1FB9EB130002531B /* Accelerate.framework */; };
 		779994AC1FB9EBED0002531B /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 779994A81FB9EAEF0002531B /* CoreMotion.framework */; };
 		779994AF1FBA03830002531B /* BUsageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994AE1FBA03830002531B /* BUsageObject.m */; };
-		779994B21FBA155C0002531B /* BFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994B11FBA155C0002531B /* BFooterView.m */; };
 		779994B71FBB69110002531B /* BChannelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994B61FBB69110002531B /* BChannelController.m */; };
 		779994BA1FBB69270002531B /* BChannelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994B91FBB69270002531B /* BChannelCell.m */; };
 		77B4EBCF1FD60D0200F448CC /* BDeailedImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B4EBCE1FD60D0200F448CC /* BDeailedImageController.m */; };
@@ -164,6 +164,8 @@
 		7722A865202AFF2100BCA0C0 /* BSettingsUserEditController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSettingsUserEditController.h; sourceTree = "<group>"; };
 		7722A866202AFF2100BCA0C0 /* BSettingsUserEditController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSettingsUserEditController.m; sourceTree = "<group>"; };
 		7722A86C202C810200BCA0C0 /* CountryCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CountryCodes.json; sourceTree = "<group>"; };
+		7722A871202DC02400BCA0C0 /* BFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFooterView.h; sourceTree = "<group>"; };
+		7722A872202DC02400BCA0C0 /* BFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFooterView.m; sourceTree = "<group>"; };
 		7734F9D3201ACE9700B1E7C0 /* terms.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = terms.pdf; sourceTree = "<group>"; };
 		7737127E1FCFBD4B00E507AE /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		773712801FD0654000E507AE /* BDocumentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDocumentController.h; sourceTree = "<group>"; };
@@ -284,8 +286,6 @@
 		779994AA1FB9EB130002531B /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		779994AD1FBA03830002531B /* BUsageObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BUsageObject.h; sourceTree = "<group>"; };
 		779994AE1FBA03830002531B /* BUsageObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BUsageObject.m; sourceTree = "<group>"; };
-		779994B01FBA155C0002531B /* BFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFooterView.h; sourceTree = "<group>"; };
-		779994B11FBA155C0002531B /* BFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFooterView.m; sourceTree = "<group>"; };
 		779994B51FBB69110002531B /* BChannelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BChannelController.h; sourceTree = "<group>"; };
 		779994B61FBB69110002531B /* BChannelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BChannelController.m; sourceTree = "<group>"; };
 		779994B81FBB69270002531B /* BChannelCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BChannelCell.h; sourceTree = "<group>"; };
@@ -714,10 +714,10 @@
 		779994B31FBA15630002531B /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				7722A871202DC02400BCA0C0 /* BFooterView.h */,
+				7722A872202DC02400BCA0C0 /* BFooterView.m */,
 				77D5AE671FDB5E2B00765EAE /* BSearchView.h */,
 				77D5AE661FDB5E2A00765EAE /* BSearchView.m */,
-				779994B01FBA155C0002531B /* BFooterView.h */,
-				779994B11FBA155C0002531B /* BFooterView.m */,
 				773712801FD0654000E507AE /* BDocumentController.h */,
 				773712811FD0654000E507AE /* BDocumentController.m */,
 				77D5AE6F1FDDE59200765EAE /* BFollowAction.h */,
@@ -1211,7 +1211,6 @@
 				771E55E72028DEAB00129FE8 /* BContactsObject.m in Sources */,
 				771E55E42024CD1700129FE8 /* BAdminStatsController.m in Sources */,
 				778D9B5A1FABD27900878A6A /* NSString+EmailAddresses.m in Sources */,
-				779994B21FBA155C0002531B /* BFooterView.m in Sources */,
 				779994BA1FBB69270002531B /* BChannelCell.m in Sources */,
 				775C1C211FE24E8C00C8EF7C /* BCompleteController.m in Sources */,
 				77D5AE711FDDE59200765EAE /* BFollowAction.m in Sources */,
@@ -1233,6 +1232,7 @@
 				778D9B4A1FABCC1400878A6A /* BCredentialsObject.m in Sources */,
 				77BDA3E81FBDF95E00249572 /* BFriendCell.m in Sources */,
 				77CB9B7C1FE96DEC00A9F7BE /* BCanvasView.m in Sources */,
+				7722A873202DC02500BCA0C0 /* BFooterView.m in Sources */,
 				778D9B251FABB53600878A6A /* main.m in Sources */,
 				77D5AE681FDB5E2B00765EAE /* BSearchView.m in Sources */,
 				77BDA3E51FBD4C4A00249572 /* BNotificationCell.m in Sources */,
