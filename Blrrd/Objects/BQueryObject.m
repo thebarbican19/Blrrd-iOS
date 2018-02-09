@@ -329,14 +329,14 @@
 
 -(void)querySuggestedUsers:(NSString *)search emails:(NSArray *)emails completion:(void (^)(NSArray *users, NSError *error))completion {
     NSString *endpointsearch =  [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSString *endpointemails =  [[emails componentsJoinedByString:@","] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSString *endpoint;
-    if (search.length > 0) endpoint = [NSString stringWithFormat:@"user/suggested.php?search=%@" ,endpointsearch];
-    else if (emails.count > 0) endpoint = [NSString stringWithFormat:@"user/suggested.php?emails=%@" ,endpointemails];
-    else endpoint = [NSString stringWithFormat:@"user/suggested.php"];
+    NSString *endpointemails = [[emails componentsJoinedByString:@","] stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
+    NSString *endpoint = @"user/suggested.php";
     NSString *endpointmethod = @"GET";
-
-    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:nil method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSDictionary *endpointparams;
+    if (search.length > 0) endpointparams = @{@"search":endpointsearch};
+    else if (emails.count > 0) endpointparams = @{@"emails":endpointemails};
+    
+    NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
         if (data.length > 0 && !error) {
             NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
@@ -862,7 +862,7 @@
         }
            
         [buildendpoint setString:[buildendpoint substringWithRange:NSMakeRange(0, buildendpoint.length - 1)]];
-                                       
+        
     }
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

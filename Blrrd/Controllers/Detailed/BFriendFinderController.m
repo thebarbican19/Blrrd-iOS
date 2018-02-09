@@ -51,7 +51,6 @@
                 
                 [self.query querySuggestedUsers:nil emails:emails completion:^(NSArray *users, NSError *error) {
                     self.friends = [[NSMutableArray alloc] init];
-                    NSLog(@"all users %@" ,users);
                     for (NSDictionary *user in users) {
                         NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:user];
                         for (NSDictionary *contact in contactslist) {

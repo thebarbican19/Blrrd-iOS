@@ -36,7 +36,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [self.viewNavigation navigationTitle:NSLocalizedString(@"Settings_Title", nil)];
-    [self.viewFooter present:false status:[NSString stringWithFormat:NSLocalizedString(@"Settings_VersionInfomation_Title", nil) ,APP_VERSION, APP_DEBUG_MODE?@"Debug Mode":@"", self.credentials.userAdmin?@"You have admin privillages":@""]];
+    [self.viewFooter present:false status:[NSString stringWithFormat:NSLocalizedString(@"Settings_VersionInfomation_Title", nil) ,APP_VERSION, APP_DEBUG_MODE?@"Debug Mode":@"", self.credentials.userAdmin?@"You have admin privileges":@""]];
     [self.mixpanel track:@"App Settings Viewed"];
 
 }

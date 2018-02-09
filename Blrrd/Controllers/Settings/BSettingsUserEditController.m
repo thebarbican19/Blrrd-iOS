@@ -192,6 +192,7 @@
                                 
                             }];
                             
+                            [self.mixpanel track:[NSString stringWithFormat:@"App User Updated %@ Details" ,type.capitalizedString]];
                             [self.viewInput.formInput resignFirstResponder];
                             
                         }

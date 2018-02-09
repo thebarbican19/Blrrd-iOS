@@ -320,7 +320,7 @@
             
         }
         else if (self.type == GDFormInputTypeDisplay) {
-            if (textField.text.length > 5) {
+            if (textField.text.length > 3) {
                 [self setValidated:true];
                 [self.formLabel setText:NSLocalizedString(@"Authenticate_DisplayOkay_Error", nil) animate:true];
                 [self.formLabel setStatusColour:UIColorFromRGB(0x69DCCB) animate:true];
