@@ -37,11 +37,14 @@
 -(NSString *)userPhone:(BOOL)countrycode;
 -(NSString *)userFullname;
 -(NSDate *)userBirthday;
+-(int)userGender;
 
 -(BOOL)appRated;
 -(BOOL)appOnboarded;
+-(BOOL)appContactsParsed;
 -(BOOL)appSaveImages;
 -(BOOL)appContactsUpdateExpired;
+-(BOOL)appFriendsAdded;
 
 -(NSString *)devicePush;
 -(NSString *)deviceIdentifyer;
@@ -58,6 +61,8 @@
 -(void)setAppRated:(BOOL)rated;
 -(void)setAppSaveImages:(BOOL)save;
 -(void)setAppContactUpdateExpiry:(BOOL)expire;
+-(void)setAppContactsParsed:(BOOL)parsed;
+-(void)setFriendsAdded:(BOOL)added;
 
 -(void)setUserType:(NSString *)type;
 -(void)setUserFullname:(NSString *)fullname;

@@ -40,6 +40,7 @@
 @property (nonatomic ,strong) UIView *userarea;
 @property (nonatomic ,strong) SAMLabel *timestamp;
 @property (nonatomic, strong) UIImageView *avatar;
+@property (nonatomic, strong) UIImageView *verifyed;
 @property (nonatomic, strong) UIView *avatarbackground;
 @property (nonatomic ,strong) GDStatusLabel *time;
 @property (nonatomic ,strong) UIButton *options;

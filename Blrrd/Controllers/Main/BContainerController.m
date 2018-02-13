@@ -34,6 +34,7 @@
         
     }
     else {
+        if (![self.credentials appFriendsAdded]) [self viewPresentFriends];
         [self viewSetup];
         
     }
@@ -46,7 +47,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [self viewCheckAuthenticaion];
-
+    
 }
 
 -(void)viewDidLoad {

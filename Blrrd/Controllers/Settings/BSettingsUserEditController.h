@@ -25,6 +25,8 @@
 @property (nonatomic) NSString *header;
 @property (nonatomic) NSString *password;
 @property (nonatomic, strong) NSString *value;
+@property (nonatomic) BOOL friendfinder;
+@property (nonatomic) BOOL signup;
 
 @property (nonatomic, strong) BNavigationView *viewNavigation;
 @property (nonatomic, strong) GDFormInput *viewInput;

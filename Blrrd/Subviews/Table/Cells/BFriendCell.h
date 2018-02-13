@@ -21,6 +21,7 @@
 @property (nonatomic, strong) UIImageView *avatar;
 @property (nonatomic, strong) BFollowAction *follow;
 @property (nonatomic, strong) UITapGestureRecognizer *gesture;
+@property (nonatomic, strong) UIImageView *verifyed;
 
 @property (nonatomic, strong) NSDictionary *data;
 @property (nonatomic, strong) BQueryObject *query;

@@ -8,6 +8,7 @@
 
 #import "BSettingsUserEditController.h"
 #import "BConstants.h"
+#import "BFriendFinderController.h"
 
 @interface BSettingsUserEditController ()
 
@@ -16,30 +17,52 @@
 @implementation BSettingsUserEditController
 
 -(void)viewNavigationButtonTapped:(UIButton *)button {
-    if (self.type == GDFormInputTypePasswordReenter) {
-        [self setPassword:nil];
-        [self setType:GDFormInputTypePassword];
-        
-        [self.viewInput setType:GDFormInputTypePassword];
-        [self.viewInput textFeildSetTitle:NSLocalizedString(@"Authentication_FormPassword_Title", nil)];
-        [self.viewInput.formInput setText:nil];
+    if (button.tag == 0) {
+        if (self.type == GDFormInputTypePasswordReenter) {
+            [self setPassword:nil];
+            [self setType:GDFormInputTypePassword];
+            
+            [self.viewInput setType:GDFormInputTypePassword];
+            [self.viewInput textFeildSetTitle:NSLocalizedString(@"Authentication_FormPassword_Title", nil)];
+            [self.viewInput.formInput setText:nil];
+            
+        }
+        else {
+            [self.navigationController popViewControllerAnimated:true];
+            
+        }
         
     }
     else {
-        [self.navigationController popViewControllerAnimated:true];
+        if (self.type == GDFormInputTypePhone && self.friendfinder) {
+            BFriendFinderController *viewFriends = [[BFriendFinderController alloc] init];
+            viewFriends.view.backgroundColor = self.view.backgroundColor;
+            viewFriends.contactgrantauthrization = true;
+            viewFriends.header = NSLocalizedString(@"Friend_Header_Text", nil);
+            viewFriends.signup = true;
+            NSLog(@"phone signup: %@" ,self.signup?@"not signup":@"signup");
+            [self.navigationController pushViewController:viewFriends animated:true];
+            
+        }
         
     }
-    
+
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [self.viewNavigation navigationTitle:self.header];
     [self.viewInput setEntry:self.value];
     
+    if (self.type == GDFormInputTypePhone && self.friendfinder) {
+        [self.viewNavigation navigationRightButton:NSLocalizedString(@"Onboarding_ActionSkip_Text", nil)];
+
+    }
+    
 }
 
 -(void)viewContentRefresh:(UIRefreshControl *)refresh {
     [self viewNavigationButtonTapped:nil];
+    
 }
 
 -(void)viewDidLoad {
@@ -50,7 +73,7 @@
     self.query = [[BQueryObject alloc] init];
     
     self.credentials = [[BCredentialsObject alloc] init];
-    
+        
     self.view.clipsToBounds = true;
     self.navigationController.navigationBarHidden = true;
     self.navigationController.view.clipsToBounds = true;
@@ -59,6 +82,7 @@
     self.viewNavigation.backgroundColor = [UIColor clearColor];
     self.viewNavigation.name = nil;
     self.viewNavigation.delegate = self;
+    self.viewNavigation.rightbutton = @"";
     [self.view addSubview:self.viewNavigation];
     
     self.viewInput = [[GDFormInput alloc] initWithFrame:CGRectMake(0.0, 50.0, self.view.bounds.size.width, self.view.bounds.size.height)];
@@ -176,6 +200,16 @@
                                 [self.credentials setUserPhoneNumber:self.viewInput.entry];
                             else if (self.type == GDFormInputTypeDisplay)
                                 [self.credentials setUserFullname:self.viewInput.entry];
+                            
+                            NSLog(@"genre: %d" ,self.credentials.userGender);
+                            if (self.credentials.userGender > 0) {
+                                [self.query postUpdateUser:nil type:@"gender" value:[NSString stringWithFormat:@"%d" ,self.credentials.userGender] completion:^(NSError *error) {
+                                    NSLog(@"error: %@" ,error);
+                                    
+                                }];
+                                
+                            }
+
 
                             [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                                 [self.viewAction setTransform:CGAffineTransformMakeScale(0.85, 0.85)];
@@ -194,6 +228,17 @@
                             
                             [self.mixpanel track:[NSString stringWithFormat:@"App User Updated %@ Details" ,type.capitalizedString]];
                             [self.viewInput.formInput resignFirstResponder];
+                            
+                            if (self.friendfinder) {
+                                BFriendFinderController *viewFriends = [[BFriendFinderController alloc] init];
+                                viewFriends.view.backgroundColor = self.view.backgroundColor;
+                                viewFriends.contactgrantauthrization = true;
+                                viewFriends.header = NSLocalizedString(@"Friend_Header_Text", nil);
+                                viewFriends.signup = true;
+                                NSLog(@"phone signup: %@" ,self.signup?@"not signup":@"signup");
+                                [self.navigationController pushViewController:viewFriends animated:true];
+                                
+                            }
                             
                         }
                         else [self.viewInput textFeildSetTitle:error.domain];

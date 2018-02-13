@@ -22,7 +22,24 @@
     [self.viewNavigation navigationBackButtonDisabled:self.signup];
     [self.viewNavigation navigationTitle:self.header];
     [self.viewTable reloadData];
+    [self.credentials setFriendsAdded:true];
     
+    if (self.contacts.contactsAuthorized || self.contactgrantauthrization) {
+        [self viewQueryContactsData];
+        
+        [self.viewHeader setType:BFriendHeaderTypeLoading];
+        [self.viewHeader headerset:NSLocalizedString(@"Friend_StatusLoading_Text", nil) animated:false];
+        
+    }
+    else {
+        [self.viewHeader setType:BFriendHeaderTypeFindContacts];
+        [self.viewHeader headerset:NSLocalizedString(@"Friend_StatusFindContacts_Text", nil) animated:false];
+        
+    }
+    
+}
+    
+-(void)viewQueryContactsData {
     [self.contacts contactsGrantAccess:^(bool granted, NSError *error) {
         if (granted) {
             [self.contacts contactsReturn:false completion:^(NSArray *contacts, int count) {
@@ -46,7 +63,7 @@
                     }
                     
                     [contactslist addObject:contact];
-
+                    
                 }
                 
                 [self.query querySuggestedUsers:nil emails:emails completion:^(NSArray *users, NSError *error) {
@@ -63,7 +80,7 @@
                                     
                                     if ([contact objectForKey:@"contact_thumbnail"] != nil && [[user objectForKey:@"avatar"] length] == 0) {
                                         [append setObject:[contact objectForKey:@"contact_thumbnail"] forKey:@"avatar"];
-
+                                        
                                     }
                                     
                                     break;
@@ -73,7 +90,6 @@
                             }
                             
                             for (NSDictionary *phonedata in [contact objectForKey:@"contact_phone"]) {
-                                //NSLog(@"phone data: %@ user %@" ,phonedata, user);
                                 if ([[phonedata objectForKey:@"number"] isEqualToString:[user objectForKey:@"phone"]]) {
                                     if ([contact objectForKey:@"contact_name"] != nil) {
                                         [append setObject:[contact objectForKey:@"contact_name"] forKey:@"fullname"];
@@ -96,15 +112,12 @@
                         [self.friends addObject:append];
                         
                     }
-                    if (error.code == 200) {
-                        [self viewSetupSections];
-                        
-                    }
+                    if (error.code == 200) [self viewSetupSections];
                     
                 }];
-
+                
                 [self viewSetupSections];
-
+                
             }];
             
         }
@@ -113,13 +126,46 @@
 
 }
 
+-(void)viewHeaderTapped:(BFriendHeaderType)type {
+    if (type == BFriendHeaderTypeFindContacts) {
+        if ([self.credentials userPhone:false] == nil) {
+            BSettingsUserEditController *viewPhoneadd = [[BSettingsUserEditController alloc] init];
+            viewPhoneadd.friendfinder = true;
+            viewPhoneadd.signup = self.signup;
+            viewPhoneadd.type = GDFormInputTypePhone;
+            viewPhoneadd.header = NSLocalizedString(@"Settings_ItemUserphone_Title", nil);
+            viewPhoneadd.value = [self.credentials userPhone:true];
+            viewPhoneadd.view.backgroundColor = self.view.backgroundColor;
+            NSLog(@"phone signup: %@" ,self.signup?@"not signup":@"signup");
+
+            [self.navigationController pushViewController:viewPhoneadd animated:true];
+            
+        }
+        else [self viewQueryContactsData];
+       
+    }
+    else if (type == BFriendHeaderTypeShare) {
+        NSArray *shareitems = @[NSLocalizedString(@"Settings_Share_Body", nil), [NSURL URLWithString:@"http://blrrd.co"]];
+        UIActivityViewController *share = [[UIActivityViewController alloc] initWithActivityItems:shareitems applicationActivities:nil];
+        [super presentViewController:share animated:true completion:^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
+            [self.mixpanel track:@"App Settings Shared"];
+            
+        }];
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:true];
+        
+    }
+    
+}
+
 -(void)viewWillAppear:(BOOL)animated {
     [self viewDownloadContent:false];
 
 }
 
 -(void)viewNavigationButtonTapped:(UIButton *)button {
-    if (button.tag == 0) [self.navigationController popViewControllerAnimated:true];
+    if (button.tag == 0) [self.navigationController popToRootViewControllerAnimated:true];
     else {
         BCompleteController *viewComplete = [[BCompleteController alloc] init];
         viewComplete.type = BCompleteScreenSignup;
@@ -135,6 +181,10 @@
 
     self.view.backgroundColor = UIColorFromRGB(0x140F26);
     
+    self.mixpanel = [Mixpanel sharedInstance];
+    
+    self.credentials = [[BCredentialsObject alloc] init];
+    
     self.query = [[BQueryObject alloc] init];
     self.query.debug = true;
     
@@ -145,7 +195,7 @@
     self.viewNavigation.name = self.header;
     self.viewNavigation.backdisabled = self.signup;
     self.viewNavigation.delegate = self;
-    self.viewNavigation.rightbutton = self.signup?NSLocalizedString(@"Onboarding_ActionSkip_Text", nil):nil;
+    self.viewNavigation.rightbutton = @"";
     [self.view addSubview:self.viewNavigation];
     
     self.viewSearch  = [[BSearchView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height, self.view.bounds.size.width, 60.0)];
@@ -158,16 +208,22 @@
     self.viewSearch.alpha = 1.0;
     [self.view addSubview:self.viewSearch];
     
+    self.viewHeader = [[BFriendHeader alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, 90.0)];
+    self.viewHeader.backgroundColor = [UIColor clearColor];
+    self.viewHeader.delegate = self;
+    if (![self.credentials appContactsParsed]) self.viewHeader.type = BFriendHeaderTypeFindContacts;
+    else self.viewHeader.type = BFriendHeaderTypeShare;
+
     self.viewTable = [[UITableView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height + self.viewSearch.bounds.size.height, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + self.viewSearch.bounds.size.height + self.viewNavigation.bounds.size.height))];
     self.viewTable.delegate = self;
     self.viewTable.dataSource = self;
-    self.viewTable.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, 15.0)];
+    self.viewTable.tableHeaderView = self.viewHeader;
     self.viewTable.separatorColor = [UIColor clearColor];
     self.viewTable.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.viewTable];
     [self.viewTable registerClass:[BFriendCell class] forCellReuseIdentifier:@"user"];
 
-    self.viewPlaceholder = [[GDPlaceholderView alloc] initWithFrame:self.viewTable.frame];
+    self.viewPlaceholder = [[GDPlaceholderView alloc] initWithFrame:CGRectMake(0.0, self.viewHeader.frame.origin.y + self.viewHeader.bounds.size.height, self.viewHeader.bounds.size.width, self.viewTable.bounds.size.height - self.viewHeader.bounds.size.height)];
     self.viewPlaceholder.delegate = self;
     self.viewPlaceholder.backgroundColor = [UIColor clearColor];
     self.viewPlaceholder.textcolor = [UIColor whiteColor];
@@ -227,6 +283,14 @@
             if ([self.friends count] > 0) {
                 [self.sections addObject:@{@"key":@"local", @"title":NSLocalizedString(@"Friend_SectionContacts_Title", nil), @"items":self.friends}];
 
+                [self.viewHeader setType:BFriendHeaderTypeShare];
+                [self.viewHeader headerset:NSLocalizedString(@"Friend_StatusShare_Text", nil) animated:true];
+                
+            }
+            else if (self.sections.count == 2) {
+                [self.viewHeader setType:BFriendHeaderTypeShare];
+                [self.viewHeader headerset:NSLocalizedString(@"Friend_StatusNoFriendsShare_Text", nil) animated:true];
+                
             }
             
             if ([self.suggested count] > 0) {
@@ -238,14 +302,13 @@
     
         if ([self.sections count] > 0) {
             [self.viewTable reloadData];
-            [self.viewTable setHidden:false];
             [self.viewPlaceholder setHidden:true];
             
         }
         else {
-            [self.viewTable setHidden:true];
             [self.viewPlaceholder setHidden:false];
-            
+            [self.view bringSubviewToFront:self.viewPlaceholder];
+
         }
         
     }];
@@ -323,7 +386,7 @@
     
     if ([self.query friendCheck:[item objectForKey:@"userid"]]) cell.follow.type = BFollowActionTypeFollowed;
     else {
-        if ([[item objectForKey:@"follows"] boolValue]) cell.follow.type = BFollowActionTypeUnfollowed;
+        if ([[item objectForKey:@"follows"] boolValue]) cell.follow.type = BFollowActionTypeFollowBack;
         else cell.follow.type = BFollowActionTypeUnfollowed;
 
     }

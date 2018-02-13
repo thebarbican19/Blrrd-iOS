@@ -40,13 +40,16 @@
                     [self.credentials setUserEmail:[user objectForKey:@"email"]];
                     [self.credentials setUserHandle:[user objectForKey:@"username"]];
                     [self.credentials setUserFullname:[user objectForKey:@"displayname"]];
-                    [self.credentials setUserPhoneNumber:[user objectForKey:@"phone"]];
+                    [self.credentials setUserPhoneNumber:[user objectForKey:@"phonenumber"]];
                     [self.credentials setUserAvatar:[user objectForKey:@"avatar"]];
                     [self.credentials setUserPublic:[[user objectForKey:@"public"] boolValue]];
                     [self.credentials setUserType:[user objectForKey:@"type"]];
                     [self.credentials setAuthToken:[[user objectForKey:@"auth"] objectForKey:@"token"]];
                     [self.credentials setAuthExpiry:[[user objectForKey:@"auth"] objectForKey:@"expiry"]];
                     [self.credentials setUserTotalTime:[[[user objectForKey:@"stats"] objectForKey:@"totaltime"] intValue] append:false];
+                    [self.credentials setAppRated:false];
+                    [self.credentials setAppContactsParsed:false];
+                    [self.credentials setAppContactUpdateExpiry:true];
 
                     NSLog(@"useer %@" ,user);
                     
@@ -95,7 +98,7 @@
                 [self.credentials setUserEmail:[user objectForKey:@"email"]];
                 [self.credentials setUserHandle:[user objectForKey:@"username"]];
                 [self.credentials setUserFullname:[user objectForKey:@"displayname"]];
-                [self.credentials setUserPhoneNumber:[user objectForKey:@"phone"]];
+                [self.credentials setUserPhoneNumber:[user objectForKey:@"phonenumber"]];
                 [self.credentials setUserAvatar:[user objectForKey:@"avatar"]];
                 [self.credentials setUserPublic:[[user objectForKey:@"public"] boolValue]];
                 [self.credentials setUserType:[user objectForKey:@"type"]];
@@ -345,7 +348,8 @@
                 [requests addObjectsFromArray:[output objectForKey:@"output"]];
                                 
                 if (search == nil && emails == nil) {
-                    [self cacheSave:requests endpointname:endpoint append:false expiry:60*30];
+                    [self cacheSave:requests endpointname:endpoint append:false expiry:60*60*1];
+                    
                     
                 }
                 
@@ -467,7 +471,7 @@
                 [self.credentials setUserTotalTime:[[stats objectForKey:@"totaltime"] intValue] append:false];
                 [self.credentials setUserEmail:[user objectForKey:@"email"]];
                 [self.credentials setUserFullname:[user objectForKey:@"displayname"]];
-                [self.credentials setUserPhoneNumber:[user objectForKey:@"phone"]];
+                [self.credentials setUserPhoneNumber:[user objectForKey:@"phonenumber"]];
                 [self.credentials setUserType:[user objectForKey:@"type"]];
                 [self.credentials setUserPublic:[[user objectForKey:@"public"] boolValue]];
                 [self.credentials setUserVerifyed:[[user objectForKey:@"promoted"] boolValue]];

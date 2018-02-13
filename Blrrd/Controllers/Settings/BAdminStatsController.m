@@ -101,7 +101,7 @@
     self.viewPlaceholder.hidden = false;
     [self.view addSubview:self.viewPlaceholder];
     [self.view sendSubviewToBack:self.viewPlaceholder];
-    [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Friend_LoadingPlaceholder_Title", nil) instructions:@"Wait for it, bellend."];
+    [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Friend_LoadingPlaceholder_Title", nil) instructions:@"Hold on Chaps!"];
 
 }
 

@@ -168,6 +168,11 @@
     
 }
 
+-(int)userGender {
+    return [[self.data objectForKey:@"user_gender"] intValue];
+    
+}
+
 -(int)userTotalTime {
     return [[self.data objectForKey:@"user_total_seconds"] intValue];
     
@@ -198,6 +203,16 @@
 -(BOOL)appOnboarded {
     return [[self.data objectForKey:@"app_onboarding"] boolValue];
 
+}
+
+-(BOOL)appContactsParsed {
+    return [[self.data objectForKey:@"app_contactsparsed"] boolValue];
+
+}
+
+-(BOOL)appFriendsAdded {
+    return [[self.data objectForKey:@"app_friends"] boolValue];
+    
 }
 
 -(BOOL)appSaveImages {
@@ -263,6 +278,18 @@
     
 }
 
+-(void)setAppContactsParsed:(BOOL)parsed {
+    [self.data setObject:[NSNumber numberWithBool:parsed] forKey:@"app_contactsparsed"];
+    [self.data synchronize];
+    
+}
+
+-(void)setFriendsAdded:(BOOL)added {
+    [self.data setObject:[NSNumber numberWithBool:added] forKey:@"app_friends"];
+    [self.data synchronize];
+    
+}
+
 -(void)setUserType:(NSString *)type {
     if (type) [self.data setObject:type forKey:@"user_type"];
     else [self.data removeObjectForKey:@"user_type"];
@@ -272,7 +299,11 @@
 }
 
 -(void)setUserFullname:(NSString *)fullname {
-    if (fullname.length > 0) [self.data setObject:fullname forKey:@"user_fullname"];
+    if (fullname.length > 0) {
+        [self.data setObject:fullname forKey:@"user_fullname"];
+        [self setUserGender:fullname];
+        
+    }
     else [self.data removeObjectForKey:@"user_fullname"];
     
     [self.data synchronize];
@@ -280,7 +311,7 @@
 }
 
 -(void)setUserEmail:(NSString *)email {
-    if (email) [self.data setObject:[email stringByCorrectingEmailTypos] forKey:@"user_email"];
+    if (email.length > 0) [self.data setObject:[email stringByCorrectingEmailTypos] forKey:@"user_email"];
     else [self.data removeObjectForKey:@"user_email"];
     
     [self.data synchronize];
@@ -347,6 +378,24 @@
     
 }
 
+-(void)setUserGender:(NSString *)name {
+    NSString *firstname = [[name componentsSeparatedByString:@" "] firstObject];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"NamesDetect" ofType:@"json"];
+    NSArray *content = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:0 error:nil];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name LIKE[c] %@" ,firstname.capitalizedString];
+    NSDictionary *output = [[content filteredArrayUsingPredicate:predicate] firstObject];
+    if (output != nil) {
+        int sex = 0;
+        if ([[output objectForKey:@"sex"] isEqualToString:@"M"]) sex = 1;
+        else sex = 2;
+        
+        [self.data setObject:[NSNumber numberWithInt:sex] forKey:@"user_gender"];
+        [self.data synchronize];
+        
+    }
+    
+}
+
 -(void)setAuthToken:(NSString *)token {
     if (token) [self.data setObject:token forKey:@"auth_token"];
     else [self.data removeObjectForKey:@"auth_token"];
@@ -366,6 +415,7 @@
     else [self.data removeObjectForKey:@"auth_expiry"];
     
     [self.data synchronize];
+    
 }
 
 @end

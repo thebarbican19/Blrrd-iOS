@@ -24,6 +24,14 @@
         self.user.userInteractionEnabled = true;
         [self.contentView addSubview:self.user];
         
+        self.verifyed = [[UIImageView alloc] initWithFrame:CGRectMake(self.user.frame.origin.x + [self.user.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.user.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.user.font} context:nil].size.width + 4.0, self.user.frame.origin.y + 1.0, 13.0 ,13.0)];
+        self.verifyed.contentMode = UIViewContentModeScaleAspectFill;
+        self.verifyed.layer.cornerRadius = self.verifyed.bounds.size.width / 2;
+        self.verifyed.clipsToBounds = true;
+        self.verifyed.image = [UIImage imageNamed:@"profile_verifyed_icon"];
+        self.verifyed.backgroundColor = [UIColor clearColor];
+        [self.contentView addSubview:self.verifyed];
+        
         self.avatar = [[UIImageView alloc] initWithFrame:CGRectMake(19.0, 6.0, self.bounds.size.height - 12.0 ,self.bounds.size.height - 12.0)];
         self.avatar.contentMode = UIViewContentModeScaleAspectFill;
         self.avatar.image = nil;
@@ -146,6 +154,8 @@
     [formatted addAttribute:NSForegroundColorAttributeName value:[self.user.textColor colorWithAlphaComponent:0.6] range:NSMakeRange(header.length, subtitle.length + 2)];
     
     [self.user setAttributedText:formatted];
+    [self.verifyed setHidden:![[data objectForKey:@"promoted"] boolValue]];
+    [self.verifyed setFrame:CGRectMake(self.user.frame.origin.x + [header boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.user.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.user.font} context:nil].size.width + 4.0, self.user.frame.origin.y + (subtitle==nil?24.0:16.0), 13.0 ,13.0)];
     
 }
 

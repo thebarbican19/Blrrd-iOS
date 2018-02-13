@@ -115,7 +115,6 @@
 "Profile_SectionYouMayKnow_Header" = "You may know";
 "Profile_MyPosts_Header" = "My Posts";
 "Profile_TimeViewed_Body" = "Total Time Viewed *%@*";
-
 "Profile_NotificationBasic_Body" = "viewed for *%@* %@seconds"; //Joe viewed your post for 1 second
 "Profile_NotificationDetailed_Body" = "*%@* viewed your post"; //Joe viewed your post again
 "Profile_NotificationEmpty_Body" = "Nobody has viewed your post yet";
@@ -170,6 +169,10 @@
 "Friend_SectionContacts_Title" = "People you know";
 "Friend_SectionSuggested_Title" = "Suggested";
 "Friend_CellSubtitleFollows_Text" = "(Follows you)";
+"Friend_StatusFindContacts_Text" = "Find your *Friends* via you *Contacts*...";
+"Friend_StatusLoading_Text" = "*Loading...*";
+"Friend_StatusShare_Text" = "Find more friends by sharing *Blrrd*";
+"Friend_StatusNoFriendsShare_Text" = "We could not find any of friends yet, help us spread the word by sharing *Blrrd*";
 
 "ImageDetailed_Report_Title" = "Reporting Image";
 "ImageDetailed_ReportSend_Placeholder" = "Reason for reporting this image?";

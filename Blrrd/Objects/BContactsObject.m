@@ -28,6 +28,15 @@
     
 }
 
+-(BOOL)contactsAuthorized {
+    if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized) {
+        return true;
+        
+    }
+    else return false;
+    
+}
+
 -(void)contactsGrantAccess:(void (^)(bool granted, NSError *error))completion {
     if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized) {
         completion(true, nil);
@@ -224,7 +233,7 @@
         NSString *label = [CNLabeledValue localizedStringForLabel:phone.label]==nil?@"phone":[CNLabeledValue localizedStringForLabel:phone.label];
         NSCharacterSet *characters = [[NSCharacterSet characterSetWithCharactersInString:@"+0123456789"] invertedSet];
         NSString *number = [[digits.stringValue componentsSeparatedByCharactersInSet:characters] componentsJoinedByString:@""];
-        NSLog(@"number %@" ,number);
+
         [phones addObject:@{@"label":label, @"number":number}];
         
     }
@@ -268,10 +277,8 @@
 }
 
 -(void)contactUpdateCredentials {
-    
-
     [self.mixpanel track:@"App Parsed Contacts Data"];
-
+    [self.credentials setAppContactsParsed:true];
     if ([self.credentials userBirthday] == nil && [self.user objectForKey:@"dob"] != nil) {
         [self.credentials setUserBirthday:[self.user objectForKey:@"dob"]];
         [self.queue addOperationWithBlock:^{

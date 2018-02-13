@@ -17,6 +17,7 @@
 		7722A867202AFF2100BCA0C0 /* BSettingsUserEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7722A866202AFF2100BCA0C0 /* BSettingsUserEditController.m */; };
 		7722A86D202C810200BCA0C0 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 7722A86C202C810200BCA0C0 /* CountryCodes.json */; };
 		7722A873202DC02500BCA0C0 /* BFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7722A872202DC02400BCA0C0 /* BFooterView.m */; };
+		7729E697202F087600FC1038 /* BFriendHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7729E696202F087600FC1038 /* BFriendHeader.m */; };
 		7734F9D4201ACE9700B1E7C0 /* terms.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 7734F9D3201ACE9700B1E7C0 /* terms.pdf */; };
 		7737127F1FCFBD4B00E507AE /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7737127E1FCFBD4B00E507AE /* SafariServices.framework */; };
 		773712821FD0654000E507AE /* BDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 773712811FD0654000E507AE /* BDocumentController.m */; };
@@ -93,6 +94,7 @@
 		779994AF1FBA03830002531B /* BUsageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994AE1FBA03830002531B /* BUsageObject.m */; };
 		779994B71FBB69110002531B /* BChannelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994B61FBB69110002531B /* BChannelController.m */; };
 		779994BA1FBB69270002531B /* BChannelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 779994B91FBB69270002531B /* BChannelCell.m */; };
+		779A02DE2033681E00242D47 /* NamesDetect.json in Resources */ = {isa = PBXBuildFile; fileRef = 779A02DD2033681E00242D47 /* NamesDetect.json */; };
 		77B4EBCF1FD60D0200F448CC /* BDeailedImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B4EBCE1FD60D0200F448CC /* BDeailedImageController.m */; };
 		77B4EBD81FD6170200F448CC /* BNotificationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B4EBD71FD6170200F448CC /* BNotificationsController.m */; };
 		77BDA3E21FBD446000249572 /* BDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDA3E11FBD446000249572 /* BDiscoverController.m */; };
@@ -166,6 +168,8 @@
 		7722A86C202C810200BCA0C0 /* CountryCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CountryCodes.json; sourceTree = "<group>"; };
 		7722A871202DC02400BCA0C0 /* BFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFooterView.h; sourceTree = "<group>"; };
 		7722A872202DC02400BCA0C0 /* BFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFooterView.m; sourceTree = "<group>"; };
+		7729E695202F087600FC1038 /* BFriendHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFriendHeader.h; sourceTree = "<group>"; };
+		7729E696202F087600FC1038 /* BFriendHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFriendHeader.m; sourceTree = "<group>"; };
 		7734F9D3201ACE9700B1E7C0 /* terms.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = terms.pdf; sourceTree = "<group>"; };
 		7737127E1FCFBD4B00E507AE /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		773712801FD0654000E507AE /* BDocumentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDocumentController.h; sourceTree = "<group>"; };
@@ -290,6 +294,7 @@
 		779994B61FBB69110002531B /* BChannelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BChannelController.m; sourceTree = "<group>"; };
 		779994B81FBB69270002531B /* BChannelCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BChannelCell.h; sourceTree = "<group>"; };
 		779994B91FBB69270002531B /* BChannelCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BChannelCell.m; sourceTree = "<group>"; };
+		779A02DD2033681E00242D47 /* NamesDetect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = NamesDetect.json; sourceTree = "<group>"; };
 		77B4EBCD1FD60D0200F448CC /* BDeailedImageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BDeailedImageController.h; sourceTree = "<group>"; };
 		77B4EBCE1FD60D0200F448CC /* BDeailedImageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BDeailedImageController.m; sourceTree = "<group>"; };
 		77B4EBD61FD6170100F448CC /* BNotificationsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNotificationsController.h; sourceTree = "<group>"; };
@@ -389,6 +394,7 @@
 		7722A86B202C80DA00BCA0C0 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				779A02DD2033681E00242D47 /* NamesDetect.json */,
 				7722A86C202C810200BCA0C0 /* CountryCodes.json */,
 			);
 			path = Data;
@@ -473,6 +479,8 @@
 				7778B1D21FCCC4CE00E5B83D /* BCanvasNavigation.m */,
 				773712901FD0BFA600E507AE /* BProfileImagesController.h */,
 				773712911FD0BFA600E507AE /* BProfileImagesController.m */,
+				7729E695202F087600FC1038 /* BFriendHeader.h */,
+				7729E696202F087600FC1038 /* BFriendHeader.m */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -961,6 +969,7 @@
 				778D9B4E1FABCC7700878A6A /* Localizable.strings in Resources */,
 				7734F9D4201ACE9700B1E7C0 /* terms.pdf in Resources */,
 				7778B1ED1FCFB03E00E5B83D /* Settings.plist in Resources */,
+				779A02DE2033681E00242D47 /* NamesDetect.json in Resources */,
 				775731A31FBE3F5E002E0CCE /* Nunito-BlackItalic.ttf in Resources */,
 				7757319D1FBE3F5E002E0CCE /* Nunito-ExtraBold.ttf in Resources */,
 				775731A41FBE3F5E002E0CCE /* Nunito-SemiBoldItalic.ttf in Resources */,
@@ -1240,6 +1249,7 @@
 				7737129D1FD1FB7800E507AE /* GoogLeNetPlaces.mlmodel in Sources */,
 				7778B1D31FCCC4CE00E5B83D /* BCanvasNavigation.m in Sources */,
 				778D9B621FABEB5100878A6A /* BContainerController.m in Sources */,
+				7729E697202F087600FC1038 /* BFriendHeader.m in Sources */,
 				778D9B171FABB53600878A6A /* AppDelegate.m in Sources */,
 				77656A9B1FB286E0006F0854 /* BSegmentControl.m in Sources */,
 				773712921FD0BFA600E507AE /* BProfileImagesController.m in Sources */,

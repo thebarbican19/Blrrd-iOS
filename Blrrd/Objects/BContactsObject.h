@@ -25,6 +25,7 @@
 @property (nonatomic, retain) BCredentialsObject *credentials;
 @property (nonatomic, retain) BQueryObject *query;
 
+-(BOOL)contactsAuthorized;
 -(void)contactsGrantAccess:(void (^)(bool granted, NSError *error))completion;
 -(void)contactsReturn:(BOOL)sections completion:(void (^)(NSArray *contacts, int count))completion;
 -(NSArray *)contactsSections:(NSArray *)contacts;

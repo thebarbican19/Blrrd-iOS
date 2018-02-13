@@ -47,6 +47,14 @@
         self.user.font = [UIFont fontWithName:@"Nunito-SemiBold" size:16];
         [self.userarea addSubview:self.user];
         
+        self.verifyed = [[UIImageView alloc] initWithFrame:CGRectMake(self.user.frame.origin.x + [self.user.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.user.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.user.font} context:nil].size.width + 4.0, self.user.frame.origin.y + 1.0, 13.0 ,13.0)];
+        self.verifyed.contentMode = UIViewContentModeScaleAspectFill;
+        self.verifyed.layer.cornerRadius = self.verifyed.bounds.size.width / 2;
+        self.verifyed.clipsToBounds = true;
+        self.verifyed.image = [UIImage imageNamed:@"profile_verifyed_icon"];
+        self.verifyed.backgroundColor = [UIColor clearColor];
+        [self.userarea addSubview:self.verifyed];
+        
         self.timestamp = [[SAMLabel alloc] initWithFrame:CGRectMake(32.0, 15.0, self.bounds.size.width - 60.0 ,10.0)];
         self.timestamp.numberOfLines = 1;
         self.timestamp.textAlignment = NSTextAlignmentLeft;
@@ -126,6 +134,8 @@
     [self.avatar sd_setImageWithURL:[self.userdata objectForKey:@"avatar"] placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
     [self.time setText:self.timeformatted animate:false];
     [self.timestamp setText:[self time:[content objectForKey:@"timestamp"]]];
+    [self.verifyed setHidden:![[self.userdata objectForKey:@"promoted"] boolValue]];
+    [self.verifyed setFrame:CGRectMake(self.user.frame.origin.x + [self.user.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.user.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.user.font} context:nil].size.width + 4.0, self.user.frame.origin.y + 2.0, 13.0 ,13.0)];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self blur:[NSURL URLWithString:self.imageurl]];
@@ -227,6 +237,7 @@
 }
 
 -(NSString *)time:(id)timestamp {
+    NSLog(@"timestamp: %@" ,timestamp);
     if (![timestamp isEqual:[NSNull null]]) {
         NSDateComponents *components;
         NSDate *outputdate;
