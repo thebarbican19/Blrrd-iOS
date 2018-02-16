@@ -11,6 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <UIImage+BlurEffects.h>
 #import "UCZProgressView.h"
+#import "BImageObject.h"
 
 @interface BCanvasView : UIView <UITextViewDelegate> {
     UIImageView *overlay;
@@ -20,6 +21,7 @@
 }
 
 @property (nonatomic, strong) UITextView *caption;
+@property (nonatomic, strong) BImageObject *imgobject;
 
 -(void)canvasImage:(UIImage *)image;
 -(void)canvasBlurOverlay:(BOOL)enabled;

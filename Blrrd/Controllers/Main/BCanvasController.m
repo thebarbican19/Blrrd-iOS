@@ -368,7 +368,7 @@
 -(void)cameraUpload {
     if (self.gallerymode) {
         if (self.viewGallery.selected != nil) {
-            [self.viewGallery.imageobj imagesFromAsset:self.viewGallery.selected thumbnail:false completion:^(NSDictionary *data, UIImage *image) { 
+            [self.viewGallery.imageobj imagesFromAsset:self.viewGallery.selected thumbnail:false completion:^(NSDictionary *data, UIImage *image) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     [self.viewNavigation title:NSLocalizedString(@"Canvas_CameraApproveImage_Title", nil)];
                     [self viewHandleImage:image preview:true loading:false camera:false];

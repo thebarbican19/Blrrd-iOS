@@ -6,6 +6,7 @@ PODS:
     - GBDeviceInfo/Core (= 4.4.0)
   - GBDeviceInfo/Core (4.4.0)
   - GPUImage (0.1.7)
+  - JTChartView (1.0.1)
   - KVNBoundedImageView (1.0.0)
   - Mixpanel (3.2.6)
   - Pushbots (2.0.4)
@@ -14,6 +15,7 @@ PODS:
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
+  - SimpleExif (0.0.1)
   - SocketRocket (0.5.1)
   - TYBlurImage (1.2.1)
   - UCZProgressView (1.0.2)
@@ -26,12 +28,14 @@ DEPENDENCIES:
   - DBImageColorPicker
   - GBDeviceInfo (~> 4.4.0)
   - GPUImage
+  - JTChartView
   - KVNBoundedImageView
   - Mixpanel
   - Pushbots (~> 2.0.4)
   - SAMKeychain
   - SAMLabel
   - SDWebImage (~> 3.8)
+  - SimpleExif
   - SocketRocket
   - TYBlurImage
   - UCZProgressView
@@ -44,18 +48,20 @@ SPEC CHECKSUMS:
   DBImageColorPicker: b0b419b0653338544d766ed2008f2558b899fc60
   GBDeviceInfo: 2ec90c6808d063061b16773ec8e857257058dc5d
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
+  JTChartView: cfe9c9cd95c04331df12d5d174d40cc3a9d39127
   KVNBoundedImageView: be2dabe166952dc9870b8000ee30e601fae0bc67
   Mixpanel: 2304449c3580927db15c894652a6e135aafae8f5
   Pushbots: bfad6adb35765289c59c88f6eb3cbbb839d0eecc
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SAMLabel: 3792d68d0a04da5600420843d44ec50631695c15
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  SimpleExif: 61ba6dce666641dc4b925d9d26a2694e68ebbf4b
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   TYBlurImage: a931704cfbfb31aa00a5b658063e0742b34e4043
   UCZProgressView: 55836987c15ee6efb7cd6dfe297556602ee46c94
   UIImage-Helpers: 06b04a42bdd222844035602e87e936765c80f620
   UIImage-ResizeMagick: f08c2d14d1e8a5f0b402185408785540562f2fe7
 
-PODFILE CHECKSUM: b2ed332578bc4d57df23aece60fefa7a272d780a
+PODFILE CHECKSUM: 135a1f7a6d6f22f40e46a0222269634fab6c9ca6
 
 COCOAPODS: 1.4.0

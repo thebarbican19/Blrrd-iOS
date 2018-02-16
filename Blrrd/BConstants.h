@@ -40,6 +40,7 @@
 #define APP_STATUSBAR_HEIGHT [UIApplication sharedApplication].statusBarFrame.size.height
 #define APP_DIRECTORY [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
+#define REGEX_HASHTAGS @"(#\\w+)"
 #define REGEX_PHONE @"(\\+)[0-9\\+\\-]{6,19}"
 #define REGEX_EMAIL @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
 #define REGEX_USERNAME @"^[a-zA-Z0-9*$._?]*"

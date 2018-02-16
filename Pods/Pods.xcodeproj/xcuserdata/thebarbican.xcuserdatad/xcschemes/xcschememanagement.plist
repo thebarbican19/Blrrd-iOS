@@ -12,7 +12,7 @@
 		<key>BLMultiColorLoader.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>DBImageColorPicker.xcscheme</key>
 		<dict>
@@ -29,70 +29,80 @@
 			<key>orderHint</key>
 			<integer>6</integer>
 		</dict>
-		<key>KVNBoundedImageView.xcscheme</key>
+		<key>JTChartView.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>7</integer>
 		</dict>
-		<key>Mixpanel.xcscheme</key>
+		<key>KVNBoundedImageView.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>8</integer>
 		</dict>
-		<key>Pods-Blrrd.xcscheme</key>
+		<key>Mixpanel.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>9</integer>
 		</dict>
-		<key>Pods-BlrrdTests.xcscheme</key>
+		<key>Pods-Blrrd.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>10</integer>
 		</dict>
-		<key>Pods-BlrrdUITests.xcscheme</key>
+		<key>Pods-BlrrdTests.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>11</integer>
 		</dict>
-		<key>SAMKeychain.xcscheme</key>
+		<key>Pods-BlrrdUITests.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>12</integer>
 		</dict>
-		<key>SAMLabel.xcscheme</key>
+		<key>SAMKeychain.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>13</integer>
 		</dict>
-		<key>SDWebImage.xcscheme</key>
+		<key>SAMLabel.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>14</integer>
 		</dict>
-		<key>SocketRocket.xcscheme</key>
+		<key>SDWebImage.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>15</integer>
 		</dict>
-		<key>TYBlurImage.xcscheme</key>
+		<key>SimpleExif.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>16</integer>
 		</dict>
-		<key>UCZProgressView.xcscheme</key>
+		<key>SocketRocket.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>17</integer>
 		</dict>
-		<key>UIImage-Helpers.xcscheme</key>
+		<key>TYBlurImage.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>18</integer>
 		</dict>
-		<key>UIImage-ResizeMagick.xcscheme</key>
+		<key>UCZProgressView.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>19</integer>
+		</dict>
+		<key>UIImage-Helpers.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>20</integer>
+		</dict>
+		<key>UIImage-ResizeMagick.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>21</integer>
 		</dict>
 	</dict>
 </dict>

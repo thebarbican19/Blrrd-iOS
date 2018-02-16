@@ -218,29 +218,32 @@
     
 }
 
--(void)imagesFromAsset:(PHAsset *)asset thumbnail:(BOOL)thumbnail completion:(void (^)(NSDictionary *data, UIImage *image))completion withProgressHandler:(PHAssetImageProgressHandler)process {
+-(void)imagesFromAsset:(PHAsset *)asset thumbnail:(BOOL)thumbnail completion:(void (^)(NSDictionary *exifdata, UIImage *image))completion withProgressHandler:(PHAssetImageProgressHandler)process {
     PHImageRequestOptions  *options = [[PHImageRequestOptions alloc] init];
-    options.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+    options.deliveryMode = thumbnail?PHImageRequestOptionsDeliveryModeOpportunistic:PHImageRequestOptionsDeliveryModeHighQualityFormat;
     options.synchronous = true;
     options.networkAccessAllowed = true;
-    options.version = PHImageRequestOptionsVersionCurrent;
+    options.version = PHImageRequestOptionsVersionOriginal;
     options.progressHandler =  ^(double progress,NSError *error,BOOL* stop, NSDictionary* dict) {
         NSLog(@"progress %lf",progress);  //never gets called
         
     };
     
+    NSLog(@"location: %@" ,asset.location)
+    
     PHImageManager *manager = [PHImageManager defaultManager];
-    [manager requestImageForAsset:asset targetSize:CGSizeMake(thumbnail?100.0:asset.pixelWidth, thumbnail?100.0:asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage* image, NSDictionary *info) {
+    [manager requestImageForAsset:asset targetSize:CGSizeMake(thumbnail?100.0:asset.pixelWidth, thumbnail?100.0:asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage* image, NSDictionary *info) {
         if ([[info valueForKey:PHImageResultIsInCloudKey] boolValue]) {
-            [manager requestImageDataForAsset:asset options:options resultHandler:^(NSData *imageData, NSString * dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+            [manager requestImageDataForAsset:asset options:options resultHandler:^(NSData *imageData, NSString * dataUTI, UIImageOrientation orientation, NSDictionary *options) {
                 BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
                 if (downloadFinined) {
-                    completion(info, [UIImage imageWithData:imageData]);
-                    NSLog(@"Image downloaded %@" ,info);
+                    if (asset.location != nil) self.assetloc = asset.location;
+                    
+                    completion([self imageMetadata:imageData], [UIImage imageWithData:imageData]);
                     
                 }
                 else {
-                    NSLog(@"Image downloading icloud %@" ,info);
+                    NSLog(@"Image downloading icloud %@" ,[self imageMetadata:imageData]);
                     
                 }
                 
@@ -248,12 +251,57 @@
             
         }
         else {
-            completion(info, image);
+            if (asset.location != nil) self.assetloc = asset.location;
+    
+            completion([self imageMetadata:UIImageJPEGRepresentation(image, 1.0)], image);
     
         }
         
     }];
     
+}
+
+-(NSArray *)tagsFromEmojis:(NSString *)caption {
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"EmojiDetect" ofType:@"json"];
+    NSArray *content = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:0 error:nil];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%@ CONTAINS unicode" ,caption];
+    for (NSDictionary *emoji in [content filteredArrayUsingPredicate:predicate]) {
+        if (emoji != nil) {
+            for (NSString *tag in [emoji objectForKey:@"tags"]) {
+                if (![output containsObject:tag]) [output addObject:tag];
+                
+            }
+        }
+        
+    }
+    
+    return output;
+    
+}
+
+-(NSArray *)tagsFromHashtag:(NSString *)caption {
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:REGEX_HASHTAGS options:0 error:&error];
+    NSArray *matches = [regex matchesInString:caption options:0 range:NSMakeRange(0, caption.length)];
+    for (NSTextCheckingResult *match in matches) {
+        NSString *hashtag = [caption substringWithRange:NSMakeRange(match.range.location + 1, match.range.length - 1)];
+        if ([hashtag length] > 2 && ![output containsObject:hashtag]) [output addObject:hashtag];
+        
+    }
+    
+    return  output;
+    
+}
+
+-(NSArray *)tagsGenerate:(NSString *)caption {
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    [output addObjectsFromArray:[self tagsFromEmojis:caption]];
+    [output addObjectsFromArray:[self tagsFromHashtag:caption]];
+    
+    return output;
+
 }
 
 -(void)imagesRetriveAlbums:(void (^)(NSArray *albums))completion {
@@ -278,13 +326,55 @@
     
 }
 
+-(UIImage *)imageAddLocationData:(NSData *)image asset:(PHAsset *)asset {
+    ExifContainer *exifcontainer = [[ExifContainer alloc] init];
+    NSMutableArray *tags = [[NSMutableArray alloc] init];
+    if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoScreenshot) [tags addObject:@"screenshot"];
+    if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoHDR) [tags addObject:@"hdr"];
+
+    [exifcontainer addLocation:asset.location];
+    [exifcontainer addUserComment:[tags componentsJoinedByString:@","]];
+
+    NSData *output = [[UIImage imageWithData:image] addExif:exifcontainer];
+
+    return [UIImage imageWithData:output];
+    
+}
+
+-(NSDictionary*)imageMetadata:(NSData*)image {
+    CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)(image), NULL);
+    if (imageSource) {
+        NSDictionary *options = @{(NSString *)kCGImageSourceShouldCache:[NSNumber numberWithBool:NO]};
+        CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (__bridge CFDictionaryRef)options);
+        if (imageProperties) {
+            NSDictionary *metadata = (__bridge NSDictionary *)imageProperties;
+            CFRelease(imageProperties);
+            CFRelease(imageSource);
+            return metadata;
+            
+        }
+        
+        CFRelease(imageSource);
+        
+    }
+    
+    NSLog(@"Can't read metadata");
+    return nil;
+}
+
 -(void)uploadImageWithCaption:(UIImage *)image caption:(NSString *)caption {
     NSMutableString *formatdata = [[NSMutableString alloc] init];
     [formatdata appendString:[UIImageJPEGRepresentation(image, 1.0) base64EncodedStringWithOptions:0]];
     NSString *endpoint = [NSString stringWithFormat:@"%@content/upload.php" ,APP_HOST_URL];
     NSString *endpointmethod = @"POST";
-    NSDictionary *endpointparams = @{@"caption":caption, @"file":formatdata};
+    NSMutableDictionary *endpointparams = [[NSMutableDictionary alloc] init];
+    [endpointparams setValue:caption forKey:@"caption"];
+    [endpointparams setValue:formatdata forKey:@"file"];
+    [endpointparams setValue:[NSString stringWithFormat:@"%f,%f" ,self.assetloc.coordinate.latitude, self.assetloc.coordinate.longitude] forKey:@"latlng"];
+    [endpointparams setValue:[[self tagsGenerate:caption] componentsJoinedByString:@","] forKey:@"caption"];
     
+    NSLog(@"tags from captions: %@" ,[self tagsGenerate:caption]);
+        
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterLongStyle];
     [formatter setTimeStyle:NSDateFormatterLongStyle];
@@ -359,6 +449,7 @@
 -(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         NSDictionary *output = [[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] firstObject];
+        NSLog(@"image output: %@" ,output);
         if ([[output objectForKey:@"error_code"] intValue] == 200) {
             if ([self.delegate respondsToSelector:@selector(imageUploadedWithErrors:)]) {
                 [self.query cacheDestroy:@"following"];

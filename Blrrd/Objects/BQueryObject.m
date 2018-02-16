@@ -180,7 +180,10 @@
 
                     }
                     
-                    [self cacheSave:posts endpointname:[endpointparams objectForKey:@"type"] append:page==0?false:true expiry:60*50];
+                    if (posts.count > 0) {
+                        [self cacheSave:posts endpointname:[endpointparams objectForKey:@"type"] append:page==0?false:true expiry:60*50];
+
+                    }
                     
                     completion(posts, [self requestErrorHandle:(int)status.statusCode message:@"all okay" error:nil endpoint:endpoint]);
                     
@@ -347,12 +350,6 @@
                 NSMutableArray *requests = [[NSMutableArray alloc] init];
                 [requests addObjectsFromArray:[output objectForKey:@"output"]];
                                 
-                if (search == nil && emails == nil) {
-                    [self cacheSave:requests endpointname:endpoint append:false expiry:60*60*1];
-                    
-                    
-                }
-                
                 for (NSDictionary *friend in requests) {
                     if ([[friend objectForKey:@"following"] boolValue]) {
                         [self friendsListAppend:[friend objectForKey:@"userid"] remove:false];

@@ -1,0 +1,1 @@
+../../../SimpleExif/Classes/UIImage+Exif.h

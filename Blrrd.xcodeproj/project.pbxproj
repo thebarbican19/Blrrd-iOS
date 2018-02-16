@@ -55,6 +55,7 @@
 		77656AA21FB29624006F0854 /* GDStatusLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 77656AA01FB29623006F0854 /* GDStatusLabel.m */; };
 		7765B49B200AA96F00374EDE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7765B49A200AA96F00374EDE /* SystemConfiguration.framework */; };
 		7765B49D200AA97700374EDE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7765B49C200AA97700374EDE /* CoreTelephony.framework */; };
+		777601A620366AEC00993905 /* EmojiDetect.json in Resources */ = {isa = PBXBuildFile; fileRef = 777601A520366AEC00993905 /* EmojiDetect.json */; };
 		7778B1CA1FCC77FE00E5B83D /* BProfileHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7778B1C91FCC77FE00E5B83D /* BProfileHeader.m */; };
 		7778B1CC1FCCC42500E5B83D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7778B1CB1FCCC42500E5B83D /* QuartzCore.framework */; };
 		7778B1CE1FCCC42C00E5B83D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7778B1CD1FCCC42C00E5B83D /* AVFoundation.framework */; };
@@ -223,6 +224,7 @@
 		77656AA11FB29624006F0854 /* GDStatusLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDStatusLabel.h; sourceTree = "<group>"; };
 		7765B49A200AA96F00374EDE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7765B49C200AA97700374EDE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		777601A520366AEC00993905 /* EmojiDetect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = EmojiDetect.json; sourceTree = "<group>"; };
 		7778B1C81FCC77FE00E5B83D /* BProfileHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BProfileHeader.h; sourceTree = "<group>"; };
 		7778B1C91FCC77FE00E5B83D /* BProfileHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BProfileHeader.m; sourceTree = "<group>"; };
 		7778B1CB1FCCC42500E5B83D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -396,6 +398,7 @@
 			children = (
 				779A02DD2033681E00242D47 /* NamesDetect.json */,
 				7722A86C202C810200BCA0C0 /* CountryCodes.json */,
+				777601A520366AEC00993905 /* EmojiDetect.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -966,6 +969,7 @@
 				7722A86D202C810200BCA0C0 /* CountryCodes.json in Resources */,
 				775731A71FBE3F5E002E0CCE /* Nunito-ExtraLight.ttf in Resources */,
 				775731A01FBE3F5E002E0CCE /* Nunito-SemiBold.ttf in Resources */,
+				777601A620366AEC00993905 /* EmojiDetect.json in Resources */,
 				778D9B4E1FABCC7700878A6A /* Localizable.strings in Resources */,
 				7734F9D4201ACE9700B1E7C0 /* terms.pdf in Resources */,
 				7778B1ED1FCFB03E00E5B83D /* Settings.plist in Resources */,

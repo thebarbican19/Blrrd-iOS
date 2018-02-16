@@ -170,8 +170,9 @@
         [cell.name setTextAlignment:NSTextAlignmentLeft];
         [cell.name setBackgroundColor:[UIColor clearColor]];
         [cell.name setTextColor:[UIColor whiteColor]];
+        [cell.name setFont:[UIFont fontWithName:@"Nunito-SemiBold" size:14]];
         [cell.accessory setHidden:toggle];
-        
+
     }
     
     [cell setBackgroundColor:[UIColor clearColor]];

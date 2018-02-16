@@ -12,6 +12,8 @@
 @implementation BCanvasView
 
 -(void)drawRect:(CGRect)rect {
+    self.imgobject = [[BImageObject alloc] init];
+    
     container = [[UIImageView alloc] initWithFrame:self.bounds];
     container.image = nil;
     container.alpha = 0.0;
@@ -132,6 +134,8 @@
 }
 
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    NSLog(@"tags: %@" ,[self.imgobject tagsGenerate:textView.text]);
+    
     if ([text isEqualToString:@"\n"]) {
         [textView resignFirstResponder];
         return false;

@@ -155,7 +155,7 @@
     
     [self.user setAttributedText:formatted];
     [self.verifyed setHidden:![[data objectForKey:@"promoted"] boolValue]];
-    [self.verifyed setFrame:CGRectMake(self.user.frame.origin.x + [header boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.user.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.user.font} context:nil].size.width + 4.0, self.user.frame.origin.y + (subtitle==nil?24.0:16.0), 13.0 ,13.0)];
+    [self.verifyed setFrame:CGRectMake(self.user.frame.origin.x + [header boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.user.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.user.font} context:nil].size.width + 4.0, self.user.frame.origin.y + (subtitle==nil?24.0:17.0), 13.0 ,13.0)];
     
 }
 

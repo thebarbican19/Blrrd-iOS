@@ -223,9 +223,9 @@
     [self.view addSubview:self.viewTable];
     [self.viewTable registerClass:[BFriendCell class] forCellReuseIdentifier:@"user"];
 
-    self.viewPlaceholder = [[GDPlaceholderView alloc] initWithFrame:CGRectMake(0.0, self.viewHeader.frame.origin.y + self.viewHeader.bounds.size.height, self.viewHeader.bounds.size.width, self.viewTable.bounds.size.height - self.viewHeader.bounds.size.height)];
+    self.viewPlaceholder = [[GDPlaceholderView alloc] initWithFrame:CGRectMake(0.0, self.viewTable.frame.origin.y + self.viewHeader.bounds.size.height, self.viewHeader.bounds.size.width, self.viewTable.bounds.size.height - (self.viewHeader.bounds.size.height))];
     self.viewPlaceholder.delegate = self;
-    self.viewPlaceholder.backgroundColor = [UIColor clearColor];
+    self.viewPlaceholder.backgroundColor = self.view.backgroundColor;
     self.viewPlaceholder.textcolor = [UIColor whiteColor];
     self.viewPlaceholder.gesture = true;
     self.viewPlaceholder.hidden = true;
@@ -250,7 +250,7 @@
     if ([self.query cacheExpired:@"user/suggested.php"]) {
         [self.query querySuggestedUsers:nil emails:nil completion:^(NSArray *users, NSError *error) {
             if (error.code == 200) {
-                [self.suggested addObjectsFromArray:[self.query cacheRetrive:@"user/suggested.php"]];
+                [self.suggested addObjectsFromArray:users];
                
 
             }
@@ -466,14 +466,14 @@
 }
 
 -(void)searchFieldWasPresented:(CGSize)keyboard {
-    [self.viewTable setFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height + self.viewSearch.bounds.size.height, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + keyboard.height + self.viewSearch.bounds.size.height + self.viewNavigation.bounds.size.height))];
-    [self.viewPlaceholder setFrame:self.viewTable.bounds];
+    [self.viewTable setFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height + self.viewSearch.bounds.size.height, self.view.bounds.size.width, self.viewTable.bounds.size.height - keyboard.height)];
+    [self.viewPlaceholder setFrame:CGRectMake(0.0, self.viewTable.frame.origin.y, self.viewHeader.bounds.size.width, self.viewTable.bounds.size.height - self.viewHeader.bounds.size.height + self.viewHeader.bounds.size.height)];
 
 }
 
 -(void)searchFieldWasDismissed {
     [self.viewTable setFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height + self.viewSearch.bounds.size.height, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + self.viewSearch.bounds.size.height + self.viewNavigation.bounds.size.height))];
-    [self.viewPlaceholder setFrame:self.viewTable.bounds];
+    [self.viewPlaceholder setFrame:CGRectMake(0.0, self.viewTable.frame.origin.y + self.viewHeader.bounds.size.height, self.viewHeader.bounds.size.width, self.viewTable.bounds.size.height - (self.viewHeader.bounds.size.height))];
 
 }
 
