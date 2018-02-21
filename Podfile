@@ -24,6 +24,7 @@ target 'Blrrd' do
   pod 'SAMKeychain'
   pod 'JTChartView'
   pod 'SimpleExif'
+  pod 'ShotBlocker'
   
   target 'BlrrdTests' do
     inherit! :search_paths

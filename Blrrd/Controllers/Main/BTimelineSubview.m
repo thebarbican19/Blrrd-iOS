@@ -47,6 +47,15 @@
     [self.collectionView registerClass:[BBlurredCell class] forCellWithReuseIdentifier:@"item"];
     [self.collectionView reloadData];
     
+    [[ShotBlocker sharedManager] detectScreenshotWithImageBlock:^(UIImage *screenshot) {
+        if (self.activecell.imagerevealed) {
+            [self.activecell reveal:nil];
+            NSLog(@"Screenshot: %@", self.activecell.content);
+            
+        }
+        
+    }];
+    
 }
 
 -(void)collectionViewLoadContent:(NSArray *)content append:(BOOL)append loading:(BOOL)loading error:(NSError *)error {
@@ -104,7 +113,7 @@
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(self.view.bounds.size.width - 30.0, self.view.bounds.size.width + 2.0);
+    return CGSizeMake(self.view.bounds.size.width - 30.0, self.view.bounds.size.width + 15.0);
     
 }
 

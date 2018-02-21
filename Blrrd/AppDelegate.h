@@ -16,6 +16,7 @@
 
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
+#import "BInstagramObject.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIGestureRecognizerDelegate, SRWebSocketDelegate, UNUserNotificationCenterDelegate>
 
@@ -27,6 +28,7 @@
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (nonatomic, strong) NSTimer *timer;
 @property (strong, nonatomic) Pushbots *pushbots;
+@property (strong, nonatomic) BInstagramObject *instagram;
 
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundtask;
 

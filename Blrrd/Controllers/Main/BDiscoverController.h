@@ -44,5 +44,7 @@
 -(void)viewPresentFriends;
 -(void)viewPresentFriendProfile:(NSDictionary *)data;
 -(void)viewPresentImageWithData:(NSDictionary *)data;
+-(void)viewEditor:(NSString *)type;
+
 @end
 

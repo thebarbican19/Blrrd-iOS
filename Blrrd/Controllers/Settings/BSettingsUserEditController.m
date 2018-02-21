@@ -194,14 +194,22 @@
                 [self.query postUpdateUser:nil type:type value:self.viewInput.entry completion:^(NSError *error) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                         if (error.code == 200) {
-                            if (self.type == GDFormInputTypeEmail)
+                            if (self.type == GDFormInputTypeEmail) {
                                 [self.credentials setUserEmail:self.viewInput.entry];
-                            else if (self.type == GDFormInputTypePhone)
+                                [self.mixpanel.people set:@{@"$email":[self.credentials userEmail]}];
+
+                            }
+                            else if (self.type == GDFormInputTypePhone) {
                                 [self.credentials setUserPhoneNumber:self.viewInput.entry];
-                            else if (self.type == GDFormInputTypeDisplay)
+                                [self.mixpanel.people set:@{@"$phone":[self.credentials userPhone:false]}];
+
+                            }
+                            else if (self.type == GDFormInputTypeDisplay) {
                                 [self.credentials setUserFullname:self.viewInput.entry];
+                                [self.mixpanel.people set:@{@"$name":[self.credentials userFullname]}];
+
+                            }
                             
-                            NSLog(@"genre: %d" ,self.credentials.userGender);
                             if (self.credentials.userGender > 0) {
                                 [self.query postUpdateUser:nil type:@"gender" value:[NSString stringWithFormat:@"%d" ,self.credentials.userGender] completion:^(NSError *error) {
                                     NSLog(@"error: %@" ,error);
@@ -209,7 +217,6 @@
                                 }];
                                 
                             }
-
 
                             [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                                 [self.viewAction setTransform:CGAffineTransformMakeScale(0.85, 0.85)];

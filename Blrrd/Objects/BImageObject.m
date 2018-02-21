@@ -295,11 +295,40 @@
     
 }
 
+-(NSArray *)tagsFromGradtag:(NSString *)caption {
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"GradtagDetect" ofType:@"json"];
+    NSArray *content = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:0 error:nil];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%@ CONTAINS[cd] tag_word" ,caption.lowercaseString];
+    NSArray *exclude = [[NSArray alloc] initWithObjects:@"colors", @"negative", @"positive", nil];
+    for (NSDictionary *emoji in [content filteredArrayUsingPredicate:predicate]) {
+        if (emoji != nil) {
+            if (![exclude containsObject:[emoji objectForKey:@"tag_type"]]) {
+                if (![output containsObject:[emoji objectForKey:@"tag_type"]] && [[emoji objectForKey:@"tag_type"] length] > 0) {
+                    [output addObject:[emoji objectForKey:@"tag_type"]];
+                    
+                }
+                
+                if (![output containsObject:[emoji objectForKey:@"tag_subtype"]] && [[emoji objectForKey:@"tag_subtype"] length] > 0) {
+                    [output addObject:[emoji objectForKey:@"tag_subtype"]];
+
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    return output;
+}
+
 -(NSArray *)tagsGenerate:(NSString *)caption {
     NSMutableArray *output = [[NSMutableArray alloc] init];
     [output addObjectsFromArray:[self tagsFromEmojis:caption]];
     [output addObjectsFromArray:[self tagsFromHashtag:caption]];
-    
+    [output addObjectsFromArray:[self tagsFromGradtag:caption]];
+
     return output;
 
 }
@@ -371,7 +400,7 @@
     [endpointparams setValue:caption forKey:@"caption"];
     [endpointparams setValue:formatdata forKey:@"file"];
     [endpointparams setValue:[NSString stringWithFormat:@"%f,%f" ,self.assetloc.coordinate.latitude, self.assetloc.coordinate.longitude] forKey:@"latlng"];
-    [endpointparams setValue:[[self tagsGenerate:caption] componentsJoinedByString:@","] forKey:@"caption"];
+    [endpointparams setValue:[[self tagsGenerate:caption] componentsJoinedByString:@","] forKey:@"tags"];
     
     NSLog(@"tags from captions: %@" ,[self tagsGenerate:caption]);
         

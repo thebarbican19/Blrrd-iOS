@@ -15,6 +15,7 @@ PODS:
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
+  - ShotBlocker (0.0.3)
   - SimpleExif (0.0.1)
   - SocketRocket (0.5.1)
   - TYBlurImage (1.2.1)
@@ -35,6 +36,7 @@ DEPENDENCIES:
   - SAMKeychain
   - SAMLabel
   - SDWebImage (~> 3.8)
+  - ShotBlocker
   - SimpleExif
   - SocketRocket
   - TYBlurImage
@@ -55,6 +57,7 @@ SPEC CHECKSUMS:
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SAMLabel: 3792d68d0a04da5600420843d44ec50631695c15
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  ShotBlocker: e05c2f5b411733dddafb807250e90e7b9931c73e
   SimpleExif: 61ba6dce666641dc4b925d9d26a2694e68ebbf4b
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   TYBlurImage: a931704cfbfb31aa00a5b658063e0742b34e4043
@@ -62,6 +65,6 @@ SPEC CHECKSUMS:
   UIImage-Helpers: 06b04a42bdd222844035602e87e936765c80f620
   UIImage-ResizeMagick: f08c2d14d1e8a5f0b402185408785540562f2fe7
 
-PODFILE CHECKSUM: 135a1f7a6d6f22f40e46a0222269634fab6c9ca6
+PODFILE CHECKSUM: 007fa2fc48f5ab5a4510a07c18cf0202cf2c8a77
 
 COCOAPODS: 1.4.0

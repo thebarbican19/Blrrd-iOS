@@ -17,6 +17,7 @@
     self.mixpanel = [Mixpanel sharedInstance];
     self.query = [[BQueryObject alloc] init];
     self.credentials = [[BCredentialsObject alloc] init];
+    self.location = [[BLocationObject alloc] init];
     if (self) {
         self.userarea = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, (self.bounds.size.width / 2) + 40.0, 26.0)];
         self.userarea.backgroundColor = [UIColor clearColor];
@@ -132,15 +133,48 @@
     [self.subtitle setText:[content objectForKey:@"caption"]];
     [self.user setText:[[self.userdata objectForKey:@"username"] lowercaseString]];
     [self.avatar sd_setImageWithURL:[self.userdata objectForKey:@"avatar"] placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
-    [self.time setText:self.timeformatted animate:false];
     [self.timestamp setText:[self time:[content objectForKey:@"timestamp"]]];
+    [self.time setText:self.timeformatted animate:false];
     [self.verifyed setHidden:![[self.userdata objectForKey:@"promoted"] boolValue]];
     [self.verifyed setFrame:CGRectMake(self.user.frame.origin.x + [self.user.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.user.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.user.font} context:nil].size.width + 4.0, self.user.frame.origin.y + 2.0, 13.0 ,13.0)];
-
+    [self localise:content];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self blur:[NSURL URLWithString:self.imageurl]];
         
     });
+    
+}
+
+-(void)localise:(NSDictionary *)content {
+    if ([content objectForKey:@"location"] != nil) {
+        float latitude = [[[content objectForKey:@"location"] objectForKey:@"latitude"] floatValue];
+        float longitude = [[[content objectForKey:@"location"] objectForKey:@"longitude"] floatValue];
+        
+        [self.location returnGeolocation:latitude longitude:longitude completion:^(CLPlacemark *location) {
+            NSString *place = @"";
+            if (location.subLocality != nil)
+                place =  [NSString stringWithFormat:@"%@, %@" ,location.subLocality ,location.country];
+            else if (location.locality != nil)
+                place = [NSString stringWithFormat:@"%@, %@" ,location.locality ,location.country];
+            else place = @"";
+            
+            [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+                [self.timestamp setAlpha:0.0];
+                
+            } completion:^(BOOL finished) {
+                [self.timestamp setText:[NSString stringWithFormat:NSLocalizedString(@"Timeline_TimestampLocation_Text", nil) ,[self time:[content objectForKey:@"timestamp"]] ,place]];
+                
+                [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    [self.timestamp setAlpha:1.0];
+                    
+                } completion:nil];
+                
+            }];
+            
+        }];
+        
+    }
     
 }
 
@@ -175,6 +209,7 @@
 -(NSString *)timeformatted {
     if (self.existingtimeviewed < 60) return [NSString stringWithFormat:@"%01ds" ,self.existingtimeviewed % 60];
     else return [NSString stringWithFormat:@"%01dm %01ds" ,self.existingtimeviewed / 60 % 60, self.existingtimeviewed % 60];
+    
 }
                         
 -(void)reveal:(UITapGestureRecognizer *)gesture {
@@ -184,7 +219,7 @@
             if (![[[self.content objectForKey:@"user"] objectForKey:@"username"] isEqualToString:self.credentials.userHandle]) {
                 [self.query postTime:self.content secondsadded:self.timeviewed timeline:self.timeline completion:^(NSError *error) {
                     [self.credentials setUserTotalRevealed:self.timeviewed append:true];
-                    [self setTimeviewed:0];
+                    [self setTimeviewed:1];
                     [self.mixpanel.people increment:@"Revealed" by:@+1];
                     [self.mixpanel track:@"App Image Revealed" properties:@{@"Image":[self.content objectForKey:@"imageurl"],
                                                                         @"ID":[self.content objectForKey:@"postid"],
@@ -194,13 +229,12 @@
                 }];
                 
             }
-            
 
         }
         
     }
     else if (gesture.state == UIGestureRecognizerStateEnded && self.imagerevealed == false) {
-        [self setTimeviewed:0];
+        [self setTimeviewed:1];
         [self.mixpanel timeEvent:@"App Image Revealed"];
         if ([self.delegate respondsToSelector:@selector(collectionViewRevealed:)]) {
             [self.delegate collectionViewRevealed:self];

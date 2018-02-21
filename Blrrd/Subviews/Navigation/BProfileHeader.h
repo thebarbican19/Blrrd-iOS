@@ -20,7 +20,7 @@
     UIView *halo;
     UIView *hairline;
     SAMLabel *username;
-    SAMLabel *email;
+    SAMLabel *handle;
     UITapGestureRecognizer *gesture;
     UIButton *settings;
     UIButton *friends;
@@ -42,6 +42,7 @@
 -(void)viewPresentProfile;
 -(void)viewPresentSettings;
 -(void)viewPresentFriends;
+-(void)viewEditor:(NSString *)type;
 
 @end
 

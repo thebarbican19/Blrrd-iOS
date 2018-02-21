@@ -84,8 +84,6 @@
     NSLog(@"Email: %@" ,self.credentials.userEmail);
     NSLog(@"Total Revealed: %d" ,self.credentials.userTotalRevealedTime);
     NSLog(@"Total Posts: %d" ,self.credentials.userPosts);
-
-    [self.query cacheDestroy:nil];
     
 }
 
@@ -436,6 +434,38 @@
         [self.navigationController pushViewController:viewDetailed animated:true];
         
     }];
+    
+}
+
+-(void)viewEditor:(NSString *)type {
+    BSettingsUserEditController *viewUser = [[BSettingsUserEditController alloc] init];
+    viewUser.header = NSLocalizedString(@"Settings_ItemUserdisplay_Title", nil);
+    
+    if ([type containsString:@"email"]) {
+        viewUser.type = GDFormInputTypeEmail;
+        viewUser.value = [self.credentials userEmail];
+        
+    }
+    else if ([type containsString:@"phone"]) {
+        viewUser.type = GDFormInputTypePhone;
+        viewUser.value = [self.credentials userPhone:true];
+        
+    }
+    else if ([type containsString:@"password"]) {
+        viewUser.type = GDFormInputTypePassword;
+        viewUser.value = nil;
+        
+    }
+    else if ([type containsString:@"display"]) {
+        viewUser.type = GDFormInputTypeDisplay;
+        viewUser.value = [self.credentials userFullname];
+        
+    }
+    
+    viewUser.view.clipsToBounds = true;
+    viewUser.view.backgroundColor = self.view.backgroundColor;
+    
+    [self.navigationController pushViewController:viewUser animated:true];
     
 }
 

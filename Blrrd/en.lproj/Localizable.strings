@@ -48,14 +48,14 @@
 "Authentication_FormPassword_Title" = "Enter your password...";
 "Authentication_FormRePassword_Title" = "And your password one more time...";
 "Authentication_FormPhone_Title" = "What's your number";
-"Authentication_FormDisplay_Title" = "This is what people will see, so make it good!";
+"Authentication_FormDisplay_Title" = "Add a display name so people can reconise you";
 "Authentication_FormUsername_Title" = "Pick an awesome username";
 "Authentication_FormLoginUsername_Title" = "Your username";
 "Authentication_FormEmail_Placeholder" = "you@domain.com";
 "Authentication_FormPassword_Placeholder" = "Password";
 "Authentication_FormPhone_Placeholder" = "Phone Number";
 "Authentication_FormUsername_Placeholder" = "blrrduser1";
-"Authentication_FormDisplay_Placeholder" = "Your Full Name";
+"Authentication_FormDisplay_Placeholder" = "Your Display Name";
 "Authentication_SignupButton_Title" = "Signup";
 "Authentication_UpdateButton_Title" = "Update";
 "Authentication_LoginButton_Title" = "Login";
@@ -80,11 +80,7 @@
 "Timeline_ActionSheetReport_Text" = "Report";
 "Timeline_ActionSheetShare_Text" = "Share";
 "Timeline_ActionDismissShare_Text" = "Dismiss";
-
-"Timeline_ChannelPhotography_Body" = "Photography";
-"Timeline_ChannelLifestyle_Body" = "Photography";
-"Timeline_ChannelArt_Body" = "Art & Design";
-"Timeline_ChannelOthers_Body" = "Others";
+"Timeline_TimestampLocation_Text" = "%@ in %@"; //// 12 minutes ago in Nine Elms, London
 
 "Timestamp_Format" = "%d %@ ago"; // 12 minutes ago
 "Timestamp_Days" = "days";//plural
@@ -120,6 +116,7 @@
 "Profile_NotificationEmpty_Body" = "Nobody has viewed your post yet";
 "Profile_UnknownUserPlaceholder_Text" = "Unknown User";
 "Profile_UnknownTimetampPlaceholder_Text" = "Unknown Date";
+"Profile_HeaderPlaceholder_Text" = "Your Name";
 
 "Settings_Title" = "Settings";
 "Settings_SectionSettings_Title" = "General";
@@ -138,6 +135,7 @@
 "Settings_ItemUserpassword_Title" = "Change Password";
 "Settings_ItemUseremail_Title" = "Change Email";
 "Settings_ItemUserdisplay_Title" = "Add/Change Display Name";
+"Settings_ItemInstagram_Title" = "Connect your Instagram Account";
 "Settings_ItemLogout_Title" = "Logout";
 "Settings_FeedbackPlaceholder_Text" = "Tell us what you think...";
 "Settings_FeedbackSend_Action" = "Send";
@@ -160,17 +158,26 @@
 "Friend_ActionFollowBack_Text" = "Follow Back";
 "Friend_ActionUnfollow_Text" = "UnFollow";
 "Friend_ActionFollowing_Text" = "Following";
+"Friend_ActionConnect_Text" = "Connect";
+"Friend_ActionConnected_Text" = "Connected";
+"Friend_ActionDisonnect_Text" = "Disconnect";
 "Friend_StatusWithLastActive_Text" = "Last Active %@"; //last active 1 day ago
 "Friend_StatusWithUsername_Text" = "@%@ • Last Active %@"; //@username • last active 1 day ago
 "Friend_ReportUser_Action" = "Report User"; 
 "Friend_BlockUser_Action" = "Block User";
 "Friend_VerifyUser_Action" = "Promote to Verifyed";
 "Friend_SectionSearch_Title" = "Results";
-"Friend_SectionContacts_Title" = "People you know";
+"Friend_SectionContacts_Title" = "From your Contacts";
+"Friend_SectionInstagram_Title" = "You follow on Instagram";
+"Friend_SectionConnectionTypes_Title" = "Connect with...";
 "Friend_SectionSuggested_Title" = "Suggested";
 "Friend_CellSubtitleFollows_Text" = "(Follows you)";
-"Friend_StatusFindContacts_Text" = "Find your *Friends* via you *Contacts*...";
-"Friend_StatusLoading_Text" = "*Loading...*";
+"Friend_ConnectionInstagram_Text" = "Instagram";
+"Friend_ConnectionContacts_Text" = "Address Book";
+"Friend_ActionSheetConectInstagram_Text" = "Connect Instagram";
+"Friend_ActionSheetConectContacts_Text" = "Authorized Contacts";
+
+"Friend_StatusLoading_Text" = "*Loading*";
 "Friend_StatusShare_Text" = "Find more friends by sharing *Blrrd*";
 "Friend_StatusNoFriendsShare_Text" = "We could not find any of friends yet, help us spread the word by sharing *Blrrd*";
 

@@ -43,20 +43,19 @@
         username.textAlignment = NSTextAlignmentLeft;
         username.textColor = [UIColor whiteColor];
         username.font = [UIFont fontWithName:@"Nunito-Bold" size:24];
-        if (self.credentials.userFullname != nil) username.text = self.credentials.userFullname;
-        else username.text = self.credentials.userHandle;
+        username.text = nil;
         [self addSubview:username];
         
-        email = [[SAMLabel alloc] initWithFrame:CGRectMake(profile.bounds.size.width + 35.0, 56.0, self.bounds.size.width - (profile.bounds.size.width - 75.0), 14.0)];
-        email.backgroundColor = [UIColor clearColor];
-        email.textAlignment = NSTextAlignmentLeft;
-        email.textColor = [UIColor colorWithWhite:0.9 alpha:0.8];
-        email.font = [UIFont fontWithName:@"Nunito-Light" size:10];
-        email.text = self.credentials.userEmail;
-        email.verticalTextAlignment = SAMLabelVerticalTextAlignmentTop;
-        [self addSubview:email];
+        handle = [[SAMLabel alloc] initWithFrame:CGRectMake(profile.bounds.size.width + 35.0, 56.0, self.bounds.size.width - (profile.bounds.size.width - 75.0), 14.0)];
+        handle.backgroundColor = [UIColor clearColor];
+        handle.textAlignment = NSTextAlignmentLeft;
+        handle.textColor = [UIColor colorWithWhite:0.9 alpha:0.8];
+        handle.font = [UIFont fontWithName:@"Nunito-Light" size:10];
+        handle.text = [NSString stringWithFormat:@"@%@" ,self.credentials.userHandle];
+        handle.verticalTextAlignment = SAMLabelVerticalTextAlignmentTop;
+        [self addSubview:handle];
         
-        verifyed = [[UIImageView alloc] initWithFrame:CGRectMake(email.frame.origin.x + [email.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, email.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:email.font} context:nil].size.width + 4.0, email.frame.origin.y + 1.0, 13.0 ,13.0)];
+        verifyed = [[UIImageView alloc] initWithFrame:CGRectMake(handle.frame.origin.x + [handle.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, handle.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:handle.font} context:nil].size.width + 4.0, handle.frame.origin.y + 1.0, 13.0 ,13.0)];
         verifyed.contentMode = UIViewContentModeScaleAspectFill;
         verifyed.layer.cornerRadius = verifyed.bounds.size.width / 2;
         verifyed.clipsToBounds = true;
@@ -98,16 +97,49 @@
     }
     
     [profile sd_setImageWithURL:self.credentials.userAvatar placeholderImage:[UIImage imageNamed:@"profile_avatar_placeholder"]];
-    [email setText:self.credentials.userEmail];
-    [username setText:self.credentials.userFullname==nil?self.credentials.userHandle:self.credentials.userFullname];
+    [handle setText:[NSString stringWithFormat:@"@%@" ,self.credentials.userHandle]];
     [timeviewed setAttributedText:self.format];
-    [verifyed setFrame:CGRectMake(email.frame.origin.x + [email.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, email.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:email.font} context:nil].size.width + 4.0, email.frame.origin.y + 1.0, 13.0 ,13.0)];
+    [verifyed setFrame:CGRectMake(handle.frame.origin.x + [handle.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, handle.bounds.size.width) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:handle.font} context:nil].size.width + 4.0, handle.frame.origin.y + 1.0, 13.0 ,13.0)];
+    [self name];
+    
+}
 
+-(void)name {
+    if (self.credentials.userFullname == nil) {
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        animation.duration = 0.9;
+        animation.toValue = [NSNumber numberWithFloat:0.1];
+        animation.fromValue = [NSNumber numberWithFloat:0.2];
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        animation.autoreverses = true;
+        animation.repeatCount = HUGE_VALF;
+        
+        [username.layer removeAnimationForKey:@"emptydisplay"];
+        [username.layer addAnimation:animation forKey:@"emptydisplay"];
+        [username setText:NSLocalizedString(@"Profile_HeaderPlaceholder_Text", nil)];
+        
+    }
+    else {
+        [username setText:self.credentials.userFullname];
+        [username setAlpha:1.0];
+
+    }
+    
 }
 
 -(void)tapped:(UIGestureRecognizer *)gesture {
-    if ([self.delegate respondsToSelector:@selector(viewPresentProfile)]) {
-        [self.delegate viewPresentProfile];
+    if (self.credentials.userFullname == nil) {
+        if ([self.delegate respondsToSelector:@selector(viewEditor:)]) {
+            [self.delegate viewEditor:@"display"];
+            
+        }
+        
+    }
+    else {
+        if ([self.delegate respondsToSelector:@selector(viewPresentProfile)]) {
+            [self.delegate viewPresentProfile];
+            
+        }
         
     }
     

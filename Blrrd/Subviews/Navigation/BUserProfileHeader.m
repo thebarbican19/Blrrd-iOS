@@ -75,15 +75,6 @@
         [action addTarget:self.delegate action:@selector(viewNavigationButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [action setImage:[UIImage imageNamed:@"timeline_options_action"] forState:UIControlStateNormal];
         [self addSubview:action];
-        /*
-        follow = [[BFollowAction alloc] initWithFrame:CGRectMake(self.bounds.size.width - 46.0, (self.bounds.size.height / 2) - 12.0, 45.0, 24.0)];
-        follow.backgroundColor = [UIColor clearColor];
-        follow.delegate = self;
-        follow.alpha = 0.0;
-        follow.style = BFollowActionStyleIcon;
-        follow.transform = CGAffineTransformMakeScale(0.9, 0.9);
-        [self addSubview:follow];
-        */
         
     }
     

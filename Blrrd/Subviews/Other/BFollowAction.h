@@ -12,6 +12,9 @@ typedef NS_ENUM(NSInteger, BFollowActionType) {
     BFollowActionTypeUnfollowed,
     BFollowActionTypeFollowed,
     BFollowActionTypeFollowBack,
+    BFollowActionTypeConnect,
+    BFollowActionTypeConnected,
+    BFollowActionTypeDisconnect,
 
 };
 

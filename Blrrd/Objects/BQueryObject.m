@@ -333,15 +333,17 @@
     
 }
 
--(void)querySuggestedUsers:(NSString *)search emails:(NSArray *)emails completion:(void (^)(NSArray *users, NSError *error))completion {
+-(void)querySuggestedUsers:(NSString *)search emails:(NSArray *)emails socials:(NSArray *)socials completion:(void (^)(NSArray *users, NSError *error))completion {
     NSString *endpointsearch =  [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSString *endpointemails = [[emails componentsJoinedByString:@","] stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
+    NSString *endpointsocials = [[socials componentsJoinedByString:@","] stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
     NSString *endpoint = @"user/suggested.php";
     NSString *endpointmethod = @"GET";
     NSDictionary *endpointparams;
     if (search.length > 0) endpointparams = @{@"search":endpointsearch};
     else if (emails.count > 0) endpointparams = @{@"emails":endpointemails};
-    
+    else if (socials.count > 0) endpointparams = @{@"socials":endpointsocials};
+
     NSURLSessionTask *task = [[self requestSession:true] dataTaskWithRequest:[self requestMaster:endpoint params:endpointparams method:endpointmethod] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *status = (NSHTTPURLResponse *)response;
         if (data.length > 0 && !error) {

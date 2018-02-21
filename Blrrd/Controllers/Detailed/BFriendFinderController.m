@@ -18,22 +18,59 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     if (self.signup) [self.viewNavigation navigationRightButton:NSLocalizedString(@"Onboarding_ActionSkip_Text", nil)];
+    else [self.viewNavigation navigationRightButton:NSLocalizedString(@"Timeline_ActionSheetShare_Text", nil)];
     
     [self.viewNavigation navigationBackButtonDisabled:self.signup];
     [self.viewNavigation navigationTitle:self.header];
     [self.viewTable reloadData];
     [self.credentials setFriendsAdded:true];
     
-    if (self.contacts.contactsAuthorized || self.contactgrantauthrization) {
-        [self viewQueryContactsData];
+    if (self.contacts.contactsAuthorized || self.contactgrantauthrization || self.credentials.instagramAdded) {
+        if (self.contacts.contactsAuthorized || self.contactgrantauthrization) {
+            [self viewQueryContactsData];
+
+        }
         
-        [self.viewHeader setType:BFriendHeaderTypeLoading];
-        [self.viewHeader headerset:NSLocalizedString(@"Friend_StatusLoading_Text", nil) animated:false];
-        
-    }
-    else {
-        [self.viewHeader setType:BFriendHeaderTypeFindContacts];
-        [self.viewHeader headerset:NSLocalizedString(@"Friend_StatusFindContacts_Text", nil) animated:false];
+        if (self.credentials.instagramAdded) {
+            [self.instagram queryFriends:^(NSArray *contacts) {
+                NSMutableArray *socials = [[NSMutableArray alloc] init];
+                NSMutableArray *socialsdata = [[NSMutableArray alloc] init];
+                for (NSDictionary *handle in contacts) {
+                    if (![socials containsObject:[handle objectForKey:@"username"]]) {
+                        [socials addObject:[handle objectForKey:@"username"]];
+                        
+                    }
+                    
+                    [socialsdata addObject:handle];
+                    
+                }
+                
+                if (socialsdata.count > 0) {
+                    [self.query querySuggestedUsers:nil emails:nil socials:socials completion:^(NSArray *users, NSError *error) {
+                        self.instausers = [[NSMutableArray alloc] init];
+                        for (NSDictionary *user in users) {
+                            NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:user];
+                            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username == %@" ,[user objectForKey:@"instagram"]];
+                            NSDictionary *exitingdata = [[socialsdata filteredArrayUsingPredicate:predicate] firstObject];
+                            if (exitingdata != nil) {
+                                [append setObject:[exitingdata objectForKey:@"profile_picture"] forKey:@"avatar"];
+                                [append setObject:[exitingdata objectForKey:@"full_name"] forKey:@"fullname"];
+
+                            }
+                            
+                            [self.instausers addObject:append];
+                            
+                        }
+                        
+                        if (error.code == 200) [self viewSetupSections];
+                        
+                    }];
+                    
+                }
+            
+            }];
+            
+        }
         
     }
     
@@ -66,8 +103,8 @@
                     
                 }
                 
-                [self.query querySuggestedUsers:nil emails:emails completion:^(NSArray *users, NSError *error) {
-                    self.friends = [[NSMutableArray alloc] init];
+                [self.query querySuggestedUsers:nil emails:emails socials:nil completion:^(NSArray *users, NSError *error) {
+                    self.localusers = [[NSMutableArray alloc] init];
                     for (NSDictionary *user in users) {
                         NSMutableDictionary *append = [[NSMutableDictionary alloc] initWithDictionary:user];
                         for (NSDictionary *contact in contactslist) {
@@ -109,9 +146,10 @@
                             
                         }
                         
-                        [self.friends addObject:append];
+                        [self.localusers addObject:append];
                         
                     }
+                    
                     if (error.code == 200) [self viewSetupSections];
                     
                 }];
@@ -126,39 +164,6 @@
 
 }
 
--(void)viewHeaderTapped:(BFriendHeaderType)type {
-    if (type == BFriendHeaderTypeFindContacts) {
-        if ([self.credentials userPhone:false] == nil) {
-            BSettingsUserEditController *viewPhoneadd = [[BSettingsUserEditController alloc] init];
-            viewPhoneadd.friendfinder = true;
-            viewPhoneadd.signup = self.signup;
-            viewPhoneadd.type = GDFormInputTypePhone;
-            viewPhoneadd.header = NSLocalizedString(@"Settings_ItemUserphone_Title", nil);
-            viewPhoneadd.value = [self.credentials userPhone:true];
-            viewPhoneadd.view.backgroundColor = self.view.backgroundColor;
-            NSLog(@"phone signup: %@" ,self.signup?@"not signup":@"signup");
-
-            [self.navigationController pushViewController:viewPhoneadd animated:true];
-            
-        }
-        else [self viewQueryContactsData];
-       
-    }
-    else if (type == BFriendHeaderTypeShare) {
-        NSArray *shareitems = @[NSLocalizedString(@"Settings_Share_Body", nil), [NSURL URLWithString:@"http://blrrd.co"]];
-        UIActivityViewController *share = [[UIActivityViewController alloc] initWithActivityItems:shareitems applicationActivities:nil];
-        [super presentViewController:share animated:true completion:^{
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
-            [self.mixpanel track:@"App Settings Shared"];
-            
-        }];
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:true];
-        
-    }
-    
-}
-
 -(void)viewWillAppear:(BOOL)animated {
     [self viewDownloadContent:false];
 
@@ -167,10 +172,25 @@
 -(void)viewNavigationButtonTapped:(UIButton *)button {
     if (button.tag == 0) [self.navigationController popToRootViewControllerAnimated:true];
     else {
-        BCompleteController *viewComplete = [[BCompleteController alloc] init];
-        viewComplete.type = BCompleteScreenSignup;
-        
-        [self.navigationController pushViewController:viewComplete animated:true];
+        if (self.signup) {
+            BCompleteController *viewComplete = [[BCompleteController alloc] init];
+            viewComplete.type = BCompleteScreenSignup;
+            
+            [self.navigationController pushViewController:viewComplete animated:true];
+            
+        }
+        else {
+            NSArray *shareitems = @[NSLocalizedString(@"Settings_Share_Body", nil), [NSURL URLWithString:@"https://apple.co/2nqdvf0"]];
+            UIActivityViewController *share = [[UIActivityViewController alloc] initWithActivityItems:shareitems applicationActivities:nil];
+            [super presentViewController:share animated:true completion:^{
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
+                [self.mixpanel track:@"App Settings Shared"];
+                
+            }];
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:true];
+            
+        }
         
     }
     
@@ -182,6 +202,8 @@
     self.view.backgroundColor = UIColorFromRGB(0x140F26);
     
     self.mixpanel = [Mixpanel sharedInstance];
+    
+    self.instagram = [[BInstagramObject alloc] init];
     
     self.credentials = [[BCredentialsObject alloc] init];
     
@@ -208,22 +230,15 @@
     self.viewSearch.alpha = 1.0;
     [self.view addSubview:self.viewSearch];
     
-    self.viewHeader = [[BFriendHeader alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, 90.0)];
-    self.viewHeader.backgroundColor = [UIColor clearColor];
-    self.viewHeader.delegate = self;
-    if (![self.credentials appContactsParsed]) self.viewHeader.type = BFriendHeaderTypeFindContacts;
-    else self.viewHeader.type = BFriendHeaderTypeShare;
-
     self.viewTable = [[UITableView alloc] initWithFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height + self.viewSearch.bounds.size.height, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + self.viewSearch.bounds.size.height + self.viewNavigation.bounds.size.height))];
     self.viewTable.delegate = self;
     self.viewTable.dataSource = self;
-    self.viewTable.tableHeaderView = self.viewHeader;
     self.viewTable.separatorColor = [UIColor clearColor];
     self.viewTable.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.viewTable];
     [self.viewTable registerClass:[BFriendCell class] forCellReuseIdentifier:@"user"];
 
-    self.viewPlaceholder = [[GDPlaceholderView alloc] initWithFrame:CGRectMake(0.0, self.viewTable.frame.origin.y + self.viewHeader.bounds.size.height, self.viewHeader.bounds.size.width, self.viewTable.bounds.size.height - (self.viewHeader.bounds.size.height))];
+    self.viewPlaceholder = [[GDPlaceholderView alloc] initWithFrame:CGRectMake(0.0, self.viewTable.frame.origin.y, self.view.bounds.size.width, self.viewTable.bounds.size.height)];
     self.viewPlaceholder.delegate = self;
     self.viewPlaceholder.backgroundColor = self.view.backgroundColor;
     self.viewPlaceholder.textcolor = [UIColor whiteColor];
@@ -246,57 +261,79 @@
 }
 
 -(void)viewDownloadContent:(BOOL)refresh {
-    self.suggested = [[NSMutableArray alloc] init];
-    if ([self.query cacheExpired:@"user/suggested.php"]) {
-        [self.query querySuggestedUsers:nil emails:nil completion:^(NSArray *users, NSError *error) {
-            if (error.code == 200) {
-                [self.suggested addObjectsFromArray:users];
-               
+    self.suggestedusers = [[NSMutableArray alloc] init];
+    [self.query querySuggestedUsers:nil emails:nil socials:nil completion:^(NSArray *users, NSError *error) {
+        if (error.code == 200) {
+            [self.suggestedusers addObjectsFromArray:users];
+           
 
-            }
-            else {
-                [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Friend_ErrorPlaceholder_Title", nil) instructions:error.domain];
-                
-            }
+        }
+        else {
+            [self.viewPlaceholder placeholderUpdateTitle:NSLocalizedString(@"Friend_ErrorPlaceholder_Title", nil) instructions:error.domain];
             
-            [self viewSetupSections];
-            
-        }];
+        }
         
-    }
-    else {
-        [self.suggested addObjectsFromArray:[self.query cacheRetrive:@"user/suggested.php"]];
         [self viewSetupSections];
-    
-    }
+        
+    }];
     
 }
 
 -(void)viewSetupSections {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         self.sections = [[NSMutableArray alloc] init];
+        self.connections = [[NSMutableArray alloc] init];
         if (self.viewSearch.search.text.length > 0) {
-            [self.sections addObject:@{@"key":@"suggested", @"title":NSLocalizedString(@"Friend_SectionSearch_Title", nil), @"items":self.suggested}];
+            [self.sections addObject:@{@"key":@"suggested", @"title":NSLocalizedString(@"Friend_SectionSearch_Title", nil), @"items":self.localusers}];
 
         }
         else {
-            if ([self.friends count] > 0) {
-                [self.sections addObject:@{@"key":@"local", @"title":NSLocalizedString(@"Friend_SectionContacts_Title", nil), @"items":self.friends}];
+            NSMutableDictionary *connectioninstagram = [[NSMutableDictionary alloc] init];
+            [connectioninstagram setObject:@"friends_instagram_icon" forKey:@"icon"];
+            [connectioninstagram setObject:@"instagram" forKey:@"key"];
+            [connectioninstagram setObject:NSLocalizedString(@"Friend_ConnectionInstagram_Text", nil) forKey:@"label"];
+            if (self.credentials.instagramAdded) {
+                [connectioninstagram setObject:[NSNumber numberWithInteger:BFollowActionTypeDisconnect] forKey:@"action"];
 
-                [self.viewHeader setType:BFriendHeaderTypeShare];
-                [self.viewHeader headerset:NSLocalizedString(@"Friend_StatusShare_Text", nil) animated:true];
+            }
+            else {
+                [connectioninstagram setObject:[NSNumber numberWithInteger:BFollowActionTypeConnect] forKey:@"action"];
+
+            }
+
+            NSMutableDictionary *connectioncontacts = [[NSMutableDictionary alloc] init];
+            [connectioncontacts setObject:@"friends_contacts_icon" forKey:@"icon"];
+            [connectioncontacts setObject:@"contacts" forKey:@"key"];
+            [connectioncontacts setObject:NSLocalizedString(@"Friend_ConnectionContacts_Text", nil) forKey:@"label"];
+            if (self.credentials.appContactsParsed) {
+                [connectioncontacts setObject:[NSNumber numberWithInteger:BFollowActionTypeConnected] forKey:@"action"];
                 
             }
-            else if (self.sections.count == 2) {
-                [self.viewHeader setType:BFriendHeaderTypeShare];
-                [self.viewHeader headerset:NSLocalizedString(@"Friend_StatusNoFriendsShare_Text", nil) animated:true];
+            else {
+                [connectioncontacts setObject:[NSNumber numberWithInteger:BFollowActionTypeConnect] forKey:@"action"];
                 
             }
             
-            if ([self.suggested count] > 0) {
-                [self.sections addObject:@{@"key":@"suggested", @"title":NSLocalizedString(@"Friend_SectionSuggested_Title", nil), @"items":self.suggested}];
+            [self.connections addObject:connectioninstagram];
+            [self.connections addObject:connectioncontacts];
+            
+            [self.sections addObject:@{@"key":@"connections", @"title":NSLocalizedString(@"Friend_SectionConnectionTypes_Title", nil), @"items":self.connections}];
+
+            if ([self.instausers count] > 0) {
+                [self.sections addObject:@{@"key":@"instagram", @"title":NSLocalizedString(@"Friend_SectionInstagram_Title", nil), @"items":self.instausers}];
                 
             }
+            
+            if ([self.localusers count] > 0) {
+                [self.sections addObject:@{@"key":@"local", @"title":NSLocalizedString(@"Friend_SectionContacts_Title", nil), @"items":self.localusers}];
+
+            }
+            
+            if ([self.suggestedusers count] > 0) {
+                [self.sections addObject:@{@"key":@"suggested", @"title":NSLocalizedString(@"Friend_SectionSuggested_Title", nil), @"items":self.suggestedusers}];
+                
+            }
+            
             
         }
     
@@ -382,20 +419,38 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *item = [[[self.sections objectAtIndex:indexPath.section] objectForKey:@"items"] objectAtIndex:indexPath.row];
+    NSString *key = [[self.sections objectAtIndex:indexPath.section] objectForKey:@"key"];
     BFriendCell *cell = (BFriendCell *)[tableView dequeueReusableCellWithIdentifier:@"user" forIndexPath:indexPath];
     
-    if ([self.query friendCheck:[item objectForKey:@"userid"]]) cell.follow.type = BFollowActionTypeFollowed;
-    else {
-        if ([[item objectForKey:@"follows"] boolValue]) cell.follow.type = BFollowActionTypeFollowBack;
-        else cell.follow.type = BFollowActionTypeUnfollowed;
+    if ([key isEqualToString:@"connections"]) {
+        [cell.user setText:[item objectForKey:@"label"]];
+        [cell.avatar setImage:[UIImage imageNamed:[item objectForKey:@"icon"]]];
+        [cell.verifyed setHidden:true];
+        [cell.follow setType:[[item objectForKey:@"action"] integerValue]];
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            [cell.follow setAlpha:1.0];
+            [cell.follow setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
+            
+        }];
+
 
     }
+    else {
+        if ([self.query friendCheck:[item objectForKey:@"userid"]]) cell.follow.type = BFollowActionTypeFollowed;
+        else {
+            if ([[item objectForKey:@"follows"] boolValue]) cell.follow.type = BFollowActionTypeFollowBack;
+            else cell.follow.type = BFollowActionTypeUnfollowed;
+
+        }
         
+        [cell content:item];
+
+    }
     
     [cell.follow followSetType:cell.follow.type animate:false];
     [cell.follow setDelegate:self];
     [cell.follow setIndexPath:indexPath];
-    [cell content:item];
     [cell setDelegate:self];
 
     [cell setBackgroundColor:[UIColor clearColor]];
@@ -408,7 +463,7 @@
 -(void)searchFieldWasUpdated:(NSString *)query {
     NSMutableArray *output = [[NSMutableArray alloc] init];
     if (query.length > 1) {
-        [self.query querySuggestedUsers:query emails:nil completion:^(NSArray *users, NSError *error) {
+        [self.query querySuggestedUsers:query emails:nil socials:nil completion:^(NSArray *users, NSError *error) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [output addObjectsFromArray:users];
                 [self searchSetContent:output error:error];
@@ -419,29 +474,22 @@
 
     }
     else {
-        if ([self.query cacheExpired:@"user/suggested.php"]) {
-            [self.query querySuggestedUsers:nil emails:nil completion:^(NSArray *users, NSError *error) {
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    [output addObjectsFromArray:[self.query cacheRetrive:@"user/suggested.php"]];
-                    [self searchSetContent:output error:nil];
-                    
-                }];
+        [self.query querySuggestedUsers:nil emails:nil socials:nil completion:^(NSArray *users, NSError *error) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [output addObjectsFromArray:[self.query cacheRetrive:@"user/suggested.php"]];
+                [self searchSetContent:output error:nil];
                 
             }];
             
-        }
-        else {
-            [self searchSetContent:[self.query cacheRetrive:@"user/suggested.php"] error:nil];
-
-        }
+        }];
 
     }
     
 }
 
 -(void)searchSetContent:(NSArray *)users error:(NSError *)error {
-    self.suggested = [[NSMutableArray alloc] initWithArray:users];
-    if (self.suggested.count > 0) {
+    self.suggestedusers = [[NSMutableArray alloc] initWithArray:users];
+    if (self.suggestedusers.count > 0) {
         [self.viewTable setHidden:false];
         [self.viewPlaceholder setHidden:true];
         
@@ -467,13 +515,13 @@
 
 -(void)searchFieldWasPresented:(CGSize)keyboard {
     [self.viewTable setFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height + self.viewSearch.bounds.size.height, self.view.bounds.size.width, self.viewTable.bounds.size.height - keyboard.height)];
-    [self.viewPlaceholder setFrame:CGRectMake(0.0, self.viewTable.frame.origin.y, self.viewHeader.bounds.size.width, self.viewTable.bounds.size.height - self.viewHeader.bounds.size.height + self.viewHeader.bounds.size.height)];
+    [self.viewPlaceholder setFrame:CGRectMake(0.0, self.viewTable.frame.origin.y, self.view.bounds.size.width, self.viewTable.bounds.size.height)];
 
 }
 
 -(void)searchFieldWasDismissed {
     [self.viewTable setFrame:CGRectMake(0.0, APP_STATUSBAR_HEIGHT + self.viewNavigation.bounds.size.height + self.viewSearch.bounds.size.height, self.view.bounds.size.width, self.view.bounds.size.height - (APP_STATUSBAR_HEIGHT + self.viewSearch.bounds.size.height + self.viewNavigation.bounds.size.height))];
-    [self.viewPlaceholder setFrame:CGRectMake(0.0, self.viewTable.frame.origin.y + self.viewHeader.bounds.size.height, self.viewHeader.bounds.size.width, self.viewTable.bounds.size.height - (self.viewHeader.bounds.size.height))];
+    [self.viewPlaceholder setFrame:CGRectMake(0.0, self.viewTable.frame.origin.y, self.view.bounds.size.width, self.viewTable.bounds.size.height)];
 
 }
 
@@ -485,40 +533,92 @@
 -(void)followActionWasTapped:(BFollowAction *)action {
     NSMutableDictionary *item = [[NSMutableDictionary alloc] initWithDictionary:[[[self.sections objectAtIndex:action.indexPath.section] objectForKey:@"items"] objectAtIndex:action.indexPath.row]];
     BFriendCell *cell = (BFriendCell *)[self.viewTable cellForRowAtIndexPath:action.indexPath];
+    NSString *key = [[self.sections objectAtIndex:action.indexPath.section] objectForKey:@"key"];
 
-    NSLog(@"button tapped %@ following %@" ,action ,[item objectForKey:@"following"]?@"yes":@"no");
+    NSLog(@"pressed: %@ key %@" ,item ,key);
 
-    if ([[item objectForKey:@"following"] boolValue]) {
-        [self.query friendsListAppend:[item objectForKey:@"userid"] remove:true];
-        [cell.follow followSetType:BFollowActionTypeUnfollowed animate:true];
-        [self.query postRequest:[item objectForKey:@"userid"] request:@"delete" completion:^(NSError *error) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                if (error.code != 200) {
-                    [cell.follow followSetType:BFollowActionTypeFollowed animate:true];
-                    [cell.follow setFrame:CGRectMake(cell.contentView.bounds.size.width - (cell.follow.followSizeUpdate + 60.0), 10.0, cell.follow.followSizeUpdate, cell.contentView.bounds.size.height - 20.0)];
+    if ([key isEqualToString:@"connections"]) {
+        if ([[item objectForKey:@"key"] isEqualToString:@"instagram"]) {
+            if (!self.credentials.instagramAdded) {
+                self.safari = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:INSTARGRAM_AUTH_URL]];
+                self.safari.dismissButtonStyle = SFSafariViewControllerDismissButtonStyleDone;
+                self.safari.view.tintColor = UIColorFromRGB(0x140F26);
+                self.safari.delegate = self;
+                
+                [self presentViewController:self.safari animated:true completion:^{
+                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
+                    
+                }];
+                
+            }
+            else {
+                [self.credentials setInstagramKey:nil];
+                [self.credentials setInstagramToken:nil];
+                [self.credentials setInstagramUsername:nil];
+                
+                [cell.follow followSetType:BFollowActionTypeConnect animate:true];
 
+            }
+
+        }
+        
+        if ([[item objectForKey:@"key"] isEqualToString:@"contacts"]) {
+            if (!self.credentials.appContactsParsed) {
+                if ([self.credentials userPhone:false] == nil) {
+                    BSettingsUserEditController *viewPhoneadd = [[BSettingsUserEditController alloc] init];
+                    viewPhoneadd.friendfinder = true;
+                    viewPhoneadd.signup = self.signup;
+                    viewPhoneadd.type = GDFormInputTypePhone;
+                    viewPhoneadd.header = NSLocalizedString(@"Settings_ItemUserphone_Title", nil);
+                    viewPhoneadd.value = [self.credentials userPhone:true];
+                    viewPhoneadd.view.backgroundColor = self.view.backgroundColor;
+                    
+                    [self.navigationController pushViewController:viewPhoneadd animated:true];
+                    
                 }
+                else [self viewQueryContactsData];
+                
+            }
+            NSLog(@"pressed: %@" ,item);
             
-            }];
-            
-        }];
+        }
         
     }
     else {
-        [self.query friendsListAppend:[item objectForKey:@"userid"] remove:false];
-        [cell.follow followSetType:BFollowActionTypeFollowed animate:true];
-        [self.query postRequest:[item objectForKey:@"userid"] request:@"add" completion:^(NSError *error) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                if (error.code != 200) {
-                    [cell.follow followSetType:BFollowActionTypeUnfollowed animate:true];
-                    [cell.follow setFrame:CGRectMake(cell.contentView.bounds.size.width - (cell.follow.followSizeUpdate + 60.0), 10.0, cell.follow.followSizeUpdate, cell.contentView.bounds.size.height - 20.0)];
-                    
-                }
+        NSLog(@"button tapped %@ following %@" ,action ,[item objectForKey:@"following"]?@"yes":@"no");
+        if ([[item objectForKey:@"following"] boolValue]) {
+            [self.query friendsListAppend:[item objectForKey:@"userid"] remove:true];
+            [cell.follow followSetType:BFollowActionTypeUnfollowed animate:true];
+            [self.query postRequest:[item objectForKey:@"userid"] request:@"delete" completion:^(NSError *error) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    if (error.code != 200) {
+                        [cell.follow followSetType:BFollowActionTypeFollowed animate:true];
+                        [cell.follow setFrame:CGRectMake(cell.contentView.bounds.size.width - (cell.follow.followSizeUpdate + 60.0), 10.0, cell.follow.followSizeUpdate, cell.contentView.bounds.size.height - 20.0)];
 
+                    }
+                
+                }];
+                
             }];
             
-        }];
+        }
+        else {
+            [self.query friendsListAppend:[item objectForKey:@"userid"] remove:false];
+            [cell.follow followSetType:BFollowActionTypeFollowed animate:true];
+            [self.query postRequest:[item objectForKey:@"userid"] request:@"add" completion:^(NSError *error) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    if (error.code != 200) {
+                        [cell.follow followSetType:BFollowActionTypeUnfollowed animate:true];
+                        [cell.follow setFrame:CGRectMake(cell.contentView.bounds.size.width - (cell.follow.followSizeUpdate + 60.0), 10.0, cell.follow.followSizeUpdate, cell.contentView.bounds.size.height - 20.0)];
+                        
+                    }
+
+                }];
+                
+            }];
             
+        }
+        
     }
     
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{

@@ -22,6 +22,8 @@
 -(NSString *)authToken;
 -(NSDate *)authExpiry;
 
+-(NSString *)userBiography;
+-(NSString *)userWebsite;
 -(NSString *)userKey;
 -(NSString *)userHandle;
 -(NSString *)userEmail;
@@ -38,6 +40,11 @@
 -(NSString *)userFullname;
 -(NSDate *)userBirthday;
 -(int)userGender;
+
+-(NSString *)instagramToken;
+-(NSString *)instagramHandle;
+-(NSString *)instagramKey;
+-(BOOL)instagramAdded;
 
 -(BOOL)appRated;
 -(BOOL)appOnboarded;
@@ -64,6 +71,8 @@
 -(void)setAppContactsParsed:(BOOL)parsed;
 -(void)setFriendsAdded:(BOOL)added;
 
+-(void)setUserBiography:(NSString *)bio;
+-(void)setUserWebsite:(NSString *)website;
 -(void)setUserType:(NSString *)type;
 -(void)setUserFullname:(NSString *)fullname;
 -(void)setUserEmail:(NSString *)email;
@@ -77,5 +86,9 @@
 -(void)setUserTotalTime:(int)seconds append:(BOOL)append;
 -(void)setUserTotalPosts:(int)posts;
 -(void)setUserTotalRevealed:(int)seconds append:(BOOL)append;
+
+-(void)setInstagramToken:(NSString *)token;
+-(void)setInstagramUsername:(NSString *)user;
+-(void)setInstagramKey:(NSString *)key;
 
 @end

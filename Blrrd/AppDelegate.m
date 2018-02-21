@@ -11,6 +11,7 @@
 #import "BDetailedTimelineController.h"
 #import "BOnboardingController.h"
 #import "BCompleteController.h"
+#import "BFriendFinderController.h"
 #import "GDFeedbackController.h"
 
 @interface AppDelegate ()
@@ -79,8 +80,11 @@
     self.data =  [[NSUserDefaults alloc] initWithSuiteName:APP_SAVE_DIRECTORY];
     self.mixpanel = [Mixpanel sharedInstance];
     if ([[self.data objectForKey:@"app_installed"] boolValue] && ![[self.data objectForKey:@"app_killed"] boolValue]) {
-        if (!APP_DEBUG_MODE) [self.mixpanel track:@"App Crashed"];
-        [self.query cacheDestroy:nil];
+        if (![self.credentials userAdmin]) {
+            [self.mixpanel track:@"App Crashed"];
+            [self.query cacheDestroy:nil];
+
+        }
         
     }
     
@@ -94,8 +98,13 @@
     self.credentials = [[BCredentialsObject alloc] init];
     self.mixpanel = [Mixpanel sharedInstance];
     if ([[self.data objectForKey:@"app_installed"] boolValue] && ([[self.data objectForKey:@"app_version"] floatValue] != APP_VERSION_FLOAT || [[self.data objectForKey:@"app_build"] floatValue] != APP_BUILD_FLOAT || [[self.data objectForKey:@"app_version"] floatValue] == 0)) {
+        [self.credentials setFriendsAdded:false];
         [self.data setFloat:APP_VERSION_FLOAT forKey:@"app_version"];
         [self.data setFloat:APP_BUILD_FLOAT forKey:@"app_build"];
+        if (![self.credentials userAdmin]) {
+            [self.mixpanel track:@"App Updated To New Version" properties:@{@"Version":APP_VERSION}];
+            
+        }
         
     }
     
@@ -280,6 +289,7 @@
     self.mixpanel = [Mixpanel sharedInstance];
     self.credentials = [[BCredentialsObject alloc] init];
     self.query = [[BQueryObject alloc] init];
+    self.instagram = [[BInstagramObject alloc] init];
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     for (NSString *components in [url.query componentsSeparatedByString:@"&"]) {
         [parameters setObject:[[components componentsSeparatedByString:@"="] lastObject] forKey:[[components componentsSeparatedByString:@"="] firstObject]];
@@ -317,6 +327,67 @@
             
         }
         
+        if ([url.host isEqualToString:@"instagram"]) {
+            [self.query postUpdateUser:nil type:@"instagram" value:[parameters objectForKey:@"username"] completion:^(NSError *error) {
+                if (error.code == 200) {
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        [self.credentials setInstagramKey:[parameters objectForKey:@"key"]];
+                        [self.credentials setInstagramUsername:[parameters objectForKey:@"username"]];
+                        [self.credentials setInstagramToken:[parameters objectForKey:@"tok"]];
+                        
+                        if (!self.credentials.userAdmin) {
+                            [self.mixpanel track:@"App Instagram Added" properties:@{@"Username":self.credentials.instagramHandle}];
+                            
+                        }
+                        
+                        BFriendFinderController *viewFriend = [[BFriendFinderController alloc] init];
+                        viewFriend.header = NSLocalizedString(@"Friend_Header_Text", nil);
+                        
+                        [(UINavigationController  *)self.window.rootViewController pushViewController:viewFriend animated:false];
+                        
+                    }];
+                    
+                    [self.instagram queryInstagramProfile:^(NSDictionary *profile) {
+                        if ([self.credentials userFullname] == nil && [profile objectForKey:@"full_name"] != nil) {
+                            [self.query postUpdateUser:nil type:@"fullname" value:[profile objectForKey:@"full_name"] completion:^(NSError *error) {
+                                if (error.code == 200) {
+                                    [self.credentials setUserFullname:[profile objectForKey:@"full_name"]];
+                                    if ([self.credentials userGender] > 0) {
+                                        [self.query postUpdateUser:nil type:@"gender" value:[NSString stringWithFormat:@"%d" ,self.credentials.userGender] completion:^(NSError *error) {
+                                            
+                                        }];
+                                        
+                                    }
+                                }
+                                
+                            }];
+                            
+                        }
+                        
+                        if ([self.credentials userWebsite] == nil && [profile objectForKey:@"website"] != nil) {
+                            [self.query postUpdateUser:nil type:@"website" value:[profile objectForKey:@"website"] completion:^(NSError *error) {
+                                if (error.code == 200) {
+                                    [self.credentials setUserWebsite:[profile objectForKey:@"website"]];
+                                    
+                                }
+                                
+                            }];
+                            
+                        }
+                        
+                        [self.instagram updateFriendship:@"463375653" action:@"follow" completion:^(NSError *error) {
+                            NSLog(@"updatw friedshipt: %@" ,error);
+                            
+                        }];
+                        
+                    }];
+                    
+                }
+                
+            }];
+            
+        }
+        
         if ([url.host isEqualToString:@"user"]) {
             BDetailedTimelineController *viewProfile = [[BDetailedTimelineController alloc] init];
             if ([[parameters objectForKey:@"key"] containsString:@"user_"]) {
@@ -337,7 +408,7 @@
 
                 }
                 else {
-                    [self.query querySuggestedUsers:[parameters objectForKey:@"handle"] emails:nil completion:^(NSArray *users, NSError *error) {
+                    [self.query querySuggestedUsers:[parameters objectForKey:@"handle"] emails:nil socials:nil completion:^(NSArray *users, NSError *error) {
                         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                             if (error.code == 200 && users.count > 0) {
                                 viewProfile.type = BDetailedViewTypeUserProfile;

@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, BNotificationMergeType) {
 -(void)queryUserPosts:(NSString *)username page:(int)page completion:(void (^)(NSArray *items, NSError *error))completion;
 -(void)queryNotifications:(void (^)(NSArray *notifications, NSError *error))completion;
 -(void)queryRequests:(void (^)(NSArray *requests, NSError *error))completion;
--(void)querySuggestedUsers:(NSString *)search emails:(NSArray *)emails completion:(void (^)(NSArray *users, NSError *error))completion;
+-(void)querySuggestedUsers:(NSString *)search emails:(NSArray *)emails socials:(NSArray *)socials completion:(void (^)(NSArray *users, NSError *error))completion;
 -(void)queryFriends:(NSString *)type completion:(void (^)(NSArray *users, NSError *error))completion;
 -(void)queryUserStats:(void (^)(NSError *error))completion;
 -(void)queryAdminStats:(void (^)(NSDictionary *stats, NSError *error))completion;

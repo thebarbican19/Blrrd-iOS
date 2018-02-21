@@ -71,6 +71,11 @@
     
 }
 
+-(void)viewEditor:(NSString *)type {
+    [self.delegate viewEditor:type];
+    
+}
+
 -(void)viewPresentImageWithData:(NSDictionary *)data {
     [self.delegate viewPresentImageWithData:data];
     

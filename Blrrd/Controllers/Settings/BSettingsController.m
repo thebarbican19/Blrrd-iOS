@@ -26,7 +26,7 @@
     NSMutableArray *contents = [[NSMutableArray alloc] init];
     if (self.credentials.userAdmin) {
         [contents addObject:@{@"section":@"admin", @"items":@[@{@"key":@"stats", @"switch":@(false)}]}];
-                              
+
     }
     [contents addObjectsFromArray:[NSArray arrayWithContentsOfFile:path]];
 
@@ -231,6 +231,19 @@
         
     }
     
+    if ([key isEqualToString:@"instagram"]) {
+        self.safari = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:INSTARGRAM_AUTH_URL]];
+        self.safari.dismissButtonStyle = SFSafariViewControllerDismissButtonStyleDone;
+        self.safari.view.tintColor = UIColorFromRGB(0x140F26);
+        self.safari.delegate = self;
+        
+        [self presentViewController:self.safari animated:true completion:^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];
+            
+        }];
+        
+    }
+    
     if ([key isEqualToString:@"permissions"]) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
             
@@ -239,7 +252,7 @@
     }
     
     if ([key isEqualToString:@"share"]) {
-        NSArray *shareitems = @[NSLocalizedString(@"Settings_Share_Body", nil), [NSURL URLWithString:@"http://blrrd.co"]];
+        NSArray *shareitems = @[NSLocalizedString(@"Settings_Share_Body", nil), [NSURL URLWithString:@"https://apple.co/2nqdvf0"]];
         UIActivityViewController *share = [[UIActivityViewController alloc] initWithActivityItems:shareitems applicationActivities:nil];
         [super presentViewController:share animated:true completion:^{
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:false];

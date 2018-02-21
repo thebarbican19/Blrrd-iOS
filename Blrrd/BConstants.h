@@ -40,6 +40,11 @@
 #define APP_STATUSBAR_HEIGHT [UIApplication sharedApplication].statusBarFrame.size.height
 #define APP_DIRECTORY [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
+#define INSTARGRAM_CLIENT_ID @"401dfb1b5bc748f19794cd8322ffcbc7"
+#define INSTARGRAM_REDIRECT @"http://52.59.224.79/api/services/instagram.php"
+#define INSTARGRAM_PRIVILLAGES @[@"basic", @"relationships", @"follower_list"]
+#define INSTARGRAM_AUTH_URL [NSString stringWithFormat:@"https://api.instagram.com/oauth/authorize/?client_id=%@&redirect_uri=%@&response_type=code&scope=%@" ,INSTARGRAM_CLIENT_ID, INSTARGRAM_REDIRECT ,[INSTARGRAM_PRIVILLAGES componentsJoinedByString:@"%20"]]
+
 #define REGEX_HASHTAGS @"(#\\w+)"
 #define REGEX_PHONE @"(\\+)[0-9\\+\\-]{6,19}"
 #define REGEX_EMAIL @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"

@@ -31,8 +31,11 @@
     [self setUserTotalTime:0 append:false];
     [self setAppContactUpdateExpiry:true];
     [self setAuthToken:nil];
+    [self setInstagramToken:nil];
+    [self setInstagramUsername:nil];
+    [self setInstagramKey:nil];
 
-    if (!APP_DEBUG_MODE) {
+    if (!self.userAdmin) {
         [self.mixpanel track:@"App Logged Out"];
         [self.mixpanel.people set:@{@"$email":@"", @"$name":@""}];
         
@@ -63,6 +66,18 @@
 
 -(NSDate *)authExpiry {
     if ([self.data objectForKey:@"auth_expiry"] != nil) return [self.data objectForKey:@"auth_expiry"];
+    else return nil;
+    
+}
+
+-(NSString *)userBiography {
+    if ([self.data objectForKey:@"user_bio"] != nil) return [self.data objectForKey:@"user_bio"];
+    else return nil;
+    
+}
+
+-(NSString *)userWebsite {
+    if ([self.data objectForKey:@"user_website"] != nil) return [self.data objectForKey:@"user_website"];
     else return nil;
     
 }
@@ -194,6 +209,26 @@
 
 }
 
+-(NSString *)instagramToken {
+    return [self.data objectForKey:@"instagram_token"];
+
+}
+
+-(NSString *)instagramHandle {
+    return [self.data objectForKey:@"instagram_user"];
+
+}
+
+-(NSString *)instagramKey {
+    return [self.data objectForKey:@"instagram_key"];
+
+}
+
+-(BOOL)instagramAdded {
+    if (self.instagramToken != nil) return true;
+    else return false;
+    
+}
 
 -(BOOL)appRated {
     return [[self.data objectForKey:@"app_rate"] boolValue];
@@ -286,6 +321,22 @@
 
 -(void)setFriendsAdded:(BOOL)added {
     [self.data setObject:[NSNumber numberWithBool:added] forKey:@"app_friends"];
+    [self.data synchronize];
+    
+}
+
+-(void)setUserBiography:(NSString *)bio {
+    if (bio) [self.data setObject:bio forKey:@"user_bio"];
+    else [self.data removeObjectForKey:@"user_bio"];
+    
+    [self.data synchronize];
+    
+}
+
+-(void)setUserWebsite:(NSString *)website {
+    if (website) [self.data setObject:website forKey:@"user_website"];
+    else [self.data removeObjectForKey:@"user_website"];
+    
     [self.data synchronize];
     
 }
@@ -413,6 +464,30 @@
     
     if (expiry) [self.data setObject:[formatter dateFromString:expiry] forKey:@"auth_expiry"];
     else [self.data removeObjectForKey:@"auth_expiry"];
+    
+    [self.data synchronize];
+    
+}
+
+-(void)setInstagramToken:(NSString *)token {
+    if (token) [self.data setObject:token forKey:@"instagram_token"];
+    else [self.data removeObjectForKey:@"instagram_token"];
+    
+    [self.data synchronize];
+    
+}
+
+-(void)setInstagramUsername:(NSString *)user {
+    if (user) [self.data setObject:user forKey:@"instagram_user"];
+    else [self.data removeObjectForKey:@"instagram_user"];
+    
+    [self.data synchronize];
+    
+}
+
+-(void)setInstagramKey:(NSString *)key {
+    if (key) [self.data setObject:key forKey:@"instagram_key"];
+    else [self.data removeObjectForKey:@"instagram_key"];
     
     [self.data synchronize];
     

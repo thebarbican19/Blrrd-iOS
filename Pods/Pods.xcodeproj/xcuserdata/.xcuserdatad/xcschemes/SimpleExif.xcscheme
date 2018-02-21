@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '4FE50E739A29DAD5BE57B7700E2F1FEB'
+               BlueprintIdentifier = '7D7AEBD3545918F46077B0839FA2655D'
                BlueprintName = 'SimpleExif'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libSimpleExif.a'>

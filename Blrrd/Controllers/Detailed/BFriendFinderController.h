@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Mixpanel/Mixpanel.h>
+#import <SafariServices/SafariServices.h>
 
 #import "BNavigationView.h"
 #import "BSearchView.h"
@@ -20,19 +21,23 @@
 #import "BDetailedTimelineController.h"
 #import "BFriendCell.h"
 #import "BSettingsUserEditController.h"
-#import "BFriendHeader.h"
+#import "BInstagramObject.h"
 
 @protocol BFriendFinderDelegate;
-@interface BFriendFinderController : UIViewController <UITableViewDelegate, UITableViewDataSource, BNavigationDelegate, BSearchViewDelegate, BFollowActionDelegate, GDPlaceholderDelegate, BDetailedTimelineDelegate, BFriendDelegateCell, BFriendHeaderDelegate>
+@interface BFriendFinderController : UIViewController <UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate, BNavigationDelegate, BSearchViewDelegate, BFollowActionDelegate, GDPlaceholderDelegate, BDetailedTimelineDelegate, BFriendDelegateCell>
 
 @property (nonatomic, strong) id <BFriendFinderDelegate> delegate;
 @property (nonatomic, strong) BQueryObject *query;
 @property (nonatomic, strong) BCredentialsObject *credentials;
 @property (nonatomic, strong) BContactsObject *contacts;
 @property (nonatomic, strong) Mixpanel *mixpanel;
+@property (nonatomic, strong) BInstagramObject *instagram;
+@property (nonatomic) SFSafariViewController *safari;
 
-@property (nonatomic, strong) NSMutableArray *suggested;
-@property (nonatomic, strong) NSMutableArray *friends;
+@property (nonatomic, strong) NSMutableArray *suggestedusers;
+@property (nonatomic, strong) NSMutableArray *localusers;
+@property (nonatomic, strong) NSMutableArray *instausers;
+@property (nonatomic, strong) NSMutableArray *connections;
 @property (nonatomic, strong) NSMutableArray *sections;
 @property (nonatomic, strong) NSString *header;
 @property (nonatomic) BOOL signup;
@@ -43,7 +48,6 @@
 @property (nonatomic, strong) GDPlaceholderView *viewPlaceholder;
 @property (nonatomic, strong) BSearchView *viewSearch;
 @property (nonatomic, strong) UIView *viewContacts;
-@property (nonatomic, strong) BFriendHeader *viewHeader;
 
 @end
 

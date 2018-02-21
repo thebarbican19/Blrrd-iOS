@@ -27,6 +27,7 @@
 @property (nonatomic, strong) BQueryObject *query;
 
 -(void)content:(NSDictionary *)item;
+-(void)avatar:(id)image;
 
 @end
 

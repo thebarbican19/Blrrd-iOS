@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <ShotBlocker/ShotBlocker.h>
+
 #import "BBlurredCell.h"
 #import "BCredentialsObject.h"
 #import "BQueryObject.h"
